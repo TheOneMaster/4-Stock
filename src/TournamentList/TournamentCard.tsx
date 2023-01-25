@@ -1,6 +1,7 @@
+import { useTheme } from "@react-navigation/native";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from "react-native";
 
-export const TournamentCard = (props, key) => {
+export const TournamentCard = (props) => {
     const id = props.id;
     const name = props.name;
     const city = props.city;
@@ -10,54 +11,68 @@ export const TournamentCard = (props, key) => {
             return cur;
         }
         return prev;
-    }, {})
+    }, {});
+
+    const { colors } = useTheme();
+
     const style = props.style || {};
+
+    const navigation = props.navigation;
 
     const styles = StyleSheet.create({
         container: {
-            // padding: 5,
             flex: 1,
             flexDirection: 'row',
-            
             borderWidth: 1,
-            // borderRadius: 15,
-            borderColor: "black",
-            borderStyle: "solid"
+            borderColor: colors.border,
+            borderStyle: "solid",
+            backgroundColor: colors.card
         },
 
         image: {
-            height: 100,
-            width: 100,
-            // flex: 1,
-            // flexDirection: 'column'
+            overflow: "hidden",
+            resizeMode: "contain",
+            flex: 1,
         },
 
         textBox: {
-            // paddingLeft: 10,
-            // padding: 10
-            paddingHorizontal: 10
+            paddingHorizontal: 10,
+        },
+        text: {
+            color: colors.text,
         },
 
         title: {
             fontWeight: 'bold',
-            marginVertical: 10
+            marginVertical: 10,
+            color: colors.text
         }
     })
 
-    function test() {
-        console.log(name)
+    function navigateToTournament() {
+        console.log(id);
+
+        const params = {
+            id: id,
+            name: name,
+            city: city,
+            date: props.startAt,
+            images: props.images
+        }
+
+        navigation.navigate("Tournament", params);
     }
 
     return (
-        <Pressable style={style} onPress={test}>
+        <Pressable style={style} onPress={navigateToTournament}>
             <View style={styles.container}>
-                <View>
+                <View style={{width: 100, height: 100}}>
                     <Image style={styles.image} source={{uri: profile_image.url}}></Image>
                 </View>
                 <View style={styles.textBox}>
                     <Text style={styles.title}>{name}</Text>
-                    <Text>City: {city}</Text>
-                    <Text>Date: {date}</Text>
+                    <Text style={styles.text}>City: {city}</Text>
+                    <Text style={styles.text}>Date: {date}</Text>
                 </View>
             </View>
         </Pressable>

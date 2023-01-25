@@ -1,4 +1,6 @@
 {
   "compilerOptions": {},
-  "extends": "expo/tsconfig.base"
+  "extends": "expo/tsconfig.base",
+  "typeRoots": ["./types"],
+  "include": ["src", "src/declarations.d.ts"]
 }
