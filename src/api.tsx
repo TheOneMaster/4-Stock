@@ -2,24 +2,25 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env"
 
-import { APIQuery } from "./types";
+import { APIQuery, APIVariables } from "./types";
 
-export function localTournamentQuery(coordinates: string, radius = "50mi", perPage = 10): string {
-    const current_time = new Date().getTime();
+export function localTournamentQuery(coordinates: string, radius = "50mi", perPage = 20, page = 1): string {
+    const current_time = new Date('2022-11-16').getTime();
     const time_seconds = Math.floor(current_time / 1000);
     // console.log(time_seconds);
     const query = `
-    query getLocalTournaments($coordinates: String!, $radius: String!, $perPage: Int) {
+    query getLocalTournaments($coordinates: String!, $radius: String!, $perPage: Int = 20, $after: Timestamp, $page: Int) {
         tournaments(query: {
             perPage: $perPage
-            sortBy: "startAt asc"
+            page: $page
+            sortBy: "startAt desc"
             filter: {
                 location: {
                     distanceFrom: $coordinates,
                     distance: $radius
                 }
                 videogameIds: [1]
-                afterDate: ${time_seconds}
+                afterDate: $after
             }
         }) {
             nodes {
@@ -41,8 +42,11 @@ export function localTournamentQuery(coordinates: string, radius = "50mi", perPa
         coordinates: coordinates,
         radius: radius,
         perPage: perPage,
+        after: time_seconds,
+        page: page
     };
 
+    console.log(time_seconds);
     return JSON.stringify({query, variables});
 }
 
@@ -87,6 +91,19 @@ export function tournamentDetailsQuery(Id: number): string {
       return JSON.stringify({query, variables});
 }
 
+
+function createQuery(params: Partial<APIVariables>) {
+
+
+
+
+
+}
+
+
+
+
+
 export async function queryAPI(query_body: string, timeout = 10000) {  
     try {
         const api_url = "https://api.start.gg/gql/alpha";
@@ -108,7 +125,7 @@ export async function queryAPI(query_body: string, timeout = 10000) {
 
         return data;
     } catch (err) {
-
+        console.error("data not got");
         if (Platform.OS === 'android') {
             ToastAndroid.show(err.message, ToastAndroid.SHORT);
         }

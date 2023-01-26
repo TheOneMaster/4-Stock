@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-import { View, Image, Text, StyleSheet, Button, ActivityIndicator, Linking, ScrollView } from "react-native";
+import { ActivityIndicator, Button, Image, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { queryAPI, tournamentDetailsQuery } from "../api";
-import { FullTournamentDetails, TournamentAPIQuery } from "../types";
 import { convertDateToString } from "../helper";
+import { FullTournamentDetails, TournamentAPIQuery } from "../types";
 
-import ContactButton from "../Views/Buttons/ContactButton";
-import EventCard from "./EventCard";
-import { failed } from "../Failed";
 import { useTheme } from "@react-navigation/native";
+import ContactButton from "../Buttons/ContactButton";
+import EventCard from "./EventCard";
 
 const TopBar = (props) => {
 
@@ -59,7 +58,7 @@ const TopBar = (props) => {
             borderRadius: 10,
             overflow: 'hidden',
             width: 80,
-            // height: 80
+            backgroundColor: colors.background
         },
         profile_image: {
             flex: 1,
@@ -67,7 +66,7 @@ const TopBar = (props) => {
         },
         profile_text: {
             marginHorizontal: 10,
-            flex: 1
+            flex: 1,
         },
         profile_title: {
             fontWeight: 'bold',
@@ -91,7 +90,7 @@ const TopBar = (props) => {
                     <Image source={{uri: profile_image.url}} style={styles.profile_image}></Image>
                 </View>
                 <View style={{...styles.profile_text, marginTop: 20}}>
-                    <Text style={styles.profile_title} >{props.name}</Text>
+                    <Text style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</Text>
                 </View>
             </View>
         </View>
@@ -169,7 +168,6 @@ const DetailSection = (props: FullTournamentDetails) => {
 
     const startDate = convertDateToString(props.startAt);
     const lastDateRegister = convertDateToString(props.eventRegistrationClosesAt);
-    const events = JSON.stringify(props.events);
 
     return (
         <View style={style.container}>
@@ -178,7 +176,7 @@ const DetailSection = (props: FullTournamentDetails) => {
                 <Text style={style.text}>Starting At: {startDate}</Text>
                 <Text style={style.text}>Country: {props.countryCode}</Text>
                 <Text style={style.text}>Currency: {props.currency}</Text>
-                { props.eventRegistrationClosesAt && <Text>Last date for registration: {lastDateRegister}</Text> }
+                { props.eventRegistrationClosesAt && <Text style={style.text}>Last date for registration: {lastDateRegister}</Text> }
                 <Text style={style.text}>Number of attendees: {props.numAttendees}</Text>
                 <Text style={style.text}>Venue Address: {props.venueAddress}</Text>
             </View>
@@ -195,6 +193,7 @@ const TournamentView = ({navigation, route}) => {
     const [loading, setLoading] = useState(false);
     const [dataReady, setdataReady] = useState(false);
     const [failed, setFailedAPI] = useState(false);
+    const [refreshing, setRefreshing] = useState(false)
     
     const params = route.params;
 
@@ -249,10 +248,16 @@ const TournamentView = ({navigation, route}) => {
         getTournamentData();
     }, [])
 
+    const refresh = () => {
+        setRefreshing(true);
+        getTournamentData();
+        setRefreshing(false);
+    }
+
     return (
         <View style={{flex: 1}}>
             
-        <ScrollView>
+        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
             <TopBar {...params}></TopBar>
                 { loading && <ActivityIndicator animating={loading} color='red' size={20} style={styles.activityIndicator}></ActivityIndicator> }    
                 <View style={styles.section}>
@@ -271,12 +276,7 @@ const TournamentView = ({navigation, route}) => {
 
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Contact</Text>
-
-                    {/* <View style={{height: 40, width: 40, backgroundColor: 'purple'}}> */}
                     { dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
-
-                    {/* </View> */}
-
                 </View>
         
         </ScrollView>

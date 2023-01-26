@@ -1,7 +1,19 @@
-// import * as React from "react"
-import { Linking, StyleSheet, TouchableHighlight } from "react-native";
-import { View, Text, Image } from "react-native";
-import DiscordLogo from "../../assets/DiscordLogo.svg"
+import { useTheme } from "@react-navigation/native";
+import * as React from "react";
+import { Linking, StyleSheet, Text, TouchableHighlight } from "react-native";
+import DiscordLogo from "../../assets/DiscordLogo.svg";
+
+function openLink(url: string, type: string) {
+    switch (type) {
+        case "discord":
+            Linking.openURL(url);
+            break;
+        case "email":
+            Linking.openURL(`mailto:${url}`);
+            break;
+    }
+}
+
 
 
 const ContactButton = (props) => {
@@ -9,43 +21,37 @@ const ContactButton = (props) => {
     const type = props.type;
     const url = props.url;
 
-    console.log(type)
+    const theme = useTheme();
+    const colors = theme.colors;
 
     const style = StyleSheet.create({
         touchable: {
             alignSelf: 'flex-start'
         },
         link: {
-            color: "blue"
+            color: colors.link,
+            fontWeight: theme.dark ? 'bold' : 'normal'
         }
     })
 
     let contactLink: JSX.Element|null = null;
     if (type === 'discord') {
-        const contact = () => {
-            Linking.openURL(url);
-        }
         contactLink = (
-            <TouchableHighlight onPress={contact} style={style.touchable}>
+            <TouchableHighlight onPress={() => openLink(url, type)} style={style.touchable}>
                 <DiscordLogo width={40} height={40}/>
             </TouchableHighlight>
         )
     }
 
     if (type === "email") {
-        const contact = () => {
-            Linking.openURL(`mailto:${url}`);
-        }
-
         contactLink = (
-            <TouchableHighlight style={style.touchable} onPress={contact}>
+            <TouchableHighlight style={style.touchable} onPress={() => openLink(url, type)}>
                 <Text style={style.link}>{url}</Text>
             </TouchableHighlight>
             )
     }
 
     return contactLink
-
 }
 
-export default ContactButton;
+export default React.memo(ContactButton);

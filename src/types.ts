@@ -17,19 +17,12 @@ export interface FullTournamentDetails extends BasicTournamentDetails{
     countryCode: string,
     currency: string,
     eventRegistrationClosesAt: number,
-    events: [
-        {
-            id: number,
-            videogame: {
-                id: number
-            }
-        }
-    ],
+    events: EventDetails[],
     isRegistrationOpen: boolean,
     mapsPlaceId: string,
     primaryContact: string,
     primaryContactType: string,
-    venueName: string,
+    venueName?: string,
     venueAddress: string,
 }
 
@@ -67,4 +60,23 @@ export interface TournamentListAPIQuery extends APIQuery {
 
 export interface TournamentAPIQuery extends APIQuery {
     tournament: FullTournamentDetails
+}
+
+export interface TournamentQueryVariables {
+    name?: string,
+    city?: string,
+    perPage?: number,
+    afterDate?: number,
+    coordinates?: string,
+    radius?: string
+}
+
+export interface APIVariables {
+    location: {
+        coords: string,
+        radius: string,
+    },
+    perPage: number,
+    page: number,
+    name: string,
 }

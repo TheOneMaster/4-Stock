@@ -1,18 +1,16 @@
 
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { EventDetails } from "../types";
 
+import { useTheme } from "@react-navigation/native";
 import Melee from "../../assets/melee.png";
 import PlaceHolder from "../../assets/placeholder.png";
-import { useTheme } from "@react-navigation/native";
 
-const EventCard = (props) => {
+const EventCard = ({event}) => {
 
-    if (props == undefined) {
+    if (event == undefined || Object.keys(event).length === 0) {
         return null
     }
-
-    const event: EventDetails = props.event;
+    
     const name = event.name;
     const videogame = event.videogame.id;
 
@@ -56,7 +54,7 @@ const EventCard = (props) => {
         <Image source={PlaceHolder} style={styles.game_image}></Image>;
 
     const test = () => {
-        console.log(props);
+        console.log(event);
     }
 
     return (

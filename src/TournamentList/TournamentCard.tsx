@@ -1,11 +1,14 @@
 import { useTheme } from "@react-navigation/native";
-import { View, Text, Image, StyleSheet, TouchableOpacity, Pressable } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { convertDateToString } from "../helper";
+import { BasicTournamentDetails } from "../types";
 
 export const TournamentCard = (props) => {
     const id = props.id;
     const name = props.name;
     const city = props.city;
-    const date = new Date(props.startAt*1000).toLocaleDateString();
+    const date = convertDateToString(props.startAt);
     const profile_image = props.images.reduce((prev, cur) => {
         if (cur.type === 'profile') {
             return cur;
@@ -13,12 +16,10 @@ export const TournamentCard = (props) => {
         return prev;
     }, {});
 
-    const { colors } = useTheme();
-
-    const style = props.style || {};
-
     const navigation = props.navigation;
 
+    const { colors } = useTheme();
+    const style = props.style || {};
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -29,6 +30,11 @@ export const TournamentCard = (props) => {
             backgroundColor: colors.card
         },
 
+        imageContainer: {
+            width: 100,
+            height: 100,
+            alignSelf: "center",
+        },
         image: {
             overflow: "hidden",
             resizeMode: "contain",
@@ -36,7 +42,15 @@ export const TournamentCard = (props) => {
         },
 
         textBox: {
+            paddingVertical: 5,
             paddingHorizontal: 10,
+            flex: 1
+        },
+        detailsText: {
+            flex: 1,
+            justifyContent: 'flex-end',
+            // alignItems: 'flex-end',
+            // backgroundColor: 'red'
         },
         text: {
             color: colors.text,
@@ -44,8 +58,10 @@ export const TournamentCard = (props) => {
 
         title: {
             fontWeight: 'bold',
-            marginVertical: 10,
-            color: colors.text
+            // marginVertical: 10,
+            color: colors.text,
+            flexWrap: 'wrap',
+            flexShrink: 1
         }
     })
 
@@ -66,13 +82,15 @@ export const TournamentCard = (props) => {
     return (
         <Pressable style={style} onPress={navigateToTournament}>
             <View style={styles.container}>
-                <View style={{width: 100, height: 100}}>
+                <View style={styles.imageContainer}>
                     <Image style={styles.image} source={{uri: profile_image.url}}></Image>
                 </View>
                 <View style={styles.textBox}>
                     <Text style={styles.title}>{name}</Text>
-                    <Text style={styles.text}>City: {city}</Text>
-                    <Text style={styles.text}>Date: {date}</Text>
+                    <View style={styles.detailsText}>
+                        <Text style={styles.text}>City: {city}</Text>
+                        <Text style={styles.text}>Date: {date}</Text>
+                    </View>
                 </View>
             </View>
         </Pressable>
