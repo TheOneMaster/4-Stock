@@ -2,7 +2,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useNavigation } from "@react-navigation/native";
 import search_icon from "../../assets/icons8-search.png"
 
-export const SearchButton = () => {
+export const SearchButton = ({showFilter}) => {
 
     const navigation = useNavigation();
 
@@ -30,7 +30,8 @@ export const SearchButton = () => {
 
     const test = () => {
         console.log("Filter");
-        navigation.navigate('Filter');
+        // navigation.navigate('Filter');
+        showFilter(true);
     }
     
     return (

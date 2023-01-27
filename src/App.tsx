@@ -20,7 +20,7 @@ function App() {
         <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={TournamentListView}></Stack.Screen>
           <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
-          <Stack.Screen name="Filter" component={FilterView}></Stack.Screen>
+          {/* <Stack.Screen name="Filter" component={FilterView}></Stack.Screen> */}
         </Stack.Navigator>
       </NavigationContainer>
     

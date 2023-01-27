@@ -1,31 +1,47 @@
 import { useTheme } from "@react-navigation/native";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"
-import { useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 
 import { FilterText } from "./FilterItem";
 import { convertDateToString } from "../helper";
+import { APIVariables } from "../types";
 
-export const FilterView = ({ onFilter }) => {
+export const FilterView = ({ onFilter, show, setShow}: {onFilter: Function, show: boolean, setShow: React.Dispatch<SetStateAction<boolean>>}) => {
 
+    // UI State elements
     const [showDate, setShowDate] = useState(false);
     
+    // Filter data elements
     const [date, setDate] = useState(new Date());
     const [name, setName] = useState('');
+    const [location, setLocation] = useState({} as Partial<APIVariables['location']>);
 
     const { colors } = useTheme();
+
+    const backgroundColor = useTheme().dark ? "#232323" : "black";
+
+
+
     const styles = StyleSheet.create({
+
+        mainBox: {
+            width: '100%',
+            height: '100%',
+            position: 'absolute'
+        },
         container: {
-            // flex: 1,
-            // alignSelf: 'flex-end',
-            justifyContent: 'flex-end',
-            alignContent: 'flex-end',
-            // height: 500,
-            backgroundColor: colors.card,
+            position: 'absolute',
+            height: 350,
+            width: '100%',
+            backgroundColor: backgroundColor,
             borderColor: colors.border,
             borderWidth: 1,
             borderStyle: 'solid',
-            margin: 10
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            zIndex: 1,
+            bottom: 0
         },
 
         formItem: {
@@ -41,9 +57,21 @@ export const FilterView = ({ onFilter }) => {
 
         text: {
             color: colors.text,
+        },
+
+
+        outerOverlay: {
+            position: 'absolute',
+            width: '100%',
+            zIndex: 1,
+            backgroundColor: 'black',
+            opacity: 0.3,
+            height: '100%'
         }
 
     });
+
+    console.log(useWindowDimensions().height*useWindowDimensions().scale)
 
     function onDateChange(event, selectedDate) {
         // console.log(event);
@@ -63,41 +91,43 @@ export const FilterView = ({ onFilter }) => {
             startDate: date
         };
 
-        console.table(filters);
+        // console.log(filters);
+        // console.log(onFilter)
+
         onFilter({...filters});
     }
 
     
 
     const form = (
-        <View style={styles.container}>
-            <View style={styles.formItem}>
-                <FilterText title={'Name'} onUpdate={setName}></FilterText>
-            </View>
-            <View style={styles.formItem}>
-                <View style={styles.innerFormItem}>
-                    <Text style={styles.text}>Starting Date: {date.toLocaleDateString()}</Text>
-                    <View style={{width: 100, marginLeft: 'auto'}}>
-                        <Button onPress={showDatePicker} title='Select Date'></Button>
-                        { showDate && <DateTimePicker value={date} onChange={onDateChange}></DateTimePicker> }
+
+        <View style={styles.mainBox}>
+            <Pressable
+                onPress={() => setShow(false)}
+                style={styles.outerOverlay}/>
+        
+            <View style={styles.container}>
+                <View style={styles.formItem}>
+                    <FilterText title={'Name'} onUpdate={setName}/>
+                </View>
+                <View style={styles.formItem}>
+                    <View style={styles.innerFormItem}>
+                        <Text style={styles.text}>Starting Date: {date.toLocaleDateString()}</Text>
+                        <View style={{width: 100, marginLeft: 'auto'}}>
+                            <Button onPress={showDatePicker} title='Select Date'/>
+                            { showDate && <DateTimePicker value={date} onChange={onDateChange}/> }
+                        </View>
                     </View>
                 </View>
+                <View style={styles.formItem}>
+                    <Button title="Filter" color={colors.primary} onPress={filterTournaments}/>
+                </View>
             </View>
+        
         </View>
     )
 
 
-    return (
-        <View style={{width: '100%', height: '100%'}}>
-            {form}
-        </View>
-    )
-
-
-
-
-
-
-
+    return form
 
 }

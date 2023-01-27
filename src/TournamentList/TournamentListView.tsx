@@ -5,6 +5,7 @@ import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, Tex
 import { localTournamentQuery, queryAPI } from "../api";
 
 import { BasicTournamentDetails, TournamentListAPIQuery } from "../types";
+import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
@@ -37,10 +38,13 @@ const TournamentListView = ({navigation}) => {
 
   const [data, setData] = useState([] as BasicTournamentDetails[]);
   
+  // UI State elements
   const [refreshing, setRefreshing] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
+  // Filters
   const [nextPage, setNextPage] = useState(2);
   const [coords, setCoords] = useState("40.730610, -73.935242");
 
@@ -97,7 +101,9 @@ const TournamentListView = ({navigation}) => {
     </View>
   );
 
-
+  const test = (test) => {
+    console.log('poop');
+  }
 
 
   return (
@@ -112,12 +118,20 @@ const TournamentListView = ({navigation}) => {
             onEndReached={updateTournamentList}
             onEndReachedThreshold={0.1}
           ></FlatList>
-        <SearchButton></SearchButton>
+        <SearchButton showFilter={setShowFilter}></SearchButton>
+
+
         { updating && 
           <View style={styles.updatingIcon}>
             <ActivityIndicator size='large' color='red'></ActivityIndicator>
           </View>
         }
+
+        { showFilter && 
+          <FilterView onFilter={test} show={showFilter} setShow={setShowFilter}></FilterView>
+        }
+
+
       </View>
   )
 }
