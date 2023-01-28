@@ -71,12 +71,21 @@ export interface TournamentQueryVariables {
     radius?: string
 }
 
+interface LocationFilter {
+    distanceFrom: string,
+    distance?: string
+}
 export interface APIVariables {
-    location: {
-        coords: string,
-        radius: string,
-    },
-    perPage: number,
-    page: number,
-    name: string,
+    name?: string,
+    perPage?: number,
+    page?: number,
+    afterDate?: number,
+    location?: LocationFilter,
+}
+export interface StorageVariables {
+    name?: string,
+    perPage?: number,
+    page?: number,
+    afterDate?: Date,
+    location?: LocationFilter
 }

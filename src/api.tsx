@@ -1,6 +1,6 @@
 import { Platform, ToastAndroid } from "react-native";
 
-import { API_TOKEN } from "@env"
+import { API_TOKEN } from "@env";
 
 import { APIQuery, APIVariables } from "./types";
 
@@ -47,7 +47,7 @@ export function localTournamentQuery(coordinates: string, radius = "50mi", perPa
     };
 
     // console.log(time_seconds);
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 export function tournamentDetailsQuery(Id: number): string {
@@ -84,15 +84,15 @@ export function tournamentDetailsQuery(Id: number): string {
         }
       }`
 
-      const variables = {
+    const variables = {
         "ID": Id,
-      }
+    }
 
-      return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 
-function createFilter(filters, spacing=0): string {
+function createFilter(filters, spacing = 0): string {
 
     // console.log(filters);
     if (typeof filters !== 'object') {
@@ -107,61 +107,40 @@ function createFilter(filters, spacing=0): string {
             const initalSpacing = '  '.repeat(spacing);
             if (typeof value !== 'object') {
                 return `${initalSpacing}${key}: ${createFilter(key)}`
-            } 
+            }
 
-            return initalSpacing + key + ":{\n" + createFilter(value, spacing+1) + "}";
+            return initalSpacing + key + ":{\n" + createFilter(value, spacing + 1) + "}";
         })
         .join("\n");
 
     // console.log(test);
 
     return test
-    
+
 }
 
 
 export function tournamentListQuery(params: Partial<APIVariables>) {
 
-    // console.log(params);
-    const templateVariables = {
-        distanceFrom: 'String',
-        distance: 'String',
-        perPage: 'Int',
-        page: 'Int',
-        after: 'Timestamp',
-        name: 'String'
-    }
-
-    const variablesUsed = Object.keys(params).filter(param => param in templateVariables);
-    
-    // console.log(variablesUsed);
-    
-    const variableList = variablesUsed
-        .map(variable => `$${variable}: ${templateVariables[variable]}`);
-        // .map(variable => `$${variable}"`);
-
-    
-    const variableString = variableList.join(", ");
+    const variableString = createVariableString(params);
 
     const bodyVariables = ['page', 'perPage'];
     let bodyObj = bodyVariables.reduce((prev, cur) => {
 
         if (cur in params) {
-            return {...prev, [cur]: params[cur]}
+            return { ...prev, [cur]: params[cur] }
         }
 
         return prev
     }, {});
 
-    // console.log(bodyObj);
-    
-    
+
     const bodyConstraints = createFilter(bodyObj, 1);
     // console.log(bodyConstraints);
 
     const filters = Object.keys(params)
         .filter(param => !(bodyVariables.includes(param)))
-        .reduce((prev, cur) => ({...prev, [cur]: params[cur]}), {});
+        .reduce((prev, cur) => ({ ...prev, [cur]: params[cur] }), {});
     // console.log(filters);
 
 
@@ -193,19 +172,17 @@ export function tournamentListQuery(params: Partial<APIVariables>) {
         }
     }`
 
-    // console.log(query);
 
+    const variables = getFlatObject(params);
 
-    const variables = params
-
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 
 
 
 
-export async function queryAPI(query_body: string, timeout = 10000) {  
+export async function queryAPI(query_body: string, timeout = 10000) {
     try {
         const api_url = "https://api.start.gg/gql/alpha";
         const response = await fetch(api_url, {
@@ -218,7 +195,6 @@ export async function queryAPI(query_body: string, timeout = 10000) {
         });
 
         const json_data: APIQuery = await response.json();
-        console.log(json_data)
         const data = json_data.data;
 
         if (data === undefined) {
@@ -234,4 +210,54 @@ export async function queryAPI(query_body: string, timeout = 10000) {
 
         throw err;
     }
+}
+
+function flattenVariables(params: Partial<APIVariables>): Object[] {
+    let test = [];
+    for (const param in params) {
+        const value = params[param];
+        if (typeof value === 'object' && !(value instanceof Date)) {
+            test.push(...flattenVariables(value));
+            continue;
+        }
+        const t = {[param]: value}
+        test.push(t)
+    }
+    return test
+}
+
+function getFlatObject(obj: Object): Object {
+    const flatArray = flattenVariables(obj);
+    return Object.assign({}, ...flatArray);
+} 
+
+function createVariableString(params) {
+    const flatVariables = getFlatObject(params);
+    console.log(flatVariables);
+
+    const variablesTemplate = {
+        name: "String",
+        perPage: "Int",
+        page: "Int",
+        afterDate: "Timestamp",
+        distanceFrom: "String",
+        distance: "String"
+    }
+
+    let variablesChosenTemplate = {}
+    for (const variable in flatVariables) {
+        if (variable in variablesTemplate) {
+            variablesChosenTemplate[variable] = variablesTemplate[variable];
+        }
+    };
+
+    let variableStringList = [];
+    for (const variable in variablesChosenTemplate) {
+        variableStringList.push(`$${variable}: ${variablesChosenTemplate[variable]}`);
+    };
+    
+    const variableString = variableStringList.join(", ");
+
+    console.log(variableString);
+    return variableString
 }

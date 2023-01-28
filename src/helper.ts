@@ -1,4 +1,5 @@
 import { NativeModules, Platform } from "react-native";
+import { APIVariables, StorageVariables } from "./types";
 
 export function convertDateToString(date: number): string {
     const given_date = new Date(date * 1000);
@@ -14,4 +15,24 @@ export function convertDateToString(date: number): string {
     //     NativeModules.I18nManager.localeIdentifier;
 
     return given_date.toLocaleDateString();
+}
+
+export function convertDateToUnixSeconds(date: Date): number {
+    return Math.floor(date.getTime() / 1000)
+}
+
+export function convertStorageToAPI(params: Partial<StorageVariables>): Partial<APIVariables> {
+
+    const final: APIVariables = {};
+
+    for (const variable in params) {
+        const value = params[variable];
+        if (value instanceof Date) {
+            final[variable] = convertDateToUnixSeconds(value);
+            continue;
+        }
+        final[variable] = value;
+    }
+
+    return final
 }

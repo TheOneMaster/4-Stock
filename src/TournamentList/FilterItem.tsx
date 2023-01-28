@@ -3,9 +3,9 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 
-function FilterItem({element, title}: {element: JSX.Element, title: string}) {
+function FilterItem({ element, title }: { element: JSX.Element, title: string }) {
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
 
     const styles = StyleSheet.create({
         container: {
@@ -30,17 +30,14 @@ function FilterItem({element, title}: {element: JSX.Element, title: string}) {
     )
 }
 
-export function FilterText({title, onUpdate=undefined, ...props}) {
+export function FilterText({ title, onUpdate = undefined, ...props }) {
 
     const [selected, setSelected] = useState(false);
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
     const style = StyleSheet.create({
         input: {
             padding: 7,
-            // width: 200,
-            // flex: 1,
-            // backgroundColor: colors.card,
             borderColor: colors.border,
             borderWidth: 1,
             borderStyle: 'solid',
@@ -63,18 +60,18 @@ export function FilterText({title, onUpdate=undefined, ...props}) {
         setSelected(false);
     }
 
-    const input = <TextInput 
-                        style={style.input}
-                        placeholder={'Genesis'}
-                        onFocus={handleFocus}
-                        onChangeText={newText => onUpdate(newText)}
-                        onBlur={handleBlur}
-                        selectionColor={colors.primary}
-                        underlineColorAndroid={ selected ? colors.primary : LIGHT_GREY }
-                        placeholderTextColor={'#777777'}
-                        
-                        {...props}
-                        />
+    const input = <TextInput
+        style={style.input}
+        placeholder={'Genesis'}
+        placeholderTextColor={colors.secondaryText}
+        onFocus={handleFocus}
+        onChangeText={newText => onUpdate(newText)}
+        onBlur={handleBlur}
+        selectionColor={colors.primary}
+        underlineColorAndroid={selected ? colors.primary : LIGHT_GREY}
+
+        {...props}
+    />
 
     return <FilterItem element={input} title={title}></FilterItem>
 }

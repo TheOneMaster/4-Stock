@@ -1,29 +1,26 @@
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { useTheme } from "@react-navigation/native";
-import { Animated, Button, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker"
 import React, { SetStateAction, useEffect, useRef, useState } from "react";
+import { Animated, Button, Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
 
-import { FilterText } from "./FilterItem";
-import { convertDateToString } from "../helper";
 import { APIVariables } from "../types";
+import { FilterText } from "./FilterItem";
 
-export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Function, setShow: React.Dispatch<SetStateAction<boolean>>, show: boolean}) => {
+export const FilterView = ({ updateFilters, setShow, show }: { updateFilters: Function, setShow: React.Dispatch<SetStateAction<boolean>>, show: boolean }) => {
 
     // UI State elements
     const [showDate, setShowDate] = useState(false);
     const fadeAnim = useRef(new Animated.Value(350)).current;
     // const 
-    
+
     // Filter data elements
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState<Date | undefined>(undefined);
     const [name, setName] = useState('');
     const [location, setLocation] = useState({} as Partial<APIVariables['location']>);
 
     const { colors } = useTheme();
 
     const backgroundColor = useTheme().dark ? "#232323" : "black";
-
-
 
     const styles = StyleSheet.create({
 
@@ -36,7 +33,7 @@ export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Func
             position: 'absolute',
             height: 350,
             width: '100%',
-            backgroundColor: backgroundColor,
+            backgroundColor: colors.card,
             borderColor: colors.border,
             borderWidth: 1,
             borderStyle: 'solid',
@@ -73,8 +70,6 @@ export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Func
 
     });
 
-    // console.log(useWindowDimensions().height*useWindowDimensions().scale)
-
     function onDateChange(event, selectedDate) {
         // console.log(event);
         console.log(selectedDate);
@@ -89,15 +84,12 @@ export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Func
     function filterTournaments() {
         const filters = {
             name: name,
-            startDate: date,
+            afterDate: date,
         };
 
         if (Object.keys(location).length > 0) {
             filters['location'] = location;
         }
-
-        // console.log(filters);
-        // console.log(updateFilters)
 
         updateFilters(filters);
         setShow(false);
@@ -107,7 +99,7 @@ export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Func
 
         const duration = 300
 
-        if (show){
+        if (show) {
             Animated.timing(fadeAnim, {
                 toValue: 0,
                 duration: duration,
@@ -119,39 +111,44 @@ export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Func
                 duration: duration,
                 useNativeDriver: true
             }).start();
+
+            Keyboard.dismiss();
+
+
         }
 
     }, [show]);
-    
+
 
     const form = (
 
-        <View style={ styles.mainBox }> 
-        
-            { show &&
+        <View style={styles.mainBox}>
+
+            {show &&
                 <Pressable
                     onPress={() => setShow(false)}
-                    style={styles.outerOverlay}/>
+                    style={styles.outerOverlay} />
             }
-        
-            <Animated.View style={{...styles.container, transform: [{translateY: fadeAnim}]}}>
+
+            <Animated.View style={{ ...styles.container, transform: [{ translateY: fadeAnim }] }}>
                 <View style={styles.formItem}>
-                    <FilterText title={'Name'} onUpdate={setName}/>
+                    <FilterText title={'Name'} onUpdate={setName} onSubmitEditing={Keyboard.dismiss} />
                 </View>
                 <View style={styles.formItem}>
                     <View style={styles.innerFormItem}>
-                        <Text style={styles.text}>Starting Date: {date.toLocaleDateString()}</Text>
-                        <View style={{width: 100, marginLeft: 'auto'}}>
-                            <Button onPress={showDatePicker} title='Select Date'/>
-                            { showDate && <DateTimePicker value={date} onChange={onDateChange}/> }
+                        <Text style={styles.text}>{date &&
+                            "Starting Date: " + date.toLocaleDateString()}</Text>
+                        <View style={{ width: 100, marginLeft: 'auto' }}>
+                            <Button onPress={showDatePicker} title='Select Date' />
+                            {showDate && <DateTimePicker value={date ?? new Date()} onChange={onDateChange} />}
                         </View>
                     </View>
                 </View>
                 <View style={styles.formItem}>
-                    <Button title="Filter" color={colors.primary} onPress={filterTournaments}/>
+                    <Button title="Filter" color={colors.primary} onPress={filterTournaments} />
                 </View>
             </Animated.View>
-        
+
         </View>
     )
 
