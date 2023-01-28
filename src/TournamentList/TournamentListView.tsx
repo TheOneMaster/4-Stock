@@ -2,9 +2,9 @@ import { useTheme } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, Text, View } from "react-native";
 
-import { localTournamentQuery, queryAPI } from "../api";
+import { localTournamentQuery, queryAPI, tournamentListQuery } from "../api";
 
-import { BasicTournamentDetails, TournamentListAPIQuery } from "../types";
+import { APIVariables, BasicTournamentDetails, TournamentListAPIQuery } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
@@ -48,13 +48,22 @@ const TournamentListView = ({navigation}) => {
   const [nextPage, setNextPage] = useState(2);
   const [coords, setCoords] = useState("40.730610, -73.935242");
 
+  const [filterParams, setFilterParams] = useState({
+    perPage: 20,
+    page: 1,
+    location: {
+      distanceFrom: "40.730610, -73.935242",
+      distance: "50mi"
+    }
+  } as Partial<APIVariables>);
+
   const getLocalTournaments = async() => {   
     try {
-      const body = localTournamentQuery(coords, "50mi");
+      const body = localTournamentQuery("40.730610, -73.935242", "50mi");
       const query_data = await queryAPI(body) as TournamentListAPIQuery;
       setData(query_data.tournaments.nodes);
     } catch(err) {
-
+      console.log('empty data set');
     }
   }
 
@@ -95,14 +104,32 @@ const TournamentListView = ({navigation}) => {
       getLocalTournaments();
   }, []);
 
+  useEffect(() => {
+    console.log('test_poop');
+    console.log(filterParams);
+  }, [filterParams])
+
+
+
+
   const tournamentItem = (props, index) => (
     <View style={ index !== 0 ? styles.tournamentCard : {...styles.tournamentCard, paddingTop: 15} }>
       <TournamentCard {...props} navigation={navigation}></TournamentCard>
     </View>
   );
 
-  const test = (test) => {
+  const test = async (filters) => {
     console.log('poop');
+
+    console.log()
+
+    // try {
+    //   const body = tournamentListQuery(filters);
+    //   const json_data = await queryAPI(body) as TournamentListAPIQuery;
+    //   setData(json_data.tournaments.nodes);
+    // } catch(err) {
+    //   console.log('pee');
+    // }
   }
 
 
@@ -127,9 +154,8 @@ const TournamentListView = ({navigation}) => {
           </View>
         }
 
-        { showFilter && 
-          <FilterView onFilter={test} show={showFilter} setShow={setShowFilter}></FilterView>
-        }
+        
+        <FilterView updateFilters={setFilterParams} setShow={setShowFilter} show={showFilter}></FilterView>
 
 
       </View>

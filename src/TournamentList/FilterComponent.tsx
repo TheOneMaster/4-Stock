@@ -1,16 +1,18 @@
 import { useTheme } from "@react-navigation/native";
-import { Button, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from "react-native";
+import { Animated, Button, Pressable, StyleSheet, Text, TextInput, useWindowDimensions, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 
 import { FilterText } from "./FilterItem";
 import { convertDateToString } from "../helper";
 import { APIVariables } from "../types";
 
-export const FilterView = ({ onFilter, show, setShow}: {onFilter: Function, show: boolean, setShow: React.Dispatch<SetStateAction<boolean>>}) => {
+export const FilterView = ({ updateFilters, setShow, show}: {updateFilters: Function, setShow: React.Dispatch<SetStateAction<boolean>>, show: boolean}) => {
 
     // UI State elements
     const [showDate, setShowDate] = useState(false);
+    const fadeAnim = useRef(new Animated.Value(350)).current;
+    // const 
     
     // Filter data elements
     const [date, setDate] = useState(new Date());
@@ -71,7 +73,7 @@ export const FilterView = ({ onFilter, show, setShow}: {onFilter: Function, show
 
     });
 
-    console.log(useWindowDimensions().height*useWindowDimensions().scale)
+    // console.log(useWindowDimensions().height*useWindowDimensions().scale)
 
     function onDateChange(event, selectedDate) {
         // console.log(event);
@@ -85,28 +87,54 @@ export const FilterView = ({ onFilter, show, setShow}: {onFilter: Function, show
     }
 
     function filterTournaments() {
-
         const filters = {
             name: name,
-            startDate: date
+            startDate: date,
         };
 
-        // console.log(filters);
-        // console.log(onFilter)
+        if (Object.keys(location).length > 0) {
+            filters['location'] = location;
+        }
 
-        onFilter({...filters});
+        // console.log(filters);
+        // console.log(updateFilters)
+
+        updateFilters(filters);
+        setShow(false);
     }
 
+    useEffect(() => {
+
+        const duration = 300
+
+        if (show){
+            Animated.timing(fadeAnim, {
+                toValue: 0,
+                duration: duration,
+                useNativeDriver: true
+            }).start();
+        } else {
+            Animated.timing(fadeAnim, {
+                toValue: 350,
+                duration: duration,
+                useNativeDriver: true
+            }).start();
+        }
+
+    }, [show]);
     
 
     const form = (
 
-        <View style={styles.mainBox}>
-            <Pressable
-                onPress={() => setShow(false)}
-                style={styles.outerOverlay}/>
+        <View style={ styles.mainBox }> 
         
-            <View style={styles.container}>
+            { show &&
+                <Pressable
+                    onPress={() => setShow(false)}
+                    style={styles.outerOverlay}/>
+            }
+        
+            <Animated.View style={{...styles.container, transform: [{translateY: fadeAnim}]}}>
                 <View style={styles.formItem}>
                     <FilterText title={'Name'} onUpdate={setName}/>
                 </View>
@@ -122,7 +150,7 @@ export const FilterView = ({ onFilter, show, setShow}: {onFilter: Function, show
                 <View style={styles.formItem}>
                     <Button title="Filter" color={colors.primary} onPress={filterTournaments}/>
                 </View>
-            </View>
+            </Animated.View>
         
         </View>
     )

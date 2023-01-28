@@ -46,7 +46,7 @@ export function localTournamentQuery(coordinates: string, radius = "50mi", perPa
         page: page
     };
 
-    console.log(time_seconds);
+    // console.log(time_seconds);
     return JSON.stringify({query, variables});
 }
 
@@ -92,12 +92,113 @@ export function tournamentDetailsQuery(Id: number): string {
 }
 
 
-function createQuery(params: Partial<APIVariables>) {
+function createFilter(filters, spacing=0): string {
+
+    // console.log(filters);
+    if (typeof filters !== 'object') {
+        return '$' + filters + '\n'
+    }
+
+
+    const test = Object.keys(filters)
+        .map(key => {
+            // console.log(key);
+            const value = filters[key];
+            const initalSpacing = '  '.repeat(spacing);
+            if (typeof value !== 'object') {
+                return `${initalSpacing}${key}: ${createFilter(key)}`
+            } 
+
+            return initalSpacing + key + ":{\n" + createFilter(value, spacing+1) + "}";
+        })
+        .join("\n");
+
+    // console.log(test);
+
+    return test
+    
+}
+
+
+export function tournamentListQuery(params: Partial<APIVariables>) {
+
+    // console.log(params);
+    const templateVariables = {
+        distanceFrom: 'String',
+        distance: 'String',
+        perPage: 'Int',
+        page: 'Int',
+        after: 'Timestamp',
+        name: 'String'
+    }
+
+    const variablesUsed = Object.keys(params).filter(param => param in templateVariables);
+    
+    // console.log(variablesUsed);
+    
+    const variableList = variablesUsed
+        .map(variable => `$${variable}: ${templateVariables[variable]}`);
+        // .map(variable => `$${variable}"`);
+
+    
+    const variableString = variableList.join(", ");
+
+    const bodyVariables = ['page', 'perPage'];
+    let bodyObj = bodyVariables.reduce((prev, cur) => {
+
+        if (cur in params) {
+            return {...prev, [cur]: params[cur]}
+        }
+
+        return prev
+    }, {});
+
+    // console.log(bodyObj);
+    
+    
+    const bodyConstraints = createFilter(bodyObj, 1);
+    // console.log(bodyConstraints);
+
+    const filters = Object.keys(params)
+        .filter(param => !(bodyVariables.includes(param)))
+        .reduce((prev, cur) => ({...prev, [cur]: params[cur]}), {});
+    // console.log(filters);
 
 
 
+    const filterString = createFilter(filters, 2);
+    // console.log(filters);
+
+    const query = `
+    query getTournaments(${variableString}) {
+        tournaments(query: {
+            ${bodyConstraints}
+            filter: {
+                ${filterString}
+            }
+        }) {
+            nodes {
+                id
+                name
+                city
+                startAt
+                numAttendees
+                images(type: "profile") {
+                    id
+                    type
+                    url
+                }
+
+            }
+        }
+    }`
+
+    // console.log(query);
 
 
+    const variables = params
+
+    return JSON.stringify({query, variables});
 }
 
 
@@ -117,6 +218,7 @@ export async function queryAPI(query_body: string, timeout = 10000) {
         });
 
         const json_data: APIQuery = await response.json();
+        console.log(json_data)
         const data = json_data.data;
 
         if (data === undefined) {
