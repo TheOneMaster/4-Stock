@@ -2,6 +2,7 @@ import { useTheme } from "@react-navigation/native";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { convertDateToString } from "../helper";
+import PlaceholderImage from "../PlaceholderImage";
 
 export const TournamentCard = (props) => {
     const id = props.id;
@@ -37,7 +38,8 @@ export const TournamentCard = (props) => {
         image: {
             overflow: "hidden",
             resizeMode: "contain",
-            flex: 1,
+            width: '100%',
+            height: '100%'
         },
 
         textBox: {
@@ -82,7 +84,7 @@ export const TournamentCard = (props) => {
         <Pressable style={style} onPress={navigateToTournament}>
             <View style={styles.container}>
                 <View style={styles.imageContainer}>
-                    <Image style={styles.image} source={{ uri: profile_image.url }}></Image>
+                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url}/>
                 </View>
                 <View style={styles.textBox}>
                     <Text style={styles.title}>{name}</Text>
