@@ -1,4 +1,4 @@
-interface Image {
+export interface ImageType {
     id: string,
     type: string,
     url: string
@@ -10,7 +10,7 @@ export interface BasicTournamentDetails {
     city: string,
     startAt: number,
     numAttendees?: number,
-    images: Image[]
+    images: ImageType[]
 }
 
 export interface FullTournamentDetails extends BasicTournamentDetails{
@@ -80,6 +80,7 @@ export interface APIVariables {
     perPage?: number,
     page?: number,
     afterDate?: number,
+    beforeDate?: number,
     location?: LocationFilter,
 }
 export interface StorageVariables {
@@ -87,5 +88,16 @@ export interface StorageVariables {
     perPage?: number,
     page?: number,
     afterDate?: Date,
+    beforeDate?: Date,
     location?: LocationFilter
 }
+
+export const APIFiltersTemplate = {
+    name: "String",
+    perPage: "Int",
+    page: "Int",
+    afterDate: "Timestamp",
+    beforeDate: "Timestamp",
+    distanceFrom: "String",
+    distance: "String"
+} as const;

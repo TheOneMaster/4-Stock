@@ -2,53 +2,9 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env";
 
-import { APIQuery, APIVariables } from "./types";
+import { APIQuery, APIVariables, APIFiltersTemplate, StorageVariables } from "./types";
+import { addMonthsToDate, convertDateToUnixSeconds } from "./helper";
 
-export function localTournamentQuery(coordinates: string, radius = "50mi", perPage = 20, page = 1): string {
-    const current_time = new Date('2022-11-16').getTime();
-    const time_seconds = Math.floor(current_time / 1000);
-    // console.log(time_seconds);
-    const query = `
-    query getLocalTournaments($coordinates: String!, $radius: String!, $perPage: Int = 20, $after: Timestamp, $page: Int) {
-        tournaments(query: {
-            perPage: $perPage
-            page: $page
-            sortBy: "startAt desc"
-            filter: {
-                location: {
-                    distanceFrom: $coordinates,
-                    distance: $radius
-                }
-                videogameIds: [1]
-                afterDate: $after
-            }
-        }) {
-            nodes {
-                id
-                name
-                city
-                startAt
-                numAttendees
-                images(type: "") {
-                    id
-                    type
-                    url
-                }
-            }
-        }
-    }`;
-
-    const variables = {
-        coordinates: coordinates,
-        radius: radius,
-        perPage: perPage,
-        after: time_seconds,
-        page: page
-    };
-
-    // console.log(time_seconds);
-    return JSON.stringify({ query, variables });
-}
 
 export function tournamentDetailsQuery(Id: number): string {
     const query = `
@@ -66,6 +22,11 @@ export function tournamentDetailsQuery(Id: number): string {
             videogame {
               id
               displayName
+              images {
+                id
+                type
+                url
+              }
             }
           }
           isRegistrationOpen
@@ -76,7 +37,7 @@ export function tournamentDetailsQuery(Id: number): string {
           startAt
           venueName
           venueAddress
-          images(type:"") {
+          images {
             id
             type
             url
@@ -121,7 +82,6 @@ function createFilter(filters, spacing = 0): string {
 
 
 export function tournamentListQuery(params: Partial<APIVariables>) {
-
     const variableString = createVariableString(params);
 
     const bodyVariables = ['page', 'perPage'];
@@ -149,7 +109,7 @@ export function tournamentListQuery(params: Partial<APIVariables>) {
     // console.log(filters);
 
     const query = `
-    query getTournaments(${variableString}) {
+    query getTournaments${variableString} {
         tournaments(query: {
             ${bodyConstraints}
             filter: {
@@ -162,7 +122,7 @@ export function tournamentListQuery(params: Partial<APIVariables>) {
                 city
                 startAt
                 numAttendees
-                images(type: "profile") {
+                images {
                     id
                     type
                     url
@@ -233,21 +193,12 @@ function getFlatObject(obj: Object): Object {
 
 function createVariableString(params) {
     const flatVariables = getFlatObject(params);
-    console.log(flatVariables);
+    // console.log(flatVariables);
 
-    const variablesTemplate = {
-        name: "String",
-        perPage: "Int",
-        page: "Int",
-        afterDate: "Timestamp",
-        distanceFrom: "String",
-        distance: "String"
-    }
-
-    let variablesChosenTemplate = {}
+    let variablesChosenTemplate = {};
     for (const variable in flatVariables) {
-        if (variable in variablesTemplate) {
-            variablesChosenTemplate[variable] = variablesTemplate[variable];
+        if (variable in APIFiltersTemplate) {
+            variablesChosenTemplate[variable] = APIFiltersTemplate[variable];
         }
     };
 
@@ -256,8 +207,13 @@ function createVariableString(params) {
         variableStringList.push(`$${variable}: ${variablesChosenTemplate[variable]}`);
     };
     
-    const variableString = variableStringList.join(", ");
+    let variableString = variableStringList.join(", ");
 
-    console.log(variableString);
+    // console.log(variableString);
+
+    if (variableString !== '') {
+        variableString = "(" + variableString + ")"; 
+    }
+
     return variableString
 }
