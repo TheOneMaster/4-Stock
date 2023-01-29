@@ -1,18 +1,38 @@
 
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 
 import { useTheme } from "@react-navigation/native";
-import Melee from "../../assets/melee.png";
-import PlaceHolder from "../../assets/placeholder.png";
 
-const EventCard = ({event}) => {
+import { PlaceholderGame } from "../Logos";
+import { ImageType } from "../types";
+import { useState } from "react";
+import PlaceholderImage from "../PlaceholderImage";
+
+
+function getVideogameImageUrl(images: ImageType[]): string {
+
+    let imageUrl = images.reduce((prev, cur) => {
+
+        if (cur.type === "primary-quality") {
+            return cur.url;
+        } else if (cur.type === 'primary' && prev == '') {
+            return cur.url;
+        }
+        return prev;
+    }, '');
+
+    return imageUrl;
+}
+
+
+const EventCard = ({ event }) => {
+
 
     if (event == undefined || Object.keys(event).length === 0) {
         return null
     }
-    
+
     const name = event.name;
-    const videogame = event.videogame.id;
 
     const { colors } = useTheme();
     const styles = StyleSheet.create({
@@ -24,21 +44,19 @@ const EventCard = ({event}) => {
             backgroundColor: colors.card
         },
         game_image: {
-            resizeMode: 'cover',
-            width: '100%',
-            height: '100%'
+            resizeMode: 'stretch',
+            flex: 1,
         },
         game_container: {
             width: 100,
             height: 100,
-            borderRightWidth: 1,
             borderColor: colors.border,
-            borderStyle: 'solid'
+            borderStyle: 'solid',
         },
         event_text: {
             flex: 1,
             justifyContent: 'center',
-            marginHorizontal: 5
+            marginHorizontal: 5,
         },
         event_title: {
             fontWeight: 'bold',
@@ -47,21 +65,19 @@ const EventCard = ({event}) => {
             flexShrink: 1,
             color: colors.text
         }
-    })
+    });
 
-    let image = videogame === 1 ?
-        <Image source={Melee} style={styles.game_image}></Image> :
-        <Image source={PlaceHolder} style={styles.game_image}></Image>;
+    const imageLogo = getVideogameImageUrl(event.videogame.images);
 
-    const test = () => {
+    const eventTouch = () => {
         console.log(event);
     }
 
     return (
-        <TouchableOpacity onPress={test}>
+        <TouchableOpacity onPress={eventTouch}>
             <View style={styles.container}>
                 <View style={styles.game_container}>
-                    {image}
+                    <PlaceholderImage imageSrc={imageLogo} placeholder={PlaceholderGame} style={styles.game_image}/>
                 </View>
                 <View style={styles.event_text}>
                     <Text style={styles.event_title}>{name}</Text>
