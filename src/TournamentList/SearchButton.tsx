@@ -1,26 +1,29 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native"
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import search_icon from "../../assets/icons8-search.png"
 
 export const SearchButton = ({ showFilter }) => {
 
     const navigation = useNavigation();
 
+    const { colors } = useTheme();
     const style = StyleSheet.create({
         container: {
             padding: 20,
             width: 70,
             height: 70,
+            
             borderRadius: 70 / 2,
+
             position: "absolute",
-            backgroundColor: "red",
             bottom: 20,
             right: 20,
             justifyContent: "center",
             alignItems: "center",
+            
+            backgroundColor: colors.primary,
         },
         icon: {
-            // flex: 1,
             width: 60,
             height: 60,
             resizeMode: 'center',

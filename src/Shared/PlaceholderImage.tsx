@@ -1,4 +1,4 @@
-import { PlaceholderGame, PlaceholderTournament } from "./Logos"
+import { PlaceholderGame, PlaceholderTournament } from "../Shared/Logos"
 import { ImageSourcePropType, Image } from "react-native"
 
 const PlaceholderImage = ({imageSrc, placeholder=null, style}) => {

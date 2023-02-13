@@ -1,29 +1,53 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
+import { useTheme } from "@react-navigation/native";
+import { HamburgerMenu } from "../Shared/SVG";
 
 
 const TopBar = () => {
+    
+    const { colors } = useTheme();
+
+
     const style = StyleSheet.create({
         container: {
-            // flex: 1,
-            width: null,
-            backgroundColor: "red",
-            // height: 10,
-            padding: 10
+            backgroundColor: colors.primary,
+            padding: 10,
+            height: 50,
+            // justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'row'
+        },
+        menu_icon: {
+            marginRight: 10
+        },
+        text: {
+            fontWeight: 'bold',
+            color: 'white'
         }
     });
+
+    function test() {
+        console.log('menu button press');
+    }
+
 
 
     return (
         <View style={style.container}>
+            <View style={style.menu_icon}>
+                <TouchableOpacity onPress={test}>
+                    <HamburgerMenu width={30} height={30} color='#fff'/>
+                </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity>
-                {/* <Image></Image> */}
-            </TouchableOpacity>
-
-            <Text style={{color: "white", fontWeight: 'bold'}}>StartGG Mobile App</Text>
+            <Text style={style.text}>StartGG Mobile App</Text>
 
         </View>
     )
 }
+
+
+
+
 
 export default TopBar;

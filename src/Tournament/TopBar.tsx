@@ -1,10 +1,11 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import PlaceholderImage from "../PlaceholderImage";
+import PlaceholderImage from "../Shared/PlaceholderImage";
 
 export const TopBar = (props) => {
 
-    const { colors } = useTheme();
+    const theme = useTheme();
+    const colors = theme.colors;
 
     const banner_image = props.images.reduce((prev, cur) => {
         if (cur.type === "banner") {
@@ -18,6 +19,9 @@ export const TopBar = (props) => {
         }
         return prev;
     }, {});
+
+    const imgBackgroundColor = theme.dark ? '#FFF' : "#000";
+
 
 
     const styles = StyleSheet.create({
@@ -50,7 +54,7 @@ export const TopBar = (props) => {
             borderRadius: 10,
             overflow: 'hidden',
             width: 80,
-            backgroundColor: colors.background
+            backgroundColor: imgBackgroundColor
         },
         profile_image: {
             flex: 1,

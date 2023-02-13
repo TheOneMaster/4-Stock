@@ -2,7 +2,7 @@ import { useTheme } from "@react-navigation/native";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 import { convertDateToString } from "../helper";
-import PlaceholderImage from "../PlaceholderImage";
+import PlaceholderImage from "../Shared/PlaceholderImage";
 
 export const TournamentCard = (props) => {
     const id = props.id;

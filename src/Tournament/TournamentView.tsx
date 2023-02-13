@@ -6,7 +6,7 @@ import { convertDateToString } from "../helper";
 import { FullTournamentDetails, TournamentAPIQuery } from "../types";
 
 import { useTheme } from "@react-navigation/native";
-import ContactButton from "../Buttons/ContactButton";
+import ContactButton from "../Shared/ContactButton";
 import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
 
@@ -85,6 +85,12 @@ const DetailSection = (props: FullTournamentDetails) => {
 
 
 const TournamentView = ({navigation, route}) => {
+
+    // 
+    // 
+    // TODO: Rewrite this component using FlatList or SectionList instead of using map
+    // 
+    // 
     
     const [data, setData] = useState({} as FullTournamentDetails);
     const [loading, setLoading] = useState(false);

@@ -1,7 +1,7 @@
-import Melee from "../assets/melee.png" 
-import Ultimate from "../assets/ultimate.png"
-import PlaceholderGame from "../assets/placeholder-Game.png"
-import PlaceholderTournament from "../assets/Placeholder-Tournament.png"
+import Melee from "../../assets/melee.png" 
+import Ultimate from "../../assets/ultimate.png"
+import PlaceholderGame from "../../assets/placeholder-Game.png"
+import PlaceholderTournament from "../../assets/Placeholder-Tournament.png"
 
 
 export {

@@ -1,7 +1,7 @@
 import { useTheme } from "@react-navigation/native";
 import * as React from "react";
 import { Linking, StyleSheet, Text, TouchableHighlight } from "react-native";
-import DiscordLogo from "../../assets/DiscordLogo.svg";
+import { DiscordDark, DiscordLight } from "./SVG";
 
 function openLink(url: string, type: string) {
     switch (type) {
@@ -36,9 +36,13 @@ const ContactButton = (props) => {
 
     let contactLink: JSX.Element|null = null;
     if (type === 'discord') {
+
+        const discLogo = theme.dark ? <DiscordDark width={40} height={40}/> : <DiscordLight width={40} height={40}/>
+
+
         contactLink = (
             <TouchableHighlight onPress={() => openLink(url, type)} style={style.touchable}>
-                <DiscordLogo width={40} height={40}/>
+                {discLogo}
             </TouchableHighlight>
         )
     }
