@@ -20,7 +20,7 @@ const defaultVariables: StorageVariables = {
     }
 };
 
-export const FilterView = ({ updateFilters, setShow, show, height }: { updateFilters: Function, setShow: React.Dispatch<SetStateAction<boolean>>, show: boolean, height: number }) => {
+export const FilterView = ({ updateFilters, setShow, show, height }: { updateFilters: Function, setShow: React.Dispatch<SetStateAction<boolean>>, show: boolean, height?: number }) => {
 
     const filterHeight = height ?? DEFAULT_HEIGHT;
 
