@@ -5,6 +5,7 @@ import { LogBox, useColorScheme } from "react-native";
 
 import TournamentView from "./Tournament/TournamentView";
 import TournamentListView from "./TournamentList/TournamentListView";
+import EventPage from "./Event/EventView";
 import { FilterView } from "./TournamentList/FilterComponent";
 import { customLightTheme, customDarkTheme } from "./Themes";
 
@@ -20,7 +21,7 @@ function App() {
         <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
           <Stack.Screen name="Home" component={TournamentListView}></Stack.Screen>
           <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
-          {/* <Stack.Screen name="Filter" component={FilterView}></Stack.Screen> */}
+          <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
     

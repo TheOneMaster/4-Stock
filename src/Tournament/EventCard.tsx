@@ -1,18 +1,16 @@
 
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 
-import { PlaceholderGame } from "../Logos";
+import { PlaceholderGame } from "../Shared/Logos";
 import { ImageType } from "../types";
 import { useState } from "react";
-import PlaceholderImage from "../PlaceholderImage";
+import PlaceholderImage from "../Shared/PlaceholderImage";
 
 
 function getVideogameImageUrl(images: ImageType[]): string {
-
     let imageUrl = images.reduce((prev, cur) => {
-
         if (cur.type === "primary-quality") {
             return cur.url;
         } else if (cur.type === 'primary' && prev == '') {
@@ -27,6 +25,8 @@ function getVideogameImageUrl(images: ImageType[]): string {
 
 const EventCard = ({ event }) => {
 
+
+    const navigation = useNavigation();
 
     if (event == undefined || Object.keys(event).length === 0) {
         return null
@@ -71,10 +71,11 @@ const EventCard = ({ event }) => {
 
     const eventTouch = () => {
         console.log(event);
+        navigation.navigate("Event", event);
     }
 
     return (
-        <TouchableOpacity onPress={eventTouch}>
+        <TouchableOpacity onPress={eventTouch} delayPressIn={50}>
             <View style={styles.container}>
                 <View style={styles.game_container}>
                     <PlaceholderImage imageSrc={imageLogo} placeholder={PlaceholderGame} style={styles.game_image}/>
