@@ -1,11 +1,11 @@
 import { useTheme } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, View } from "react-native";
+import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { queryAPI, tournamentListQuery } from "../api";
-import { convertDateToUnixSeconds, convertStorageToAPI } from "../helper";
+import { addMonthsToDate } from "../helper";
 
-import { APIVariables, BasicTournamentDetails, StorageVariables, TournamentListAPIQuery } from "../types";
+import { BasicTournamentDetails, StorageVariables, TournamentListAPIQuery } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
@@ -49,44 +49,28 @@ const TournamentListView = ({ navigation }) => {
   const [page, setPage] = useState(1);
   const [coords, setCoords] = useState("40.730610, -73.935242");
 
+  const dateTemp = new Date();
+
   const [filterParams, setFilterParams] = useState({
-    perPage: 20,
-    location: {
-      distanceFrom: "40.730610, -73.935242",
-      distance: "50mi"
-    }
+    beforeDate: addMonthsToDate(dateTemp, 1)
   } as Partial<StorageVariables>);
 
   const setTournamentData = async () => {
-
-    const finalVariables: APIVariables = {};
-    for (const variable in filterParams) {
-      const value = filterParams[variable];
-
-      // console.info(`${variable} - ${typeof(value)}`);
-
-      if (value instanceof Date) {
-        finalVariables[variable] = convertDateToUnixSeconds(value);
-        continue;
-      }
-      finalVariables[variable] = value;
-    }
-
-    // console.log(finalVariables);
+    setRefreshing(true);
 
     try {
-      const body = tournamentListQuery(finalVariables);
+      const body = tournamentListQuery(filterParams);
       const json_data = await queryAPI(body) as TournamentListAPIQuery;
-
       const currentData = json_data.tournaments.nodes
-
-      setData(json_data.tournaments.nodes);
+      setData(currentData);
     } catch (err) {
       console.log(err)
     }
-  }
 
-  const updateTournamentList = async (pageNum: number) => {
+    setRefreshing(false);
+  };
+
+  const updateTournamentList = async () => {
 
     if (finished) {
       return;
@@ -95,12 +79,9 @@ const TournamentListView = ({ navigation }) => {
     setUpdating(true);
 
     const params = Object.assign({}, filterParams);
-    params.page = pageNum;
+    params.page = page;
 
-    const variables = convertStorageToAPI(params);
-    variables.page = page;
-
-    const body = tournamentListQuery(variables);
+    const body = tournamentListQuery(params);
     const query_data = await queryAPI(body) as TournamentListAPIQuery;
     const current_data = query_data.tournaments.nodes;
 
@@ -112,18 +93,18 @@ const TournamentListView = ({ navigation }) => {
     }
 
     setUpdating(false);
-  }
-
+  };
 
   const onRefresh = async () => {
-    setRefreshing(true);
     setPage(1);
+    setFinished(false);
+    
     await setTournamentData();
-    setRefreshing(false);
   };
 
   useEffect(() => {
     setRefreshing(true);
+    setFinished(false);
 
     setTournamentData().then(() => setRefreshing(false))
 
@@ -132,9 +113,18 @@ const TournamentListView = ({ navigation }) => {
 
   useEffect(() => {
     if (page !== 1) {
-      updateTournamentList(page);
+      updateTournamentList();
     }
-  }, [page])
+  }, [page]);
+
+  useEffect(() => {
+
+    if (finished) {
+      ToastAndroid.show("No more tournaments", ToastAndroid.SHORT);
+    }
+
+
+  }, [finished])
 
 
 
@@ -143,13 +133,6 @@ const TournamentListView = ({ navigation }) => {
       <TournamentCard {...props} navigation={navigation}></TournamentCard>
     </View>
   );
-
-  const test = async (filters) => {
-    console.log('poop');
-
-
-  }
-
 
   return (
     <View style={{ flex: 1 }}>
@@ -168,7 +151,7 @@ const TournamentListView = ({ navigation }) => {
 
       {updating &&
         <View style={styles.updatingIcon}>
-          <ActivityIndicator size='large' color='red'></ActivityIndicator>
+          <ActivityIndicator size='large' color={colors.primary}></ActivityIndicator>
         </View>
       }
 
@@ -177,7 +160,7 @@ const TournamentListView = ({ navigation }) => {
 
 
     </View>
-  )
+  );
 }
 
 export default TournamentListView;

@@ -3,8 +3,9 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { APIQuery, APIVariables, APIFiltersTemplate, StorageVariables } from "./types";
-import { addMonthsToDate, convertDateToUnixSeconds } from "./helper";
+import { addMonthsToDate, cleanObject, convertDateToUnixSeconds, convertStorageToAPI } from "./helper";
 
+// API Query functions
 
 export function tournamentDetailsQuery(Id: number): string {
     const query = `
@@ -53,60 +54,47 @@ export function tournamentDetailsQuery(Id: number): string {
 }
 
 
-function createFilter(filters, spacing = 0): string {
-
-    // console.log(filters);
+function createGraphQLString(filters: any, spacing = 0): string {
     if (typeof filters !== 'object') {
         return '$' + filters + '\n'
     }
 
-
     const test = Object.keys(filters)
         .map(key => {
-            // console.log(key);
             const value = filters[key];
             const initalSpacing = '  '.repeat(spacing);
             if (typeof value !== 'object') {
-                return `${initalSpacing}${key}: ${createFilter(key)}`
+                return `${initalSpacing}${key}: ${createGraphQLString(key)}`
             }
 
-            return initalSpacing + key + ":{\n" + createFilter(value, spacing + 1) + "}";
+            return initalSpacing + key + ":{\n" + createGraphQLString(value, spacing + 1) + "}";
         })
         .join("\n");
-
-    // console.log(test);
 
     return test
 
 }
 
 
-export function tournamentListQuery(params: Partial<APIVariables>) {
-    const variableString = createVariableString(params);
+export function tournamentListQuery(storageParams: Partial<StorageVariables>) {
+    const params = convertStorageToAPI(storageParams);
+    const paramsUsed = cleanObject(params);
+    const variableString = createVariableString(paramsUsed);
 
     const bodyVariables = ['page', 'perPage'];
     let bodyObj = bodyVariables.reduce((prev, cur) => {
-
-        if (cur in params) {
-            return { ...prev, [cur]: params[cur] }
+        if (cur in paramsUsed) {
+            return { ...prev, [cur]: paramsUsed[cur] }
         }
-
         return prev
     }, {});
 
-
-    const bodyConstraints = createFilter(bodyObj, 1);
-    // console.log(bodyConstraints);
-
-    const filters = Object.keys(params)
+    const bodyConstraints = createGraphQLString(bodyObj, 1);
+    const filters = Object.keys(paramsUsed)
         .filter(param => !(bodyVariables.includes(param)))
-        .reduce((prev, cur) => ({ ...prev, [cur]: params[cur] }), {});
-    // console.log(filters);
+        .reduce((prev, cur) => ({ ...prev, [cur]: paramsUsed[cur] }), {});
 
-
-
-    const filterString = createFilter(filters, 2);
-    // console.log(filters);
+    const filterString = createGraphQLString(filters, 2);
 
     const query = `
     query getTournaments${variableString} {
@@ -133,16 +121,42 @@ export function tournamentListQuery(params: Partial<APIVariables>) {
     }`
 
 
-    const variables = getFlatObject(params);
+    const variables = getFlatObject(paramsUsed);
 
     return JSON.stringify({ query, variables });
+}
+
+export function EventDetailsQuery(Id: number): string {
+    const query = `
+    query getEventData($id: ID) {
+        event(id: $id){
+          id
+          name
+          isOnline
+          state
+          startAt
+          waves{
+            id
+            identifier
+            startAt
+          }
+        }
+    }`;
+
+    const variables = {
+        id: Id
+    }
+
+    return JSON.stringify({query, variables});
 }
 
 
 
 
 
-export async function queryAPI(query_body: string, timeout = 10000) {
+
+
+export async function queryAPI(query_body: string) {
     try {
         const api_url = "https://api.start.gg/gql/alpha";
         const response = await fetch(api_url, {
@@ -156,7 +170,6 @@ export async function queryAPI(query_body: string, timeout = 10000) {
 
         const json_data: APIQuery = await response.json();
         const data = json_data.data;
-
         if (data === undefined) {
             throw new TypeError("API request failed. Please try again later.")
         }
@@ -172,18 +185,20 @@ export async function queryAPI(query_body: string, timeout = 10000) {
     }
 }
 
-function flattenVariables(params: Partial<APIVariables>): Object[] {
-    let test = [];
+// Object manipulation functions
+
+function flattenVariables<T extends Object>(params: T): Object[] {
+    let returnVariables = [];
     for (const param in params) {
         const value = params[param];
         if (typeof value === 'object' && !(value instanceof Date)) {
-            test.push(...flattenVariables(value));
+            returnVariables.push(...flattenVariables(value));
             continue;
         }
         const t = {[param]: value}
-        test.push(t)
+        returnVariables.push(t)
     }
-    return test
+    return returnVariables
 }
 
 function getFlatObject(obj: Object): Object {
@@ -191,7 +206,7 @@ function getFlatObject(obj: Object): Object {
     return Object.assign({}, ...flatArray);
 } 
 
-function createVariableString(params) {
+function createVariableString(params): string {
     const flatVariables = getFlatObject(params);
     // console.log(flatVariables);
 
