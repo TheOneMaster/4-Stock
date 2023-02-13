@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native"
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { EventDetailsQuery, queryAPI } from "../api";
@@ -8,6 +8,28 @@ import BracketPage from "./BracketPage";
 
 
 const Tab = createMaterialTopTabNavigator();
+
+const MainView = ({loading, data}) => {
+
+    const {colors} = useTheme();
+
+    if (loading) {
+        return (
+            <View style={styles.loading}>
+                <ActivityIndicator color={colors.primary} size='large' />
+            </View>
+        )
+    }
+
+    return (
+        <Tab.Navigator>
+            <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes}} />
+            <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
+        </Tab.Navigator>
+    )
+}
+
+
 
 const EventPage = ({navigation, route}) => {
 
@@ -20,20 +42,14 @@ const EventPage = ({navigation, route}) => {
         const queryData = queryAPI(queryBody);
 
         queryData.then(details => {
-            console.log(details)
-            setData(details)
+            setData(details.event)
             setLoading(false);
         });
 
         
-    }, [])
+    }, []);
 
-    return (
-        <Tab.Navigator>
-            <Tab.Screen name="Results" component={ResultsPage}/>
-            <Tab.Screen name="Bracket" component={BracketPage}/>
-        </Tab.Navigator>
-    )
+    return <MainView loading={loading} data={data}/>
 };
 
 
@@ -42,6 +58,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         margin: 'auto'
+    },
+    loading: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 

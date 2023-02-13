@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
+
+import ResultCard from "./ResultCard";
 
 const ResultsPage = ({navigation, route}) => {
 
-    const [results, setResults] = useState([]);
+    const standings = route.params.standings;
+    const { colors } = useTheme()
     
     return (
-        <View style={style.container}>
-            <Text>{JSON.stringify(route)}</Text>
+        <View style={{flex: 1}}>
+            <FlatList
+                data={standings}
+                renderItem={({index, item}) => <ResultCard playerData={item}/>}
+                style={{...styles.container, backgroundColor: colors.background}}
+                />
         </View>
     )
 
@@ -16,9 +24,10 @@ const ResultsPage = ({navigation, route}) => {
 
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-
+        paddingHorizontal: 10,
+        paddingTop: 10
     }
 })
 

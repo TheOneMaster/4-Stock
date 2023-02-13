@@ -140,6 +140,27 @@ export function EventDetailsQuery(Id: number): string {
             identifier
             startAt
           }
+          standings(query: {
+            page: 1
+            perPage: 24
+          }){
+            nodes {
+                entrant {
+                    id
+                    name
+                    participants {
+                        user {
+                            images {
+                                id
+                                url
+                                type
+                            }
+                        }
+                    }
+                }
+                placement
+            }
+          }
         }
     }`;
 
