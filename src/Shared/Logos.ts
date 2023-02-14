@@ -2,6 +2,7 @@ import Melee from "../../assets/melee.png"
 import Ultimate from "../../assets/ultimate.png"
 import PlaceholderGame from "../../assets/placeholder-Game.png"
 import PlaceholderTournament from "../../assets/Placeholder-Tournament.png"
+import PlaceHolderPlayer from "../../assets/placeholder-player.png"
 
 
 export {
@@ -9,6 +10,7 @@ export {
     Ultimate,
     PlaceholderGame,
     PlaceholderTournament,
+    PlaceHolderPlayer
 }
 
 

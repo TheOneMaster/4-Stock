@@ -42,7 +42,7 @@ interface APIHint {
 }
 export interface APIQuery {
     actionRecords: [],
-    data: TournamentAPIQuery|TournamentListAPIQuery,
+    data: TournamentAPIQuery|TournamentListAPIQuery|EventAPIQuery,
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -60,6 +60,10 @@ export interface TournamentListAPIQuery extends APIQuery {
 
 export interface TournamentAPIQuery extends APIQuery {
     tournament: FullTournamentDetails
+}
+
+export interface EventAPIQuery extends APIQuery {
+    event: FullEventDetails
 }
 
 export interface TournamentQueryVariables {
@@ -101,3 +105,32 @@ export const APIFiltersTemplate = {
     distanceFrom: "String",
     distance: "String"
 } as const;
+
+interface Participant {
+
+}
+
+export interface Entrant {
+    id: number,
+    name: string,
+    participants: Participant[],
+    placement: number
+}
+
+interface Wave {
+    id: number,
+    identifier: string,
+    startAt: number
+}
+
+export interface FullEventDetails {
+    id: number,
+    isOnline: boolean,
+    name: string,
+    standings: {
+        nodes: Entrant[]
+    },
+    startAt: number,
+    state: string,
+    waves: Wave[]
+}

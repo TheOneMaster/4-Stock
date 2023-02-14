@@ -1,12 +1,20 @@
-import { PlaceholderGame, PlaceholderTournament } from "../Shared/Logos"
+import { PlaceholderGame, PlaceHolderPlayer, PlaceholderTournament } from "../Shared/Logos"
 import { ImageSourcePropType, Image } from "react-native"
 
-const PlaceholderImage = ({imageSrc, placeholder=null, style}) => {
+const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc: string, placeholder?: 'tournament'|'game'|'player', style?: Object}) => {
     let placeholderFinal: ImageSourcePropType;
 
-    if (placeholder === null) {
-        placeholderFinal = PlaceholderTournament;
-    } 
+    switch (placeholder) {
+        case 'tournament':
+            placeholderFinal = PlaceholderTournament;
+            break;
+        case 'game':
+            placeholderFinal = PlaceholderGame;
+            break;
+        case 'player':
+            placeholderFinal = PlaceHolderPlayer;
+            break;
+    }
 
 
     if (imageSrc) {
@@ -14,7 +22,7 @@ const PlaceholderImage = ({imageSrc, placeholder=null, style}) => {
             <Image 
                 style={style}
                 source={{uri: imageSrc}}
-                defaultSource={placeholder}/>
+                defaultSource={placeholderFinal}/>
         )
     }
 

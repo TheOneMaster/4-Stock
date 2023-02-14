@@ -53,30 +53,92 @@ export function tournamentDetailsQuery(Id: number): string {
     return JSON.stringify({ query, variables });
 }
 
+export function EventDetailsQuery(Id: number): string {
+    const query = `
+    query getEventData($id: ID) {
+        event(id: $id){
+          id
+          name
+          isOnline
+          state
+          startAt
+          waves{
+            id
+            identifier
+            startAt
+          }
+          standings(query: {
+            page: 1
+            perPage: 24
+          }){
+            nodes {
+                id
+                entrant {
+                    id
+                    name
+                    participants {
+                        user {
+                            images {
+                                id
+                                url
+                                type
+                            }
+                        }
+                    }
+                }
+                placement
+            }
+          }
+        }
+    }`;
 
-function createGraphQLString(filters: any, spacing = 0): string {
-    if (typeof filters !== 'object') {
-        return '$' + filters + '\n'
+    const variables = {
+        id: Id
     }
 
-    const test = Object.keys(filters)
-        .map(key => {
-            const value = filters[key];
-            const initalSpacing = '  '.repeat(spacing);
-            if (typeof value !== 'object') {
-                return `${initalSpacing}${key}: ${createGraphQLString(key)}`
+    return JSON.stringify({query, variables});
+}
+
+export function EventStandingsQuery(Id: number, page: number): string {
+    const query = `
+    query getEventStandings($id: ID, $page: Int) {
+        event(id: $id) {
+            standings(query: {
+                page: $page
+                perPage: 24
+            }) {
+                nodes {
+                    id
+                    placement
+                    entrant {
+                        id
+                        name
+                        participants {
+                            user {
+                                images {
+                                    id
+                                    url
+                                    type
+                                }
+                            }
+                        }
+                    }
+                }
             }
+        }
+    }`;
 
-            return initalSpacing + key + ":{\n" + createGraphQLString(value, spacing + 1) + "}";
-        })
-        .join("\n");
+    const variables = {
+        id: Id,
+        page: page
+    }
 
-    return test
-
+    return JSON.stringify({query, variables});
 }
 
 
-export function tournamentListQuery(storageParams: Partial<StorageVariables>) {
+
+export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
     const params = convertStorageToAPI(storageParams);
     const paramsUsed = cleanObject(params);
     const variableString = createVariableString(paramsUsed);
@@ -125,57 +187,6 @@ export function tournamentListQuery(storageParams: Partial<StorageVariables>) {
 
     return JSON.stringify({ query, variables });
 }
-
-export function EventDetailsQuery(Id: number): string {
-    const query = `
-    query getEventData($id: ID) {
-        event(id: $id){
-          id
-          name
-          isOnline
-          state
-          startAt
-          waves{
-            id
-            identifier
-            startAt
-          }
-          standings(query: {
-            page: 1
-            perPage: 24
-          }){
-            nodes {
-                entrant {
-                    id
-                    name
-                    participants {
-                        user {
-                            images {
-                                id
-                                url
-                                type
-                            }
-                        }
-                    }
-                }
-                placement
-            }
-          }
-        }
-    }`;
-
-    const variables = {
-        id: Id
-    }
-
-    return JSON.stringify({query, variables});
-}
-
-
-
-
-
-
 
 export async function queryAPI(query_body: string) {
     try {
@@ -252,4 +263,25 @@ function createVariableString(params): string {
     }
 
     return variableString
+}
+
+function createGraphQLString(filters: any, spacing = 0): string {
+    if (typeof filters !== 'object') {
+        return '$' + filters + '\n'
+    }
+
+    const test = Object.keys(filters)
+        .map(key => {
+            const value = filters[key];
+            const initalSpacing = '  '.repeat(spacing);
+            if (typeof value !== 'object') {
+                return `${initalSpacing}${key}: ${createGraphQLString(key)}`
+            }
+
+            return initalSpacing + key + ":{\n" + createGraphQLString(value, spacing + 1) + "}";
+        })
+        .join("\n");
+
+    return test
+
 }
