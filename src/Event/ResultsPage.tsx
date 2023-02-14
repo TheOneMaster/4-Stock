@@ -52,7 +52,7 @@ const ResultsPage = ({navigation, route}) => {
         <View style={{flex: 1}}>
             <FlatList
                 data={standings}
-                renderItem={({index, item}) => <ResultCard playerData={item}/>}
+                renderItem={({index, item}) => <ResultCard playerData={item} index={index}/>}
                 style={styles.container}
                 onEndReached={() => setPage(page+1)}
                 onEndReachedThreshold={0.1}
@@ -69,7 +69,6 @@ const ResultsPage = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         paddingHorizontal: 10,
-        paddingTop: 10
     },
     loadingCircle: {
         position: 'absolute',

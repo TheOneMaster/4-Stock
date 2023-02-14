@@ -17,7 +17,7 @@ function getProfileImageUrl(participant): string {
 }
 
 
-const ResultCard = ({playerData}) => {
+const ResultCard = ({playerData, index}) => {
 
     const { colors } = useTheme();
     const entrant = playerData.entrant;
@@ -25,10 +25,17 @@ const ResultCard = ({playerData}) => {
     const placement = playerData.placement;
     const profileImage = getProfileImageUrl(participant)
 
+    const containerStyle = {
+        ...styles.container,
+        borderColor: colors.border,
+        backgroundColor: colors.card,
+        marginTop: index === 0 ? 10 : undefined
+    }
+
     return (
-        <View style={{...styles.container, borderColor: colors.border, backgroundColor: colors.card}}>
+        <View style={containerStyle}>
             <View style={styles.imageContainer}>
-                <PlaceholderImage imageSrc={profileImage} style={{height: 100, width: 100}}/>
+                <PlaceholderImage imageSrc={profileImage} placeholder='player' style={{height: 100, width: 100}}/>
             </View>
             <View style={styles.detailsContainer}>
                 <Text style={{...styles.playerTag, color: colors.text}}>{entrant.name}</Text>
@@ -67,7 +74,7 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 20,
         fontWeight: '700',
-        fontSize: 15
+        fontSize: 20
     }
 });
 
