@@ -25,7 +25,7 @@ const MainView = ({loading, data}) => {
 
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes, id: data.id}} />
+            { data.state==='COMPLETED' && <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes, id: data.id}} /> }
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )
