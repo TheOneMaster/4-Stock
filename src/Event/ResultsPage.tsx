@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import ResultCard from "./ResultCard";
@@ -47,6 +47,12 @@ const ResultsPage = ({navigation, route}) => {
         addPlacements()
 
     }, [page])
+
+    useEffect(() => {
+        if (finished){
+            ToastAndroid.show("No more players", ToastAndroid.SHORT);
+        }
+    }, [finished])
 
     return (
         <View style={{flex: 1}}>
