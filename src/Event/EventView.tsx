@@ -5,6 +5,7 @@ import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import ResultsPage from "./ResultsPage";
 import BracketPage from "./BracketPage";
+import { EventAPIQuery, FullEventDetails } from "../types";
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -14,6 +15,7 @@ const MainView = ({loading, data}) => {
     const {colors} = useTheme();
 
     if (loading) {
+        // Default view before data is loaded
         return (
             <View style={styles.loading}>
                 <ActivityIndicator color={colors.primary} size='large' />
@@ -23,7 +25,7 @@ const MainView = ({loading, data}) => {
 
     return (
         <Tab.Navigator>
-            <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes}} />
+            <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes, id: data.id}} />
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )
@@ -33,13 +35,13 @@ const MainView = ({loading, data}) => {
 
 const EventPage = ({navigation, route}) => {
 
-    const [data, setData] = useState({});
+    const [data, setData] = useState({} as FullEventDetails);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const eventId = route.params.id;
         const queryBody = EventDetailsQuery(eventId);
-        const queryData = queryAPI(queryBody);
+        const queryData = queryAPI(queryBody) as Promise<EventAPIQuery>;
 
         queryData.then(details => {
             setData(details.event)
