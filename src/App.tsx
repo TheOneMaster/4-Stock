@@ -6,7 +6,6 @@ import { LogBox, useColorScheme } from "react-native";
 import TournamentView from "./Tournament/TournamentView";
 import TournamentListView from "./TournamentList/TournamentListView";
 import EventPage from "./Event/EventView";
-import { FilterView } from "./TournamentList/FilterComponent";
 import { customLightTheme, customDarkTheme } from "./Themes";
 
 LogBox.ignoreAllLogs();
