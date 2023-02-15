@@ -109,13 +109,22 @@ export function EventDetailsQuery(Id: number, singles=true): string {
     return JSON.stringify({query, variables});
 }
 
-export function EventStandingsQuery(Id: number, page: number, singles: boolean): string {
+export function EventStandingsQuery(Id: number, perPage: number, page: number, singles: boolean, filter?: string) {
+    const filterString = filter ? `filter: {
+        search: {
+            searchString: $filter
+        }
+    }` : '';
+
+    let variableString = filter ? '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!, $filter: String' : '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!';
+
     const query = `
-    query getEventStandings($id: ID, $page: Int, $singles: Boolean!) {
+    query getEventStandings(${variableString}) {
         event(id: $id) {
           standings(query: {
             page: $page
-            perPage: 24
+            perPage: $perPage
+            ${filterString}
                     }) {
                 nodes {
                   id
@@ -145,12 +154,14 @@ export function EventStandingsQuery(Id: number, page: number, singles: boolean):
                       }
           }
         }
-      }`;
+    }`;
 
     const variables = {
         id: Id,
+        perPage: perPage,
         page: page,
-        singles: singles
+        singles: singles,
+        filter: filter
     }
 
     return JSON.stringify({query, variables});

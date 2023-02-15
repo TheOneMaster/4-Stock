@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, ToastAndroid, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import ResultCard from "./ResultCard";
 import { Entrant, EventAPIQuery } from "../types";
 import { EventStandingsQuery, queryAPI } from "../api";
+import SearchBar from "../Shared/SearchBar";
+
+const PER_PAGE = 24    // Show 24 players per page (instead of the default 25) 
 
 const ResultsPage = ({navigation, route}) => {
     
@@ -15,7 +18,6 @@ const ResultsPage = ({navigation, route}) => {
 
     // Data state
     const [standings, setStandings] = useState(route.params.standings as Entrant[]);
-    const [filteredStandings, setFilteredData] = useState([] as Entrant[]);
     const [page, setPage] = useState(1);
     const [filter, setFilter] = useState('');
 
@@ -27,7 +29,7 @@ const ResultsPage = ({navigation, route}) => {
     async function addPlacements() {
         setUpdating(true);
 
-        const queryBody = EventStandingsQuery(eventId, page, singles);
+        const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
         const data = await queryAPI(queryBody) as EventAPIQuery;
 
         const event_standings = data.event.standings.nodes;
@@ -42,11 +44,32 @@ const ResultsPage = ({navigation, route}) => {
         setUpdating(false);
     }
 
+    async function filterEntrants() {
+        setUpdating(true);
+        setFinished(false);
+        setPage(1);
 
+        const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
+        console.log(queryBody);
+        const data = await queryAPI(queryBody) as EventAPIQuery;
 
+        const event_standings = data.event.standings.nodes;
 
+        if (event_standings.length > 0) {
+            setStandings(event_standings)
 
+            // Remove extra redundant API call by setting it to finished early
+            if (event_standings.length < PER_PAGE) {
+                setFinished(true);
+            }
 
+        } else {
+            console.log('No more players');
+            setFinished(true);
+        }
+
+        setUpdating(false);
+    }
 
     useEffect(() => {
         if (finished || page === 1) {
@@ -58,7 +81,7 @@ const ResultsPage = ({navigation, route}) => {
     }, [page])
 
     useEffect(() => {
-        if (finished){
+        if (finished && page > 1){
             ToastAndroid.show("No more players", ToastAndroid.SHORT);
         }
     }, [finished])
@@ -66,6 +89,10 @@ const ResultsPage = ({navigation, route}) => {
     return (
         <View style={{flex: 1}}>
             <FlatList
+
+                ListHeaderComponent={ <SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" /> }
+
+
                 data={standings}
                 renderItem={({index, item}) => <ResultCard playerData={item} index={index}/>}
                 style={styles.container}
