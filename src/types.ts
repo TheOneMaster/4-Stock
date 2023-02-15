@@ -29,6 +29,7 @@ export interface FullTournamentDetails extends BasicTournamentDetails{
 export interface EventDetails {
     id: number,
     name: string,
+    type: number,
     videogame: {
         id: number,
         displayName: string

@@ -19,6 +19,7 @@ export function tournamentDetailsQuery(Id: number): string {
           eventRegistrationClosesAt
           events {
             id
+            type
             name
             videogame {
               id
@@ -53,9 +54,9 @@ export function tournamentDetailsQuery(Id: number): string {
     return JSON.stringify({ query, variables });
 }
 
-export function EventDetailsQuery(Id: number): string {
+export function EventDetailsQuery(Id: number, singles=true): string {
     const query = `
-    query getEventData($id: ID) {
+    query getEventData($id: ID, $singles: Boolean!) {
         event(id: $id){
           id
           name
@@ -73,64 +74,83 @@ export function EventDetailsQuery(Id: number): string {
           }){
             nodes {
                 id
-                player {
-                    id
+                  placement  
+                  player @include(if: $singles) {
                     prefix
                     gamerTag
                     user {
-                        images {
-                            id
+                        images(type: "profile") {
                             url
-                            type
                         }
                     genderPronoun
                     }
                 }
-                placement
+                entrant @skip(if: $singles){
+                  id
+                  name
+                  participants {
+                    user {
+                      images(type: "profile") {
+                        url
+                      }
+                    }
+                  }
+                }
             }
           }
         }
     }`;
 
     const variables = {
-        id: Id
+        id: Id,
+        singles: singles
     }
 
     return JSON.stringify({query, variables});
 }
 
-export function EventStandingsQuery(Id: number, page: number): string {
+export function EventStandingsQuery(Id: number, page: number, singles: boolean): string {
     const query = `
-    query getEventStandings($id: ID, $page: Int) {
+    query getEventStandings($id: ID, $page: Int, $singles: Boolean!) {
         event(id: $id) {
-            standings(query: {
-                page: $page
-                perPage: 24
-            }) {
+          standings(query: {
+            page: $page
+            perPage: 24
+                    }) {
                 nodes {
-                    id
-                    placement
-                    player {
+                  id
+                  placement
+                  player @include(if: $singles) {
                         id
                         prefix
                         gamerTag
                         user {
-                            images {
-                                id
+                            images(type: "profile") {
                                 url
-                                type
                             }
                         genderPronoun
                         }
                     }
-                }
-            }
+                  entrant @skip(if: $singles) {
+                    id
+                    name
+                    participants {
+                      user {
+                        images(type: "profile") {
+                          url
+                        }
+                      }
+                    }
+                  }
+                      }
+          }
         }
-    }`;
+      }`;
 
     const variables = {
         id: Id,
-        page: page
+        page: page,
+        singles: singles
     }
 
     return JSON.stringify({query, variables});

@@ -3,26 +3,32 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } fro
 import { useTheme } from "@react-navigation/native";
 
 import ResultCard from "./ResultCard";
-import { Entrant } from "../types";
+import { Entrant, EventAPIQuery } from "../types";
 import { EventStandingsQuery, queryAPI } from "../api";
 
 const ResultsPage = ({navigation, route}) => {
     
+    // UI state 
     const [refresh, setRefresh] = useState(false);
     const [updating, setUpdating] = useState(false);
     const [finished, setFinished] = useState(false);
+
+    // Data state
     const [standings, setStandings] = useState(route.params.standings as Entrant[]);
+    const [filteredStandings, setFilteredData] = useState([] as Entrant[]);
     const [page, setPage] = useState(1);
+    const [filter, setFilter] = useState('');
 
+    // Constants
     const eventId = route.params.id;
-
-    const { colors } = useTheme()
+    const singles = route.params.singles;
+    const { colors } = useTheme();
     
     async function addPlacements() {
         setUpdating(true);
 
-        const queryBody = EventStandingsQuery(eventId, page);
-        const data = await queryAPI(queryBody)
+        const queryBody = EventStandingsQuery(eventId, page, singles);
+        const data = await queryAPI(queryBody) as EventAPIQuery;
 
         const event_standings = data.event.standings.nodes;
 
@@ -35,6 +41,9 @@ const ResultsPage = ({navigation, route}) => {
 
         setUpdating(false);
     }
+
+
+
 
 
 
