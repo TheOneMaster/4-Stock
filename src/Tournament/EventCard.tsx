@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
 
 import { PlaceholderGame } from "../Shared/Logos";
-import { ImageType } from "../types";
+import { EventDetails, ImageType } from "../types";
 import { useState } from "react";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 
@@ -23,7 +23,7 @@ function getVideogameImageUrl(images: ImageType[]): string {
 }
 
 
-const EventCard = ({ event }) => {
+const EventCard = ({ event }: {event: EventDetails}) => {
 
 
     const navigation = useNavigation();
