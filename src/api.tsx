@@ -73,17 +73,17 @@ export function EventDetailsQuery(Id: number): string {
           }){
             nodes {
                 id
-                entrant {
+                player {
                     id
-                    name
-                    participants {
-                        user {
-                            images {
-                                id
-                                url
-                                type
-                            }
+                    prefix
+                    gamerTag
+                    user {
+                        images {
+                            id
+                            url
+                            type
                         }
+                    genderPronoun
                     }
                 }
                 placement
@@ -110,17 +110,17 @@ export function EventStandingsQuery(Id: number, page: number): string {
                 nodes {
                     id
                     placement
-                    entrant {
+                    player {
                         id
-                        name
-                        participants {
-                            user {
-                                images {
-                                    id
-                                    url
-                                    type
-                                }
+                        prefix
+                        gamerTag
+                        user {
+                            images {
+                                id
+                                url
+                                type
                             }
+                        genderPronoun
                         }
                     }
                 }
