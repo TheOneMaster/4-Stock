@@ -88,7 +88,7 @@ const TournamentView = ({navigation, route}) => {
 
     // 
     // 
-    // TODO: Rewrite this component using FlatList or SectionList instead of using map
+    // TODO: Rewrite this component using FlatList or SectionList instead of using map inside a ScrollView
     // 
     // 
     
@@ -103,7 +103,6 @@ const TournamentView = ({navigation, route}) => {
     const { colors } = useTheme();
     const styles = StyleSheet.create({
         container: {
-
         },
         activityIndicator: {
             position: "relative",
@@ -112,12 +111,9 @@ const TournamentView = ({navigation, route}) => {
             alignSelf: 'center',
             justifyContent: 'center'
         },
-
         section: {
-            marginRight: 10,
-            marginLeft: 20,
+            marginHorizontal: 20,
             marginBottom: 10,
-            // backgroundColor: 'blue'
         },
         sectionTitle: {
             fontWeight: 'bold',
@@ -125,7 +121,6 @@ const TournamentView = ({navigation, route}) => {
             marginVertical: 5,
             color: colors.text
         },
-
         eventCard: {
             marginBottom: 5
         }
@@ -160,9 +155,11 @@ const TournamentView = ({navigation, route}) => {
     return (
         <View style={{flex: 1}}>
             
-        <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
-            <TopBar {...params}></TopBar>
-                { loading && <ActivityIndicator animating={loading} color='red' size={20} style={styles.activityIndicator}></ActivityIndicator> }    
+            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
+                <TopBar {...params}></TopBar>
+                
+                { loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator> }    
+                
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Details</Text>
                     <DetailSection {...data}></DetailSection>
@@ -181,9 +178,9 @@ const TournamentView = ({navigation, route}) => {
                     <Text style={styles.sectionTitle}>Contact</Text>
                     { dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
                 </View>
-        
-        </ScrollView>
             
+            </ScrollView>
+
             { dataReady && <RegisterButton open={data.isRegistrationOpen}></RegisterButton> }
         </View>
     )
