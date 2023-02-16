@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import ResultCard from "./ResultCard";
@@ -7,7 +7,7 @@ import { Entrant, EventAPIQuery } from "../types";
 import { EventStandingsQuery, queryAPI } from "../api";
 import SearchBar from "../Shared/SearchBar";
 
-const PER_PAGE = 24    // Show 24 players per page (instead of the default 25) 
+const PER_PAGE = 24    // Show 24 players per page (instead of the default 25).
 
 const ResultsPage = ({navigation, route}) => {
     
@@ -49,22 +49,15 @@ const ResultsPage = ({navigation, route}) => {
         setFinished(false);
         setPage(1);
 
-        const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
-        console.log(queryBody);
+        const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles, filter);
         const data = await queryAPI(queryBody) as EventAPIQuery;
+        const event_standings = data.event.standings;
 
-        const event_standings = data.event.standings.nodes;
+        const standings = event_standings ? event_standings.nodes : [] as Entrant[];
 
-        if (event_standings.length > 0) {
-            setStandings(event_standings)
+        setStandings(standings)
 
-            // Remove extra redundant API call by setting it to finished early
-            if (event_standings.length < PER_PAGE) {
-                setFinished(true);
-            }
-
-        } else {
-            console.log('No more players');
+        if (standings.length < PER_PAGE) {
             setFinished(true);
         }
 
@@ -82,6 +75,7 @@ const ResultsPage = ({navigation, route}) => {
 
     useEffect(() => {
         if (finished && page > 1){
+            console.info("No more players");
             ToastAndroid.show("No more players", ToastAndroid.SHORT);
         }
     }, [finished])
@@ -89,13 +83,17 @@ const ResultsPage = ({navigation, route}) => {
     return (
         <View style={{flex: 1}}>
             <FlatList
-
-                ListHeaderComponent={ <SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" /> }
-
-
+                style={styles.container}
+                ListHeaderComponent={ <SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{marginTop: 20}}/> }
                 data={standings}
                 renderItem={({index, item}) => <ResultCard playerData={item} index={index}/>}
-                style={styles.container}
+                
+                contentContainerStyle={{flexGrow: 1}}
+                ListEmptyComponent={ 
+                    <View style={styles.centerText}>
+                        <Text style={{color: colors.text}}>No entrants were found</Text>
+                    </View> }
+                
                 onEndReached={() => setPage(page+1)}
                 onEndReachedThreshold={0.1}
                 />
@@ -119,6 +117,11 @@ const styles = StyleSheet.create({
         right: 0,
         justifyContent: 'center',
         alignContent: 'center'
+    },
+    centerText: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
