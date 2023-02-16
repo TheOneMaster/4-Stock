@@ -14,48 +14,38 @@ function openLink(url: string, type: string) {
     }
 }
 
-
-
-const ContactButton = (props) => {
-
-    const type = props.type;
-    const url = props.url;
-
+const ContactButton = ({type, url}: {type: string, url: string}) => {
     const theme = useTheme();
     const colors = theme.colors;
 
-    const style = StyleSheet.create({
-        touchable: {
-            alignSelf: 'flex-start'
-        },
+    const stylesheetColors = StyleSheet.create({
         link: {
             color: colors.link,
-            fontWeight: theme.dark ? 'bold' : 'normal'
+            fontWeight: theme.dark ? 'normal' : 'bold'
         }
-    })
+    });
 
-    let contactLink: JSX.Element|null = null;
     if (type === 'discord') {
-
-        const discLogo = theme.dark ? <DiscordDark width={40} height={40}/> : <DiscordLight width={40} height={40}/>
-
-
-        contactLink = (
-            <TouchableHighlight onPress={() => openLink(url, type)} style={style.touchable}>
-                {discLogo}
+        const DIMENSION = 40;
+        const discordLogo = theme.dark ? <DiscordDark width={DIMENSION} height={DIMENSION}/> : <DiscordLight width={DIMENSION} height={DIMENSION}/>;
+        return (
+            <TouchableHighlight onPress={() => openLink(url, type)} style={styles.touchable}>
+                { discordLogo }
             </TouchableHighlight>
         )
     }
 
-    if (type === "email") {
-        contactLink = (
-            <TouchableHighlight style={style.touchable} onPress={() => openLink(url, type)}>
-                <Text style={style.link}>{url}</Text>
-            </TouchableHighlight>
-            )
-    }
-
-    return contactLink
+    return (
+        <TouchableHighlight onPress={() => openLink(url, type)} style={styles.touchable}>
+            <Text style={stylesheetColors.link}>{url}</Text>
+        </TouchableHighlight>
+    )
 }
 
-export default React.memo(ContactButton);
+const styles = StyleSheet.create({
+    touchable: {
+        alignSelf: 'flex-start'
+    }
+});
+
+export default ContactButton
