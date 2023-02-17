@@ -3,7 +3,8 @@ import { useTheme } from "@react-navigation/native"
 
 import { ImageType } from "../types";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { User } from "./types"; 
+import { Standing, User } from "./types"; 
+import { getNumberOrdinal } from "../helper";
 
 function getImages(participants: {user: User}[]): string[] {
     const images = participants.map((participant) => {
@@ -17,10 +18,12 @@ function getImages(participants: {user: User}[]): string[] {
 
 
 
-const ResultCard = ({playerData, index}) => {
+const ResultCard = ({playerData, index}: {playerData: Standing, index: number}) => {
 
     const { colors } = useTheme();
     const placement = playerData.placement;
+    const placementString = getNumberOrdinal(placement);
+    // console.log(placementString);
 
     const containerStyle = {
         ...styles.container,
@@ -29,6 +32,7 @@ const ResultCard = ({playerData, index}) => {
         marginTop: index === 0 ? 10 : undefined
     }
 
+    // If the event is singles
     if (playerData.player) {
         const player = playerData.player;
         const user = player.user;
@@ -46,12 +50,13 @@ const ResultCard = ({playerData, index}) => {
                         { player.prefix && <Text style={{...styles.playerSponsor, color: colors.secondaryText}}>{player.prefix}</Text> }
                         { user.genderPronoun && <Text style={{...styles.playerPronoun, color: colors.secondaryText}}>{user.genderPronoun}</Text>}
                     </View>
-                    <Text style={{...styles.playerPlacement, color: colors.text}}>{placement}</Text>
+                    <Text style={{...styles.playerPlacement, color: colors.text}}>{placementString}</Text>
                 </View>
             </View>
         )
     }
 
+    // Teams (not singles) events
     const entrant = playerData.entrant;
     const participants = entrant.participants;
     const images = getImages(participants);
@@ -59,13 +64,13 @@ const ResultCard = ({playerData, index}) => {
     return (
         <View style={containerStyle}>
             <View style={styles.imageContainer}>
-                <PlaceholderImage imageSrc={images[0]} placeholder="player" style={{height: 100, width: 100}} />
+                <PlaceholderImage imageSrc={images[0]} placeholder="player"/>
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.playerTitle}>
                     <Text style={{...styles.playerTag, color: colors.text}}>{entrant.name}</Text>
                 </View>
-                <Text style={{...styles.playerPlacement, color: colors.text}}>{placement}</Text>
+                <Text style={{...styles.playerPlacement, color: colors.text}}>{placementString}</Text>
             </View>
         </View>
     )
