@@ -9,6 +9,7 @@ import { useTheme } from "@react-navigation/native";
 import ContactButton from "../Shared/ContactButton";
 import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
+import { TournamentViewProps } from "../navTypes";
 
 const RegisterButton = (props) => {
 
@@ -84,7 +85,7 @@ const DetailSection = (props: FullTournamentDetails) => {
 
 
 
-const TournamentView = ({navigation, route}) => {
+const TournamentView = ({navigation, route}: TournamentViewProps) => {
 
     // 
     // 
@@ -98,7 +99,7 @@ const TournamentView = ({navigation, route}) => {
     const [failed, setFailedAPI] = useState(false);
     const [refreshing, setRefreshing] = useState(false)
     
-    const params = route.params;
+    const tournament = route.params.tournamentDetails;
 
     const { colors } = useTheme();
     const styles = StyleSheet.create({
@@ -130,7 +131,7 @@ const TournamentView = ({navigation, route}) => {
     const getTournamentData = async() => {
         try{
             setLoading(true);
-            const tournamentQuery = tournamentDetailsQuery(params.id);
+            const tournamentQuery = tournamentDetailsQuery(tournament.id);
             const api_data = await queryAPI(tournamentQuery) as TournamentAPIQuery;
             const tournament_data = api_data.tournament;
             setData(tournament_data);
@@ -156,7 +157,7 @@ const TournamentView = ({navigation, route}) => {
         <View style={{flex: 1}}>
             
             <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
-                <TopBar {...params}></TopBar>
+                <TopBar {...tournament}></TopBar>
                 
                 { loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator> }    
                 

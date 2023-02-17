@@ -10,33 +10,13 @@ import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
 
 
-const TournamentListView = ({ navigation }) => {
+const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackParamList, "Home">) => {
 
   const { colors } = useTheme();
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: colors.background,
-      paddingHorizontal: 10,
-    },
-
-    tournamentCard: {
-      marginBottom: 15,
-    },
-
-    updatingIcon: {
-      position: "absolute",
-      bottom: 20,
-      left: 0,
-      right: 0,
-      alignContent: "center",
-      justifyContent: "center",
-    }
-  });
-
   const [data, setData] = useState([] as BasicTournamentDetails[]);
 
   // UI State elements
@@ -47,12 +27,9 @@ const TournamentListView = ({ navigation }) => {
 
   // Filters
   const [page, setPage] = useState(1);
-  const [coords, setCoords] = useState("40.730610, -73.935242");
-
-  const dateTemp = new Date();
 
   const [filterParams, setFilterParams] = useState({
-    beforeDate: addMonthsToDate(dateTemp, 1)
+    beforeDate: addMonthsToDate(new Date(), 1)
   } as Partial<StorageVariables>);
 
   const setTournamentData = async () => {
@@ -128,18 +105,17 @@ const TournamentListView = ({ navigation }) => {
 
 
 
-  const tournamentItem = (props, index) => (
+  const tournamentItem = (props: BasicTournamentDetails, index: number) => (
     <View style={index !== 0 ? styles.tournamentCard : { ...styles.tournamentCard, paddingTop: 15 }}>
-      <TournamentCard {...props} navigation={navigation}></TournamentCard>
+      <TournamentCard id={props.id} name={props.name} city={props.city} startAt={props.startAt} images={props.images} navigation={navigation}></TournamentCard>
     </View>
   );
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar></StatusBar>
       <TopBar></TopBar>
       <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={styles.container}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, {backgroundColor: colors.background}]}
         data={data}
         renderItem={(tournament) => tournamentItem(tournament.item, tournament.index)}
         keyExtractor={tournament => `tournament_${tournament.id.toString()}`}
@@ -162,5 +138,25 @@ const TournamentListView = ({ navigation }) => {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 15,
+  },
+
+  tournamentCard: {
+    marginBottom: 15,
+  },
+
+  updatingIcon: {
+    position: "absolute",
+    bottom: 20,
+    left: 0,
+    right: 0,
+    alignContent: "center",
+    justifyContent: "center",
+  }
+})
 
 export default TournamentListView;

@@ -1,11 +1,13 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import { HamburgerMenu } from "../Shared/SVG";
+import { TournamentsTopBarNavigationProp } from "../navTypes";
 
 
 const TopBar = () => {
     
     const { colors } = useTheme();
+    const navigation = useNavigation<TournamentsTopBarNavigationProp>();
 
 
     const style = StyleSheet.create({
@@ -28,9 +30,8 @@ const TopBar = () => {
 
     function test() {
         console.log('menu button press');
+        navigation.openDrawer();
     }
-
-
 
     return (
         <View style={style.container}>
