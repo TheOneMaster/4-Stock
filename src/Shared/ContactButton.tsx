@@ -14,7 +14,9 @@ function openLink(url: string, type: string) {
     }
 }
 
-const ContactButton = ({type, url}: {type: string, url: string}) => {
+const DEFAULT_SIZE = 40;
+
+const ContactButton = ({type, url, size}: {type: string, url: string, size?: number}) => {
     const theme = useTheme();
     const colors = theme.colors;
 
@@ -26,7 +28,7 @@ const ContactButton = ({type, url}: {type: string, url: string}) => {
     });
 
     if (type === 'discord') {
-        const DIMENSION = 40;
+        const DIMENSION = size ?? DEFAULT_SIZE;
         const discordLogo = theme.dark ? <DiscordDark width={DIMENSION} height={DIMENSION}/> : <DiscordLight width={DIMENSION} height={DIMENSION}/>;
         return (
             <TouchableHighlight onPress={() => openLink(url, type)} style={styles.touchable}>

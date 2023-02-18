@@ -42,7 +42,7 @@ const ResultCard = ({playerData, index}: {playerData: Standing, index: number}) 
         return (
             <View style={containerStyle}>
                 <View style={styles.imageContainer}>
-                    <PlaceholderImage imageSrc={profileImage} placeholder='player' style={{height: 100, width: 100}}/>
+                    <PlaceholderImage imageSrc={profileImage} placeholder='player' style={styles.image} />
                 </View>
                 <View style={styles.detailsContainer}>
                     <View style={styles.playerTitle}>
@@ -64,7 +64,7 @@ const ResultCard = ({playerData, index}: {playerData: Standing, index: number}) 
     return (
         <View style={containerStyle}>
             <View style={styles.imageContainer}>
-                <PlaceholderImage imageSrc={images[0]} placeholder="player"/>
+                <PlaceholderImage imageSrc={images[0]} placeholder="player" style={styles.image}/>
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.playerTitle}>
@@ -86,6 +86,11 @@ const styles = StyleSheet.create({
     imageContainer: {
         height: 100,
         width: 100,
+    },
+    image: {
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%'
     },
     detailsContainer: {
         alignItems: 'center',

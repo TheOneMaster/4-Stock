@@ -1,14 +1,14 @@
-import { Button, Image, StyleSheet, TextInput, View } from "react-native"
+import { Button, Image, StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { Text } from "react-native";
 
-const SearchBar = ({setFilter, filterAction, searchTitle}: {setFilter: React.Dispatch<React.SetStateAction<string>>, filterAction: () => void, searchTitle: string}) => {
+const SearchBar = ({setFilter, filterAction, searchTitle, style}: {setFilter: React.Dispatch<React.SetStateAction<string>>, filterAction: () => void, searchTitle: string, style?: StyleProp<ViewStyle>}) => {
 
     const { colors } = useTheme();
 
 
     return (
-        <View style={{...styles.container, backgroundColor: colors.card2}}>
+        <View style={[styles.container, style, {backgroundColor: colors.card}]}>
             <View>
                 <Image />
             </View>
@@ -29,7 +29,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop: 20,
+        marginBottom: 10,
         alignItems: 'center'
     },
     filterInput: {
