@@ -113,7 +113,6 @@ const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackPara
 
   return (
     <View style={{ flex: 1 }}>
-      <TopBar></TopBar>
       <FlatList
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, {backgroundColor: colors.background}]}
         data={data}
