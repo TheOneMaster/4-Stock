@@ -1,8 +1,7 @@
 import { PlaceholderGame, PlaceHolderPlayer, PlaceholderTournament } from "../Shared/Logos"
-import { ImageSourcePropType, Image, StyleSheet } from "react-native"
-import { useTheme } from "@react-navigation/native";
+import { ImageSourcePropType, Image, StyleSheet, StyleProp, ViewStyle, RegisteredStyle, ImageStyle, ImageURISource } from "react-native"
 
-const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc: string, placeholder?: 'tournament'|'game'|'player', style?: Object}) => {
+const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc: string, placeholder?: 'tournament'|'game'|'player', style?: StyleProp<ImageStyle>}) => {
     let placeholderFinal: ImageSourcePropType;
 
     switch (placeholder) {
@@ -17,31 +16,27 @@ const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc
             break;
     }
 
-    const styles = StyleSheet.create({
-        image: {
-            backgroundColor: 'white'
-        }
-    });
-
-    const imageStyle = Object.assign({}, styles.image, style);
-
 
     if (imageSrc) {
         return (
             <Image 
-                style={imageStyle}
+                style={[styles.image, style]}
                 source={{uri: imageSrc}}
-                defaultSource={placeholderFinal}/>
+                defaultSource={placeholderFinal as ImageURISource|number}/>
         )
     }
 
     const image = <Image
-                    style={imageStyle}
+                    style={[styles.image, style]}
                     source={placeholderFinal}/>;
     
-    // console.log(image);
-
     return image
 }
+
+const styles = StyleSheet.create({
+    image: {
+        backgroundColor: 'white'
+    }
+})
 
 export default PlaceholderImage;

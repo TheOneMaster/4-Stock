@@ -88,8 +88,6 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
     });
 
     function onDateChange(event, selectedDate) {
-        // console.log(event);
-        console.log(selectedDate);
         setShowDate(false);
         setAfterDate(selectedDate);
     }
@@ -138,16 +136,6 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
         }
 
     }, [show]);
-
-
-
-    const customBackPress = () => {
-        if (show) {
-            setShow(false);
-            return true;
-        }
-        return false
-    }
 
 
     useFocusEffect(

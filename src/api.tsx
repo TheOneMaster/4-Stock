@@ -151,7 +151,7 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
                       }
                     }
                   }
-                      }
+                }
           }
         }
     }`;
