@@ -2,8 +2,8 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env";
 
-import { APIQuery, APIVariables, APIFiltersTemplate, StorageVariables } from "./types";
-import { addMonthsToDate, cleanObject, convertDateToUnixSeconds, convertStorageToAPI } from "./helper";
+import { APIQuery, APIFiltersTemplate, StorageVariables } from "./types";
+import { cleanObject, convertStorageToAPI } from "./helper";
 
 // API Query functions
 
@@ -63,6 +63,11 @@ export function EventDetailsQuery(Id: number, singles=true): string {
           isOnline
           state
           startAt
+          phases {
+            id
+            name
+            bracketType
+          }
           waves{
             id
             identifier
