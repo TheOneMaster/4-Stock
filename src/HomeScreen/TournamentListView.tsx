@@ -11,10 +11,10 @@ import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
+import { HomeDrawerParamList, RootStackParamList, TournamentListViewProps } from "../navTypes";
 
 
-const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackParamList, "Home">) => {
+const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
   const [data, setData] = useState([] as BasicTournamentDetails[]);
