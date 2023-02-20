@@ -9,29 +9,24 @@ const BracketPage = ({navigation, route}: BracketViewProps) => {
     
     const groups = route.params.phases;
 
-    const defaultView = (
-        <View style={styles.default}>
-            <Text>No brackets found</Text>
-        </View>
-    )
-
-    return (
-        <View>
-            
-            { groups.length > 1 && 
+    if (groups.length === 0) {
+        return (
+            <View style={styles.default}>
+                <Text>No brackets found</Text>
+            </View>
+        )
+    } else if (groups.length > 1) {
+        return (
             <FlatList
                 data={groups}
-                renderItem={({item, index}) => index < (groups.length - 1)
-                ? <PhaseButton name={item.name} type={item.bracketType}/>
-                : <PhaseButton name={item.name} type={item.bracketType} style={{marginRight: 10}}/>
+                renderItem={({item, index}) => index === (groups.length - 1)
+                ? <PhaseButton name={item.name} type={item.bracketType} style={{marginRight: 10}}/>
+                : <PhaseButton name={item.name} type={item.bracketType}/>
                 }
                 horizontal={true}
-                /> }
-
-            { groups.length === 0 && defaultView }
-
-        </View>
-    )
+                />
+            )
+    }
 }
 
 const styles = StyleSheet.create({
