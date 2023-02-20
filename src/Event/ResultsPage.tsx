@@ -84,7 +84,7 @@ const ResultsPage = ({navigation, route}) => {
         <View style={{flex: 1}}>
             <FlatList
                 style={styles.container}
-                ListHeaderComponent={ <SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{marginTop: 20}}/> }
+                ListHeaderComponent={ <SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{marginTop: 20}}/> }
                 data={standings}
                 renderItem={({index, item}) => <ResultCard playerData={item} index={index}/>}
                 
@@ -93,6 +93,8 @@ const ResultsPage = ({navigation, route}) => {
                     <View style={styles.centerText}>
                         <Text style={{color: colors.text}}>No entrants were found</Text>
                     </View> }
+
+                keyboardShouldPersistTaps='handled'
                 
                 onEndReached={() => setPage(page+1)}
                 onEndReachedThreshold={0.1}

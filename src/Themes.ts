@@ -17,7 +17,7 @@ export const customLightTheme: CustomTheme = {
         ...DefaultTheme.colors,
         secondaryText: "rgb(148, 163, 184)",
         link: 'blue',
-        card2: ''
+        card2: '#FFF'
     }
 }
 
@@ -27,7 +27,7 @@ export const customDarkTheme: CustomTheme = {
         ...DarkTheme.colors,
         secondaryText: 'rgb(75, 85, 99)',
         link: '#1e90ff',
-        card2: ''
+        card2: '#242424'
     }
 }
 

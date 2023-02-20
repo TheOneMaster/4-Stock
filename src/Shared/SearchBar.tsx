@@ -1,26 +1,90 @@
-import { Button, Image, StyleProp, StyleSheet, TextInput, View, ViewStyle } from "react-native"
+import { Button, Image, Keyboard, NativeSyntheticEvent, StyleProp, StyleSheet, TextInput, TextInputFocusEventData, TouchableHighlight, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
-import { Text } from "react-native";
+import { useState } from "react";
+import { BackIcon, MagnifyingGlassIcon } from "./SVG";
 
-const SearchBar = ({setFilter, filterAction, searchTitle, style}: {setFilter: React.Dispatch<React.SetStateAction<string>>, filterAction: () => void, searchTitle: string, style?: StyleProp<ViewStyle>}) => {
+const SearchBarIcon = ({selected, onBackPress}: {selected: boolean, onBackPress: () => void}) => {
+
+    const { colors } = useTheme();
+
+    function backEvent() {
+        Keyboard.dismiss();
+        onBackPress();
+    }
+
+    if (!selected) {
+        return (
+            <View style={styles.imageContainer}>
+                <MagnifyingGlassIcon width={25} height={30} color={colors.text} fill={colors.text}/>
+            </View>
+        )
+    }
+
+    return (
+        <TouchableOpacity onPress={backEvent} style={styles.imageContainer}>
+            <BackIcon width={20} height={30} color={colors.text} fill={colors.text}/>
+        </TouchableOpacity>
+    )
+}
+
+type SearchBarProps = {
+    filter: string,
+    setFilter: React.Dispatch<React.SetStateAction<string>>,
+    filterAction: () => void,
+    searchTitle?: string,
+    style?: StyleProp<ViewStyle>
+}
+
+const SearchBar = ({filter, setFilter, filterAction, searchTitle, style}: SearchBarProps) => {
+
+    const [selected, setSelected] = useState<boolean>(false);
+
 
     const { colors } = useTheme();
 
 
+    function handleFocus(event: NativeSyntheticEvent<TextInputFocusEventData>) {
+        setSelected(true);
+    }
+
+    function handleBlur(event: NativeSyntheticEvent<TextInputFocusEventData>) {
+        setSelected(false);
+    }
+
+    function buttonClick() {
+        if (selected) {
+            Keyboard.dismiss();
+            setSelected(false);
+        }
+        filterAction()
+    }
+
+    function clearInput() {
+        setFilter('')
+    }
+
     return (
-        <View style={[styles.container, style, {backgroundColor: colors.card}]}>
-            <View>
-                <Image />
+        <View style={[styles.container, {backgroundColor: colors.card2}, style]}>
+
+            <SearchBarIcon selected={selected} onBackPress={clearInput}/>
+
+            <View style={styles.filterInput}>
+                <TextInput
+                    style={{backgroundColor: colors.card2, padding: 5, color: colors.text}}
+                    placeholder="Entrant"
+                    placeholderTextColor={colors.secondaryText}
+                    value={filter}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    onSubmitEditing={Keyboard.dismiss}
+                    onChangeText={(newText) => setFilter(newText.trim())}
+                    />
             </View>
-            <TextInput
-                placeholder="Entrant"
-                placeholderTextColor={colors.secondaryText}
-                onChangeText={(newText) => setFilter(newText.trim())}
-                style={{...styles.filterInput, backgroundColor: colors.card, color: colors.text}}
-            />
+
             <View style={styles.filterButton}>
-                <Button onPress={filterAction} title={searchTitle}></Button>
+                <Button onPress={buttonClick} title={searchTitle ?? "Search"}></Button>
             </View>
+        
         </View>
     )
 }
@@ -31,15 +95,24 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 20,
         marginBottom: 10,
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: 10,
+        overflow: 'hidden'
+    },
+    imageContainer: {
+        width: 35,
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     filterInput: {
         marginRight: 5,
         flex: 1,
-        padding: 5
+        height: '100%',
+        overflow: 'hidden',
     },
     filterButton: {
-        marginLeft: 'auto'
+        marginLeft: 'auto',
     }
 });
 
