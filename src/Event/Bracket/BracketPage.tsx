@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native"
-import { BracketViewProps } from "../navTypes";
+import { BracketViewProps } from "../../navTypes";
 import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
 
-import PhaseButton from "./Bracket/PhaseButton";
+import PhaseButton from "./PhaseButton";
 
 const BracketPage = ({navigation, route}: BracketViewProps) => {
     
@@ -26,7 +26,7 @@ const BracketPage = ({navigation, route}: BracketViewProps) => {
                 : <PhaseButton name={item.name} type={item.bracketType} style={{marginRight: 10}}/>
                 }
                 horizontal={true}
-                />}
+                /> }
 
             { groups.length === 0 && defaultView }
 

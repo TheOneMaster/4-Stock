@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import ResultsPage from "./ResultsPage";
-import BracketPage from "./BracketPage";
+import BracketPage from "./Bracket/BracketPage";
 import { EventAPIQuery, FullEventDetails } from "../types";
 
 
