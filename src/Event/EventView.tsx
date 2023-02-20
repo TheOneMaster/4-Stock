@@ -6,16 +6,19 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import ResultsPage from "./ResultsPage";
 import BracketPage from "./Bracket/BracketPage";
 import { EventAPIQuery, FullEventDetails } from "../types";
+import { EventTabParamList, EventViewProps } from "../navTypes";
 
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
-const EventPage = ({navigation, route}) => {
+const EventPage = ({navigation, route}: EventViewProps) => {
 
     const [data, setData] = useState({} as FullEventDetails);
     const [loading, setLoading] = useState(true);
 
     const singles = route.params.type === 1;
+    const firstPhase = route.params.phases[0];
+
     const {colors} = useTheme();
 
     useEffect(() => {

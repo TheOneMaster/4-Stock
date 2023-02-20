@@ -21,6 +21,9 @@ export function tournamentDetailsQuery(Id: number): string {
             id
             type
             name
+            phases {
+                id
+            }
             videogame {
               id
               displayName
