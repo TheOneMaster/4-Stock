@@ -8,8 +8,8 @@ const SearchBarIcon = ({selected, onBackPress}: {selected: boolean, onBackPress:
     const { colors } = useTheme();
 
     function backEvent() {
-        Keyboard.dismiss();
         onBackPress();
+        Keyboard.dismiss();
     }
 
     if (!selected) {
@@ -60,7 +60,9 @@ const SearchBar = ({filter, setFilter, filterAction, searchTitle, style}: Search
     }
 
     function clearInput() {
-        setFilter('')
+        requestAnimationFrame(() => {
+            setFilter('');
+        })
     }
 
     return (
