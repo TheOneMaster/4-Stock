@@ -29,7 +29,7 @@ const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemPro
             <View style={[styles.itemContainer, { borderColor: colors.border }]}>
                 <Text style={[styles.itemText, { color: colors.text }]}>{label}</Text>
                 {active &&
-                    <View style={{marginLeft: 'auto'}}>
+                    <View style={{ marginLeft: 'auto' }}>
                         <CheckMark width={20} height={20} color={colors.primary} />
                     </View>
                 }
@@ -43,7 +43,7 @@ const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemPro
 
 
 
-const SettingsDropdown = ({ data, value, title, style }: SettingsDropdownProps) => {
+const SettingsDropdown = ({ data, value, title, backgroundColorTop, style }: SettingsDropdownProps) => {
 
     const [selected, setSelected] = useState<number>(value ?? null);
     const [drawerState, setDrawerState] = useState(false);
@@ -85,7 +85,7 @@ const SettingsDropdown = ({ data, value, title, style }: SettingsDropdownProps) 
 
             {/* Top bar that you click on to create the dropdown menu */}
             <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.topBar]}>
+                <View style={[styles.topBar, { backgroundColor: backgroundColorTop }]}>
                     <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
                     <View style={styles.placeholder}>
                         <Text style={[styles.placeholderText, { color: colors.text }]}>{selected !== null ? getSelectedItem().label : "Select a value"}</Text>
