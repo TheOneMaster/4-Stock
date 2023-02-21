@@ -2,21 +2,23 @@ import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
+import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 
 interface DropdownItemProps {
     item: DropdownOption,
+    active: boolean,
     selectItem: React.Dispatch<React.SetStateAction<number>>,
-    closeDrawer: () => void
+    closeDrawer: () => void,
 }
 
-const DropdownItem = ({item, selectItem, closeDrawer, }: DropdownItemProps) => {
+const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemProps) => {
 
     const label = item.label;
     const value = item.value;
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
 
-    const pressed = () => {
+    function pressed() {
         selectItem(value);
         closeDrawer();
     }
@@ -24,7 +26,15 @@ const DropdownItem = ({item, selectItem, closeDrawer, }: DropdownItemProps) => {
 
     return (
         <TouchableOpacity onPress={pressed}>
-            <Text style={{color: colors.text}}>{label}</Text>
+            <View style={[styles.itemContainer, { borderColor: colors.border }]}>
+                <Text style={[styles.itemText, { color: colors.text }]}>{label}</Text>
+                {active &&
+                    <View style={{marginLeft: 'auto'}}>
+                        <CheckMark width={20} height={20} color={colors.primary} />
+                    </View>
+                }
+
+            </View>
         </TouchableOpacity>
     )
 }
@@ -33,27 +43,26 @@ const DropdownItem = ({item, selectItem, closeDrawer, }: DropdownItemProps) => {
 
 
 
-const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) => {
+const SettingsDropdown = ({ data, value, title, style }: SettingsDropdownProps) => {
 
     const [selected, setSelected] = useState<number>(value ?? null);
     const [drawerState, setDrawerState] = useState(false);
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
 
     function toggleDrawer() {
         requestAnimationFrame(() => {
             const newState = !drawerState;
-            console.log(newState)
             setDrawerState(newState);
         })
     }
-    
+
     function closeDrawer() {
         requestAnimationFrame(() => {
             setDrawerState(false);
         })
     }
-        
+
 
     function selectItem(val: number) {
         requestAnimationFrame(() => {
@@ -72,28 +81,33 @@ const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) =>
 
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
 
             {/* Top bar that you click on to create the dropdown menu */}
             <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.topBar, {backgroundColor: colors.card}]}>
-                    <Text style={[styles.title, {color: colors.text}]}>{title}</Text>
+                <View style={[styles.topBar]}>
+                    <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
                     <View style={styles.placeholder}>
-                        <Text style={[styles.placeholderText, {color: colors.text}]}>{ selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+                        <Text style={[styles.placeholderText, { color: colors.text }]}>{selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+                        {drawerState
+                            ? <ArrowLeft width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
+                            : <ArrowDown width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
+                        }
+
                     </View>
                 </View>
             </TouchableHighlight>
 
             {/* Dropdown menu options */}
-            { drawerState &&
+            {drawerState &&
                 <FlatList
                     data={data}
-                    renderItem={({item}) => <DropdownItem item={item} selectItem={selectItem} closeDrawer={closeDrawer}/>}
-                    
+                    renderItem={({ item }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
+
                     style={styles.options}
-                    contentContainerStyle={{alignItems: 'flex-end'}}
-                    
-                    />
+                // contentContainerStyle={{alignItems: 'flex-end'}}
+
+                />
             }
         </View>
     )
@@ -104,18 +118,18 @@ const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) =>
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        // flex: 1
     },
     topBar: {
         flexDirection: 'row',
         padding: 10,
-        backgroundColor: "white"
     },
     title: {
         fontWeight: 'bold',
         fontSize: 15
     },
     placeholder: {
+        flexDirection: 'row',
         marginLeft: 'auto'
     },
     placeholderText: {
@@ -124,6 +138,17 @@ const styles = StyleSheet.create({
     options: {
         paddingHorizontal: 10,
         // paddingTop: 5
+    },
+
+    itemContainer: {
+        flexDirection: 'row',
+        padding: 10,
+        borderBottomWidth: 1,
+        borderStyle: 'solid',
+        alignItems: 'center'
+    },
+    itemText: {
+        fontSize: 15
     }
 })
 
