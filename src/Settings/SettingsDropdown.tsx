@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { FlatList, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
 
@@ -72,16 +72,17 @@ const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) =>
     return (
         <View style={styles.container}>
 
-            
-            <TouchableOpacity onPress={toggleDrawer} style={styles.topBar}>
-                <Text>{title}</Text>
-                
-                <View style={styles.placeholder}>
-                    <Text style={styles.placeholderText}>{ selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+            {/* Top bar that you click on to create the dropdown menu */}
+            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.95}>
+                <View style={styles.topBar}>
+                    <Text>{title}</Text>
+                    <View style={styles.placeholder}>
+                        <Text style={styles.placeholderText}>{ selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+                    </View>
                 </View>
-                
-            </TouchableOpacity>
+            </TouchableHighlight>
 
+            {/* Dropdown menu options */}
             { drawerState &&
                 <FlatList
                     data={data}
