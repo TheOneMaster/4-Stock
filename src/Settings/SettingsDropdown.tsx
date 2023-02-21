@@ -14,6 +14,8 @@ const DropdownItem = ({item, selectItem, closeDrawer, }: DropdownItemProps) => {
     const label = item.label;
     const value = item.value;
 
+    const {colors} = useTheme();
+
     const pressed = () => {
         selectItem(value);
         closeDrawer();
@@ -22,7 +24,7 @@ const DropdownItem = ({item, selectItem, closeDrawer, }: DropdownItemProps) => {
 
     return (
         <TouchableOpacity onPress={pressed}>
-            <Text>{label}</Text>
+            <Text style={{color: colors.text}}>{label}</Text>
         </TouchableOpacity>
     )
 }
@@ -73,11 +75,11 @@ const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) =>
         <View style={styles.container}>
 
             {/* Top bar that you click on to create the dropdown menu */}
-            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.95}>
-                <View style={styles.topBar}>
-                    <Text>{title}</Text>
+            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
+                <View style={[styles.topBar, {backgroundColor: colors.card}]}>
+                    <Text style={[styles.title, {color: colors.text}]}>{title}</Text>
                     <View style={styles.placeholder}>
-                        <Text style={styles.placeholderText}>{ selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+                        <Text style={[styles.placeholderText, {color: colors.text}]}>{ selected !== null ? getSelectedItem().label : "Select a value"}</Text>
                     </View>
                 </View>
             </TouchableHighlight>
@@ -89,6 +91,7 @@ const SettingsDropdown = ({data, value, title, style}: SettingsDropdownProps) =>
                     renderItem={({item}) => <DropdownItem item={item} selectItem={selectItem} closeDrawer={closeDrawer}/>}
                     
                     style={styles.options}
+                    contentContainerStyle={{alignItems: 'flex-end'}}
                     
                     />
             }
@@ -107,6 +110,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10,
         backgroundColor: "white"
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 15
     },
     placeholder: {
         marginLeft: 'auto'
