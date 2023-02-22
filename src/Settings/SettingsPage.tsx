@@ -1,9 +1,7 @@
-import { StyleSheet, View, Text, Switch } from "react-native"
-import SettingsItem from "./SettingsItem";
+import { StyleSheet, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { useState } from "react";
 import SettingsDropdown from "./SettingsDropdown";
-import Card from "../Shared/Card";
 import SettingsSwitch from "./SettingsSwitch";
 
 const SettingsPage = ({ navigation, route }) => {
@@ -17,8 +15,8 @@ const SettingsPage = ({ navigation, route }) => {
     ]
 
     return (
-        <View style={[styles.container, {backgroundColor: colors.background}]}>
-            <SettingsSwitch title="Debug" setting="debug"/>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <SettingsSwitch title="Debug" setting="debug" />
             <SettingsDropdown data={test_data} setting="mainGame" title="Main Game"></SettingsDropdown>
         </View>
     )
