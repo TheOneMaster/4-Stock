@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { FlatList, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native"
+import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
+import { SettingsItemStyles } from "./types";
 
 interface DropdownItemProps {
     item: DropdownOption,
@@ -43,7 +44,7 @@ const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemPro
 
 
 
-const SettingsDropdown = ({ data, value, title, backgroundColorTop, style }: SettingsDropdownProps) => {
+const SettingsDropdown = ({ data, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
     const [selected, setSelected] = useState<number>(value ?? null);
     const [drawerState, setDrawerState] = useState(false);
@@ -80,12 +81,24 @@ const SettingsDropdown = ({ data, value, title, backgroundColorTop, style }: Set
     }
 
 
+    const highlightProps: TouchableHighlightProps = {
+        underlayColor: backgroundColor ? colors.primary : null,
+        activeOpacity: backgroundColor ? 0.93 : null
+    }
+
+    const topBarStyle: StyleProp<ViewStyle> = {
+        backgroundColor: backgroundColor,
+        borderBottomWidth: 1,
+        borderStyle: 'solid',
+        borderBottomColor: colors.border
+    }
+
     return (
         <View style={[styles.container, style]}>
 
             {/* Top bar that you click on to create the dropdown menu */}
-            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.topBar, { backgroundColor: backgroundColorTop }]}>
+            <TouchableHighlight onPress={toggleDrawer} {...highlightProps}>
+                <View style={[SettingsItemStyles.container, topBarStyle]}>
                     <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
                     <View style={styles.placeholder}>
                         <Text style={[styles.placeholderText, { color: colors.text }]}>{selected !== null ? getSelectedItem().label : "Select a value"}</Text>
@@ -102,11 +115,9 @@ const SettingsDropdown = ({ data, value, title, backgroundColorTop, style }: Set
             {drawerState &&
                 <FlatList
                     data={data}
-                    renderItem={({ item }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
+                    renderItem={({ item, index }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
 
-                    style={styles.options}
-                // contentContainerStyle={{alignItems: 'flex-end'}}
-
+                    style={[styles.options, {backgroundColor: backgroundColor}]}
                 />
             }
         </View>
@@ -136,7 +147,7 @@ const styles = StyleSheet.create({
 
     },
     options: {
-        paddingHorizontal: 10,
+        // paddingHorizontal: 10,
         // paddingTop: 5
     },
 
