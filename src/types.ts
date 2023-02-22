@@ -1,6 +1,6 @@
 export interface ImageType {
-    id: string,
-    type: string,
+    id?: string,
+    type?: string,
     url: string
 }
 
@@ -33,7 +33,11 @@ export interface EventDetails {
     videogame: {
         id: number,
         displayName: string
-    }
+        images: ImageType[]
+    },
+    phases: {
+        id: number
+    }[]
 }
 
 interface APIHint {
@@ -112,7 +116,7 @@ interface Participant {
 }
 
 export interface Entrant {
-    id: number,
+    id?: number,
     name: string,
     participants: Participant[],
     placement: number
@@ -133,5 +137,40 @@ export interface FullEventDetails {
     },
     startAt: number,
     state: string,
-    waves: Wave[]
+    waves: Wave[],
+    phases: {
+        id: number,
+        name: string,
+        bracketType: string
+    }[]
+}
+
+export interface Phase {
+    id?: number,
+    name: string,
+    bracketType: string
+    phaseGroups: {
+        nodes: PhaseGroup[]
+    }
+}
+
+export interface PhaseGroup {
+    id?: number,
+    displayIdentifier: string,
+    sets?: {
+        nodes: Set[]
+    }
+}
+
+export interface Set {
+    id?: number,
+    displayScore: string,
+    identifier: string,
+    round: number,
+    slots: SetSlot[]
+}
+
+interface SetSlot {
+    id?: number,
+    entrant: Partial<Entrant>
 }
