@@ -1,55 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { SettingsItemStyles } from "./types";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-interface DropdownItemProps {
-    item: DropdownOption,
-    active: boolean,
-    selectItem: React.Dispatch<React.SetStateAction<number>>,
-    closeDrawer: () => void,
-}
+const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
-const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemProps) => {
-
-    const label = item.label;
-    const value = item.value;
-
-    const { colors } = useTheme();
-
-    function pressed() {
-        selectItem(value);
-        closeDrawer();
-    }
-
-
-    return (
-        <TouchableOpacity onPress={pressed}>
-            <View style={[styles.itemContainer, { borderColor: colors.border }]}>
-                <Text style={[styles.itemText, { color: colors.text }]}>{label}</Text>
-                {active &&
-                    <View style={{ marginLeft: 'auto' }}>
-                        <CheckMark width={20} height={20} color={colors.primary} />
-                    </View>
-                }
-
-            </View>
-        </TouchableOpacity>
-    )
-}
-
-
-
-
-
-const SettingsDropdown = ({ data, value, title, backgroundColor, style }: SettingsDropdownProps) => {
-
-    const [selected, setSelected] = useState<number>(value ?? null);
+    const [selected, setSelected] = useState(value ?? null);
+    const mounted = useRef(false);
     const [drawerState, setDrawerState] = useState(false);
 
     const { colors } = useTheme();
+
+    useEffect(() => {
+        if (!mounted.current) {
+            AsyncStorage.getItem(setting).then(settingVal => {
+                const selectedVal: DropdownOption = JSON.parse(settingVal);
+                setSelected(selectedVal.value);
+                mounted.current = true;
+            })
+        }
+        const selectedItem = getSelectedItem();
+        AsyncStorage.setItem(setting, JSON.stringify(selectedItem));
+    }, [selected])
+
+
 
     function toggleDrawer() {
         requestAnimationFrame(() => {
@@ -116,7 +93,7 @@ const SettingsDropdown = ({ data, value, title, backgroundColor, style }: Settin
                 <FlatList
                     data={data}
                     renderItem={({ item, index }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
-
+                    initialNumToRender={20}
                     style={[styles.options, {backgroundColor: backgroundColor}]}
                 />
             }
@@ -127,9 +104,43 @@ const SettingsDropdown = ({ data, value, title, backgroundColor, style }: Settin
 
 }
 
+interface DropdownItemProps {
+    item: DropdownOption,
+    active: boolean,
+    selectItem: React.Dispatch<React.SetStateAction<number>>,
+    closeDrawer: () => void,
+}
+
+const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemProps) => {
+
+    const label = item.label;
+    const value = item.value;
+
+    const { colors } = useTheme();
+
+    function pressed() {
+        selectItem(value);
+        closeDrawer();
+    }
+
+
+    return (
+        <TouchableOpacity onPress={pressed}>
+            <View style={[styles.itemContainer, { borderColor: colors.border }]}>
+                <Text style={[styles.itemText, { color: colors.text }]}>{label}</Text>
+                {active &&
+                    <View style={{ marginLeft: 'auto' }}>
+                        <CheckMark width={20} height={20} color={colors.primary} />
+                    </View>
+                }
+
+            </View>
+        </TouchableOpacity>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
-        // flex: 1
     },
     topBar: {
         flexDirection: 'row',
@@ -144,13 +155,9 @@ const styles = StyleSheet.create({
         marginLeft: 'auto'
     },
     placeholderText: {
-
     },
     options: {
-        // paddingHorizontal: 10,
-        // paddingTop: 5
     },
-
     itemContainer: {
         flexDirection: 'row',
         padding: 10,
