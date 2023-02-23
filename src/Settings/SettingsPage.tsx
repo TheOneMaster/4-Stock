@@ -12,7 +12,7 @@ const SettingsPage = ({ navigation, route }) => {
     return (
         <View style={styles.container}>
             <SettingsSwitch title="Debug" setting="debug" />
-            <SettingsDropdown data={GameOptions} setting="mainGame" title="Main Game"></SettingsDropdown>
+            <SettingsDropdown data={GameOptions} setting="mainGame" title="Main Game" />
         </View>
     )
 }
