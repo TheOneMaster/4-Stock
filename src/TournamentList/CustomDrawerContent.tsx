@@ -10,7 +10,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
     return (
         <DrawerContentScrollView {...props}>
-            <UserLogin />
+            <UserLogin loggedIn={loggedIn}/>
 
             <DrawerItemList {...props} />
         </DrawerContentScrollView>
