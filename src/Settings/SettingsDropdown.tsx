@@ -18,7 +18,11 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
         if (!mounted.current) {
             AsyncStorage.getItem(setting).then(settingVal => {
                 const selectedVal: DropdownOption = JSON.parse(settingVal);
-                setSelected(selectedVal.value);
+
+                if (selectedVal !== null) {
+                    setSelected(selectedVal.value);
+                }
+
                 mounted.current = true;
             })
         }
@@ -94,7 +98,7 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
                     data={data}
                     renderItem={({ item, index }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
                     initialNumToRender={20}
-                    style={[styles.options, {backgroundColor: backgroundColor}]}
+                    style={[styles.options, { backgroundColor: backgroundColor }]}
                 />
             }
         </View>

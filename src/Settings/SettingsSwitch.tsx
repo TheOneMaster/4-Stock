@@ -12,17 +12,23 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
     const mounted = useRef(false);
     const { colors } = useTheme();
 
+    async function initialSetup() {
+        const value = await AsyncStorage.getItem(setting);
+
+        if (value === null) {
+            return
+        }
+
+        const valueBool = value === "true";
+
+        setActive(valueBool);
+        mounted.current = true
+    }
+
     useEffect(() => {
         // Keep state hook and storage in sync
-        if (!mounted) {
-            AsyncStorage.getItem(setting).then((value) => {
-                if (value === null) {
-                    return
-                }
-                const valueBool = value === "true";
-                setActive(valueBool);
-                mounted.current = true;
-            }).catch((err) => { return })
+        if (!mounted.current) {
+            initialSetup();
         }
         AsyncStorage.setItem(setting, active.toString());
     }, [active])
