@@ -4,6 +4,8 @@ import HamburgerMenu from "../../assets/hamburger-menu.svg"
 import ArrowDown from "../../assets/arrowDown.svg"
 import ArrowLeft from "../../assets/arrowLeft.svg"
 import CheckMark from "../../assets/checkMark.svg"
+import MagnifyingGlassIcon from "../../assets/icons8-search.svg"
+import BackIcon from "../../assets/backIcon.svg"
 
 export {
     DiscordDark,
@@ -11,5 +13,7 @@ export {
     HamburgerMenu,
     ArrowDown,
     ArrowLeft,
-    CheckMark
+    CheckMark,
+    MagnifyingGlassIcon,
+    BackIcon
 }

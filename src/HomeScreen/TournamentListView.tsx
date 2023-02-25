@@ -11,11 +11,10 @@ import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { HomeDrawerParamList, RootStackParamList, TournamentListViewProps } from "../navTypes";
 
 
-const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackParamList, "Home">) => {
+const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
   const [data, setData] = useState([] as BasicTournamentDetails[]);
@@ -25,16 +24,15 @@ const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackPara
   const [updating, setUpdating] = useState(false);
   const [finished, setFinished] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const [init, setInit] = useState(false);
 
   // Filters
   const [page, setPage] = useState(1);
 
   const [filterParams, setFilterParams] = useState({
     beforeDate: addMonthsToDate(new Date(), 1)
-  } as StorageVariables);
+  } as Partial<StorageVariables>);
 
-  async function getTournamentData() {
+  const setTournamentData = async () => {
     setRefreshing(true);
 
     try {
@@ -49,7 +47,7 @@ const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackPara
     setRefreshing(false);
   };
 
-  async function updateTournamentList() {
+  const updateTournamentList = async () => {
 
     if (finished) {
       return;
@@ -74,69 +72,38 @@ const TournamentListView = ({ navigation }: NativeStackScreenProps<RootStackPara
     setUpdating(false);
   };
 
-  async function onRefresh() {
+  const onRefresh = async () => {
     setPage(1);
     setFinished(false);
     
-    await getTournamentData();
+    await setTournamentData();
   };
 
-  async function initialSetup() {
-
-    try {
-      const debugValue = await AsyncStorage.getItem("debug");
-      console.log(debugValue)
-      const debug = debugValue === "true";
-      setInit(true);
-
-      if (debug) {
-        const filters: StorageVariables = {
-          name: "Genesis"
-        }
-        setFilterParams(filters);
-      } 
-
-    } catch(e) {
-
-    }
-
-    
-  }
-
   useEffect(() => {
-    initialSetup();
-  }, [])
-
-  useEffect(() => {
-
-    if (!init) {
-      return
-    }
-
     setRefreshing(true);
     setFinished(false);
 
-    getTournamentData().then(() => setRefreshing(false))
+    setTournamentData().then(() => setRefreshing(false))
 
     // setRefreshing(false);
   }, [filterParams]);
 
   useEffect(() => {
-    if (init && page !== 1) {
+    if (page !== 1) {
       updateTournamentList();
     }
   }, [page]);
 
   useEffect(() => {
 
-    if (init && finished) {
+    if (finished) {
       ToastAndroid.show("No more tournaments", ToastAndroid.SHORT);
     }
 
 
   }, [finished])
 
-  
+
 
   const tournamentItem = (props: BasicTournamentDetails, index: number) => (
     <View style={index !== 0 ? styles.tournamentCard : { ...styles.tournamentCard, paddingTop: 15 }}>

@@ -45,9 +45,9 @@ const ResultsPage = ({navigation, route}) => {
     }
 
     async function filterEntrants() {
+        setPage(1);
         setUpdating(true);
         setFinished(false);
-        setPage(1);
 
         const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles, filter);
         const data = await queryAPI(queryBody) as EventAPIQuery;
@@ -64,6 +64,13 @@ const ResultsPage = ({navigation, route}) => {
         setUpdating(false);
     }
 
+    function handleEndReached(event) {
+        if (finished) {
+            return
+        }
+        setPage(page + 1);
+    }
+
     useEffect(() => {
         if (finished || page === 1) {
             return
@@ -76,6 +83,7 @@ const ResultsPage = ({navigation, route}) => {
     useEffect(() => {
         if (finished && page > 1){
             console.info("No more players");
+            console.log(page)
             ToastAndroid.show("No more players", ToastAndroid.SHORT);
         }
     }, [finished])
@@ -84,7 +92,7 @@ const ResultsPage = ({navigation, route}) => {
         <View style={{flex: 1}}>
             <FlatList
                 style={styles.container}
-                ListHeaderComponent={ <SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{marginTop: 20}}/> }
+                ListHeaderComponent={ <SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{marginTop: 20}}/> }
                 data={standings}
                 renderItem={({index, item}) => <ResultCard playerData={item} index={index}/>}
                 
@@ -93,8 +101,10 @@ const ResultsPage = ({navigation, route}) => {
                     <View style={styles.centerText}>
                         <Text style={{color: colors.text}}>No entrants were found</Text>
                     </View> }
+
+                keyboardShouldPersistTaps='handled'
                 
-                onEndReached={() => setPage(page+1)}
+                onEndReached={handleEndReached}
                 onEndReachedThreshold={0.1}
                 />
 

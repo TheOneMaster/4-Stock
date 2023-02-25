@@ -10,7 +10,7 @@ import { customLightTheme, customDarkTheme } from "./Themes";
 
 import TournamentView from "./Tournament/TournamentView";
 import EventPage from "./Event/EventView";
-import HomeScreen from './TournamentList/HomeScreen';
+import HomeScreen from './HomeScreen/HomeScreen';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
