@@ -1,0 +1,13 @@
+[
+    {"label": "Melee", "value": 1},
+    {"label": "Project M", "value": 2},
+    {"label": "Ultimate", "value": 1386},
+    {"label": "Brawl", "value": 5},
+    {"label": "CS:GO", "value": 12},
+    {"label": "Hearthstone", "value": 13},
+    {"label": "Rocket League", "value": 14},
+    {"label": "Brawlhalla", "value": 15},
+    {"label": "TEKKEN 7", "value": 17},
+    {"label": "UMvC3", "value": 18},
+    {"label": "Killer Instinct", "value": 19}
+]

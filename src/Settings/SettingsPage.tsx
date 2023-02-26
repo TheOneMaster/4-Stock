@@ -1,12 +1,18 @@
-import { StyleSheet, View, Text } from "react-native"
-import SettingsItem from "./SettingsItem";
+import { StyleSheet, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import SettingsDropdown from "./SettingsDropdown";
+import SettingsSwitch from "./SettingsSwitch";
 
+import GameOptions from "./games.json"
 
-const SettingsPage = ({navigation, route}) => {
+const SettingsPage = ({ navigation, route }) => {
+
+    const { colors } = useTheme()
 
     return (
         <View style={styles.container}>
-            <SettingsItem title="Test" type="switch"></SettingsItem>
+            <SettingsSwitch title="Debug" setting="debug" />
+            <SettingsDropdown data={GameOptions} setting="mainGame" title="Main Game" />
         </View>
     )
 }
@@ -14,7 +20,6 @@ const SettingsPage = ({navigation, route}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingVertical: 10,
         marginHorizontal: 10
     }
 });
