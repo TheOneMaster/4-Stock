@@ -1,14 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { version } from "../../package.json"
+import { MainText, SubtitleText } from "../Shared/ThemedText";
 
 function AboutInfo() {
 
-    const { colors } = useTheme()
+    const { colors } = useTheme();
 
     return (
         <View style={[styles.container, { borderColor: colors.border }]}>
-            <View style={{ paddingHorizontal: 20 }}>
+            <View style={styles.innerContainer}>
                 <InfoRow title="Version" value={version} />
                 <InfoRow title="Made By" value="TheOneMaster" />
             </View>
@@ -24,12 +25,10 @@ interface InfoRowProps {
 }
 
 function InfoRow({ title, value }: InfoRowProps) {
-    const { colors } = useTheme();
-
     return (
         <View style={styles.infoRow}>
-            <Text style={[styles.rowTitle, { color: colors.text }]}>{title}</Text>
-            <Text style={[styles.rowValue, { color: colors.secondaryText }]}>{value}</Text>
+            <MainText style={styles.rowTitle}>{title}</MainText>
+            <SubtitleText style={styles.rowValue}>{value}</SubtitleText>
         </View>
     )
 }
@@ -38,6 +37,9 @@ const styles = StyleSheet.create({
     container: {
         borderBottomWidth: 1,
         borderStyle: 'solid'
+    },
+    innerContainer: {
+        paddingHorizontal: 20
     },
     infoRow: {
         paddingVertical: 5
