@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
 import { queryAPI, tournamentDetailsQuery } from "../api";
 import { FullTournamentDetails, TournamentAPIQuery } from "../types";
@@ -63,30 +63,6 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
     const tournament = route.params.tournamentDetails;
 
     const { colors } = useTheme();
-    const styles = StyleSheet.create({
-        container: {
-        },
-        activityIndicator: {
-            position: "relative",
-            left: 'auto',
-            right: 'auto',
-            alignSelf: 'center',
-            justifyContent: 'center'
-        },
-        section: {
-            marginHorizontal: 20,
-            marginBottom: 10,
-        },
-        sectionTitle: {
-            fontWeight: 'bold',
-            fontSize: 20,
-            marginVertical: 5,
-            color: colors.text
-        },
-        eventCard: {
-            marginBottom: 5
-        }
-    })
 
 
     const getTournamentData = async() => {
@@ -123,12 +99,12 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
                 { loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator> }    
                 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Details</Text>
+                    <MainText style={styles.sectionTitle}>Details</MainText>
                     <DetailSection {...data}></DetailSection>
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Events</Text>
+                    <MainText style={styles.sectionTitle}>Events</MainText>
                     { dataReady && data.events.map(event => (
                         <View style={styles.eventCard} key={event.id}>
                             <EventCard event={event}></EventCard>
@@ -137,7 +113,7 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
                 </View>
 
                 <View style={styles.section}>
-                    <Text style={styles.sectionTitle}>Contact</Text>
+                    <MainText style={styles.sectionTitle}>Contact</MainText>
                     { dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
                 </View>
             
@@ -147,5 +123,29 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+    },
+    activityIndicator: {
+        position: "relative",
+        left: 'auto',
+        right: 'auto',
+        alignSelf: 'center',
+        justifyContent: 'center'
+    },
+    section: {
+        marginHorizontal: 20,
+        marginBottom: 10,
+    },
+    sectionTitle: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        marginVertical: 5,
+    },
+    eventCard: {
+        marginBottom: 5
+    }
+})
 
 export default TournamentView;
