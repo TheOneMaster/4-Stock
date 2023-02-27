@@ -7,6 +7,7 @@ import { ImageType } from "../types";
 import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
 
 import PlaceholderImage from "../Shared/PlaceholderImage";
+import { MainText, SubtitleText } from "../Shared/ThemedText";
 
 
 type TournamentCardProps = {
@@ -19,7 +20,7 @@ type TournamentCardProps = {
     style?: StyleProp<ViewStyle>
 }
 
-export const TournamentCard = ({id, name, city, startAt, images, navigation, style}: TournamentCardProps) => {
+export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
     const dateString = convertDateToString(startAt);
     const profile_image = images.reduce((prev, cur) => {
         if (cur.type === 'profile') {
@@ -53,20 +54,20 @@ export const TournamentCard = ({id, name, city, startAt, images, navigation, sty
             images: images
         }
 
-        navigation.navigate("Tournament", {tournamentDetails: tournamentDetails});
+        navigation.navigate("Tournament", { tournamentDetails: tournamentDetails });
     }
 
     return (
         <Pressable style={style} onPress={navigateToTournament}>
             <View style={[styles.container, colorCSS.container]}>
                 <View style={styles.imageContainer}>
-                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url}/>
+                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text style={[styles.title, colorCSS.title]}>{name}</Text>
+                    <MainText style={styles.title}>{name}</MainText>
                     <View style={styles.detailsText}>
-                        <Text style={colorCSS.text}>{city}</Text>
-                        <Text style={colorCSS.text}>{dateString}</Text>
+                        <SubtitleText style={colorCSS.text}>{city}</SubtitleText>
+                        <SubtitleText style={colorCSS.text}>{dateString}</SubtitleText>
                     </View>
                 </View>
             </View>

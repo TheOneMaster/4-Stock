@@ -1,10 +1,11 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useFocusEffect, useTheme } from "@react-navigation/native";
 import React, { SetStateAction, useCallback, useEffect, useRef, useState } from "react";
-import { Animated, BackHandler, Button, Keyboard, Pressable, StyleSheet, Text, View } from "react-native";
+import { Animated, BackHandler, Button, Keyboard, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { addMonthsToDate } from "../helper";
+import { MainText } from "../Shared/ThemedText";
 
-import { APIVariables, StorageVariables } from "../types";
+import { StorageVariables } from "../types";
 import { FilterText } from "./FilterItem";
 
 const DEFAULT_HEIGHT = 350;
@@ -39,53 +40,12 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
     const { colors } = useTheme();
     const backgroundColor = useTheme().dark ? "#232323" : "black";
 
-    const styles = StyleSheet.create({
-
-        mainBox: {
-            width: '100%',
-            height: '100%',
-            position: 'absolute'
-        },
-        container: {
-            position: 'absolute',
-            height: filterHeight,
-            width: '100%',
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            borderTopLeftRadius: 10,
-            borderTopRightRadius: 10,
-            zIndex: 1,
-            bottom: 0
-        },
-
-        formItem: {
-            margin: 10,
-            padding: 10,
-            gap: 5,
-        },
-        innerFormItem: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            padding: 10
-        },
-
-        text: {
-            color: colors.text,
-        },
-
-
-        outerOverlay: {
-            position: 'absolute',
-            width: '100%',
-            zIndex: 1,
-            backgroundColor: 'black',
-            opacity: 0.3,
-            height: '100%'
-        }
-
-    });
+    const containerStyle: Animated.AnimatedProps<StyleProp<ViewStyle>> = {
+        backgroundColor: colors.card,
+        borderColor: colors.border,
+        height: filterHeight,
+        transform: [{ translateY: fadeAnim }]
+    }
 
     function onDateChange(event, selectedDate) {
         setShowDate(false);
@@ -156,8 +116,7 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
     )
 
 
-    const form = (
-
+    return (
         <View style={styles.mainBox}>
 
             {show &&
@@ -166,13 +125,13 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
                     style={styles.outerOverlay} />
             }
 
-            <Animated.View style={{ ...styles.container, transform: [{ translateY: fadeAnim }] }}>
+            <Animated.View style={[styles.container, containerStyle]}>
                 <View style={styles.formItem}>
                     <FilterText title={'Name'} onUpdate={(name: string) => setName(name.trim())} onSubmitEditing={Keyboard.dismiss} />
                 </View>
                 <View style={styles.formItem}>
                     <View style={styles.innerFormItem}>
-                        <Text style={styles.text}>{afterDate && "Starting Date: " + afterDate.toLocaleDateString() }</Text>
+                        <MainText>{afterDate && "Starting Date: " + afterDate.toLocaleDateString()}</MainText>
                         <View style={{ width: 100, marginLeft: 'auto' }}>
                             <Button onPress={showDatePicker} title='Select Date' />
                             {showDate && <DateTimePicker value={afterDate ?? new Date()} onChange={onDateChange} />}
@@ -186,8 +145,41 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
 
         </View>
     )
-
-
-    return form
-
 }
+
+const styles = StyleSheet.create({
+    mainBox: {
+        width: '100%',
+        height: '100%',
+        position: 'absolute'
+    },
+    container: {
+        position: 'absolute',
+        width: '100%',
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        zIndex: 1,
+        bottom: 0
+    },
+
+    formItem: {
+        margin: 10,
+        padding: 10,
+        gap: 5,
+    },
+    innerFormItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10
+    },
+    outerOverlay: {
+        position: 'absolute',
+        width: '100%',
+        zIndex: 1,
+        backgroundColor: 'black',
+        opacity: 0.3,
+        height: '100%'
+    }
+})
