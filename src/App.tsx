@@ -11,6 +11,7 @@ import { customLightTheme, customDarkTheme } from "./Themes";
 import TournamentView from "./Tournament/TournamentView";
 import EventPage from "./Event/EventView";
 import HomeScreen from './HomeScreen/HomeScreen';
+import { SettingsProvider } from './Contexts/SettingsContext';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -22,12 +23,14 @@ function App() {
 
     return (
       <NavigationContainer theme={colorScheme === 'dark' ? customDarkTheme : customLightTheme}>
-        <StatusBar/>
-        <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-          <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
-          <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
-        </Stack.Navigator>
+        <SettingsProvider>
+          <StatusBar/>
+          <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
+            <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
+            <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
+            <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
+          </Stack.Navigator>
+        </SettingsProvider>
       </NavigationContainer>
     
     )
