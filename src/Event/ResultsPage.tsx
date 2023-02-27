@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { EventStandingsQuery, queryAPI } from "../api";
 import SearchBar from "../Shared/SearchBar";
@@ -16,6 +16,8 @@ const ResultsPage = ({ navigation, route }) => {
     const [refreshing, setRefresh] = useState(false);
     const [updating, setUpdating] = useState(false);
     const [finished, setFinished] = useState(false);
+
+    console.log(refreshing);
 
     // Data state
     const [standings, setStandings] = useState(route.params.standings as Entrant[]);
@@ -72,6 +74,21 @@ const ResultsPage = ({ navigation, route }) => {
         setPage(page + 1);
     }
 
+    async function refreshPage() {
+        setRefresh(true);
+        setPage(1);
+
+        const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles);
+        const data = await queryAPI(queryBody) as EventAPIQuery;
+
+        const event_standings = data.event.standings.nodes;
+
+        setStandings(event_standings);
+        setRefresh(false)
+    }
+
+
+
     useEffect(() => {
         if (finished || page === 1) {
             return
@@ -96,6 +113,9 @@ const ResultsPage = ({ navigation, route }) => {
                 ListHeaderComponent={<SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
                 data={standings}
                 renderItem={({ index, item }) => <ResultCard playerData={item} index={index} />}
+
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshPage} />}
+
 
                 contentContainerStyle={{ flexGrow: 1 }}
                 ListEmptyComponent={
