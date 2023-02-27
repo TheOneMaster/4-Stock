@@ -12,7 +12,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
     const [active, setActive] = useState(false);
     const mounted = useRef(false);
     const { colors } = useTheme();
-    const {settings, setSettings} = useContext(SettingsContext)
+    const { settings, setSettings } = useContext(SettingsContext)
 
     async function initialSetup() {
         const value = await AsyncStorage.getItem(setting);
@@ -31,7 +31,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
         // Keep state hook and storage in sync
         if (!mounted.current) {
             const value = settings[setting];
-            if (value == null) {
+            if (typeof(value) !== 'boolean') {
                 return
             }
 
@@ -41,7 +41,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
         }
 
         if (setting in settings) {
-            const newSettings = Object.assign({}, settings, {[setting]: active});
+            const newSettings = Object.assign({}, settings, { [setting]: active });
             setSettings(newSettings);
         }
     }, [active])

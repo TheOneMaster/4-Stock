@@ -4,7 +4,6 @@ import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { SettingsItemStyles } from "./types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SettingsContext } from "../Contexts/SettingsContext";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
@@ -14,18 +13,16 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
     const [drawerState, setDrawerState] = useState(false);
 
     const { colors } = useTheme();
-    // const [settings, setSettings] = useSettings();
     const {settings, setSettings} = useContext(SettingsContext);
 
     useEffect(() => {
         if (!mounted.current) {
-            const option: DropdownOption = settings[setting];
-            if (option === null) {
+            const option = settings[setting];
+            if (typeof(option) === 'object') {
+                setSelected(option.value);
+                mounted.current = true;
                 return
             }
-            setSelected(option.value);
-            mounted.current = true;
-            return
         }
         const selectedItem = getSelectedItem();
 

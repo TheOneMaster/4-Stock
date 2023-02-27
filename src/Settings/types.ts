@@ -7,7 +7,7 @@ export interface DropdownOption {
 
 export interface SettingsProps {
     title: string,
-    setting: string,
+    setting: keyof AppSettings,
     style?: StyleProp<ViewStyle> | StyleProp<ViewStyle>[]
 }
 
