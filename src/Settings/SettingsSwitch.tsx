@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { SettingsItemStyles } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MainText } from "../Shared/ThemedText";
 
 
 const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
@@ -39,7 +40,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
 
     return (
         <View style={[SettingsItemStyles.container, { borderColor: colors.border }, style]}>
-            <Text style={[SettingsItemStyles.title, { color: colors.text }]}>{title}</Text>
+            <MainText style={SettingsItemStyles.title}>{title}</MainText>
             <View style={SettingsItemStyles.componentContainer}>
                 <Switch value={active} onValueChange={toggleSwitch} />
             </View>
