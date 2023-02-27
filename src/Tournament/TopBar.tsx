@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     banner_image: {
         flex: 1,
-        resizeMode: "cover",
+        resizeMode: "stretch",
     },
     profile_container: {
         height: 80,
