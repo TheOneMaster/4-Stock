@@ -24,7 +24,7 @@ function App() {
 
   return (
     <NavigationContainer theme={colorTheme}>
-      <StatusBar animated={true} backgroundColor={statusbarBackground} />
+      <StatusBar animated={true} backgroundColor={statusbarBackground} translucent={false} />
       <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
         <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
