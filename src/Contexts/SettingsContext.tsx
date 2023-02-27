@@ -22,7 +22,6 @@ export function SettingsProvider(props?: ViewProps) {
 
     useEffect(() => {
         AsyncStorage.getItem("settings").then((settingsString) => {
-            console.log(`init: ${settingsString}`);
             if (settingsString === null) {
                 return
             }
@@ -40,7 +39,6 @@ export function SettingsProvider(props?: ViewProps) {
             return
         }
         AsyncStorage.setItem("settings", JSON.stringify(settings));
-        console.log(`update: ${JSON.stringify(settings)}`);
     }, [settings])
 
     return (
