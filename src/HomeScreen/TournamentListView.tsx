@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { queryAPI, tournamentListQuery } from "../api";
@@ -12,6 +12,7 @@ import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeDrawerParamList, RootStackParamList, TournamentListViewProps } from "../navTypes";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 
 const TournamentListView = ({ navigation }: TournamentListViewProps) => {
@@ -24,30 +25,33 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   const [updating, setUpdating] = useState(false);
   const [finished, setFinished] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const { settings } = useContext(SettingsContext);
 
   // Filters
   const [page, setPage] = useState(1);
 
-  const [filterParams, setFilterParams] = useState({
-    beforeDate: addMonthsToDate(new Date(), 1)
-  } as Partial<StorageVariables>);
+  const filters: StorageVariables = settings.debug
+    ? { name: "Genesis" }
+    : { beforeDate: addMonthsToDate(new Date(), 1)};
 
-  const setTournamentData = async () => {
+  const [filterParams, setFilterParams] = useState(filters);
+
+  async function getTournamentData() {
     setRefreshing(true);
 
     try {
       const body = tournamentListQuery(filterParams);
       const json_data = await queryAPI(body) as TournamentListAPIQuery;
-      const currentData = json_data.tournaments.nodes
+      const currentData = json_data.tournaments.nodes;
       setData(currentData);
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
 
     setRefreshing(false);
-  };
+  }
 
-  const updateTournamentList = async () => {
+  async function updateTournamentList() {
 
     if (finished) {
       return;
@@ -72,18 +76,29 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
     setUpdating(false);
   };
 
-  const onRefresh = async () => {
+  async function onRefresh() {
     setPage(1);
     setFinished(false);
-    
-    await setTournamentData();
-  };
+
+    await getTournamentData();
+  }
+
+  useEffect(() => {
+    const debug = settings.debug;
+
+    if (debug) {
+      const filters: StorageVariables = {
+        name: "Genesis"
+      };
+      setFilterParams(filters);
+    }
+  }, [settings])
 
   useEffect(() => {
     setRefreshing(true);
     setFinished(false);
 
-    setTournamentData().then(() => setRefreshing(false))
+    getTournamentData().then(() => setRefreshing(false))
 
     // setRefreshing(false);
   }, [filterParams]);
