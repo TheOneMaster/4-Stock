@@ -6,8 +6,7 @@ import SettingsSwitch from "./SettingsSwitch";
 import GameOptions from "./games.json"
 
 const SettingsPage = ({ navigation, route }) => {
-
-    const { colors } = useTheme()
+    const { colors } = useTheme();
 
     return (
         <View style={styles.container}>

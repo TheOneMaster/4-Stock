@@ -1,9 +1,10 @@
 import { Switch, Text, View } from "react-native";
 import { SettingsProps } from "./types";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import { SettingsItemStyles } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 
 const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
@@ -11,6 +12,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
     const [active, setActive] = useState(false);
     const mounted = useRef(false);
     const { colors } = useTheme();
+    const {settings, setSettings} = useContext(SettingsContext)
 
     async function initialSetup() {
         const value = await AsyncStorage.getItem(setting);
@@ -28,9 +30,20 @@ const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {
     useEffect(() => {
         // Keep state hook and storage in sync
         if (!mounted.current) {
-            initialSetup();
+            const value = settings[setting];
+            if (value == null) {
+                return
+            }
+
+            setActive(value);
+            mounted.current = true;
+            return
         }
-        AsyncStorage.setItem(setting, active.toString());
+
+        if (setting in settings) {
+            const newSettings = Object.assign({}, settings, {[setting]: active});
+            setSettings(newSettings);
+        }
     }, [active])
 
     function toggleSwitch(state) {

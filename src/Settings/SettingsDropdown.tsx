@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { DropdownOption, SettingsDropdownProps } from "./types";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { SettingsItemStyles } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
@@ -13,21 +14,26 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
     const [drawerState, setDrawerState] = useState(false);
 
     const { colors } = useTheme();
+    // const [settings, setSettings] = useSettings();
+    const {settings, setSettings} = useContext(SettingsContext);
 
     useEffect(() => {
         if (!mounted.current) {
-            AsyncStorage.getItem(setting).then(settingVal => {
-                const selectedVal: DropdownOption = JSON.parse(settingVal);
-
-                if (selectedVal !== null) {
-                    setSelected(selectedVal.value);
-                }
-
-                mounted.current = true;
-            })
+            const option: DropdownOption = settings[setting];
+            if (option === null) {
+                return
+            }
+            setSelected(option.value);
+            mounted.current = true;
+            return
         }
         const selectedItem = getSelectedItem();
-        AsyncStorage.setItem(setting, JSON.stringify(selectedItem));
+
+        if (setting in settings) {
+            const newSettings = Object.assign({}, settings, {[setting]: selectedItem});
+            setSettings(newSettings);
+        }
+
     }, [selected])
 
 
