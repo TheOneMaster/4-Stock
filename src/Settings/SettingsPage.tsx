@@ -1,9 +1,9 @@
-import { StyleSheet, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { StyleSheet, View } from "react-native";
 import SettingsDropdown from "./SettingsDropdown";
 import SettingsSwitch from "./SettingsSwitch";
 
-import GameOptions from "./games.json"
+import GameOptions from "./games.json";
 
 const SettingsPage = ({ navigation, route }) => {
 

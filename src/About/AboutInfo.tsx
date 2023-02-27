@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { version } from "../../package.json"
+import { StyleSheet, View } from "react-native";
+import { version } from "../../package.json";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
 
 function AboutInfo() {

@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { Image, StyleSheet, View } from "react-native";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText } from "../Shared/ThemedText";
 
@@ -43,7 +43,7 @@ export const TopBar = (props) => {
 
                 <View style={{ ...styles.profile_container, marginTop: -20 }}>
                     <View style={[styles.profile_image_container, colorCSS.profile_image_container]}>
-                        <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image}/>
+                        <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image} />
                     </View>
                     <View style={{ ...styles.profile_text, marginTop: 20 }}>
                         <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
@@ -57,7 +57,7 @@ export const TopBar = (props) => {
         <View style={styles.profile_only_view}>
             <View style={styles.profile_container}>
                 <View style={styles.profile_image_container}>
-                    <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image}/>
+                    <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image} />
                 </View>
                 <View style={{ ...styles.profile_text, justifyContent: 'center' }}>
                     <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>

@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { convertDateToString } from "../helper";
-import { FullTournamentDetails } from "../types";
 import { MainText } from "../Shared/ThemedText";
+import { FullTournamentDetails } from "../types";
 
 function DetailSection(props: FullTournamentDetails) {
     if (Object.keys(props).length === 0) {

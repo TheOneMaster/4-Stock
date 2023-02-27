@@ -1,10 +1,9 @@
-import { Switch, Text, View } from "react-native";
-import { SettingsProps } from "./types";
-import { useEffect, useRef, useState } from "react";
-import { useTheme } from "@react-navigation/native";
-import { SettingsItemStyles } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "@react-navigation/native";
+import { useEffect, useRef, useState } from "react";
+import { Switch, View } from "react-native";
 import { MainText } from "../Shared/ThemedText";
+import { SettingsItemStyles, SettingsProps } from "./types";
 
 
 const SettingsSwitch = ({ title, setting, style }: SettingsProps) => {

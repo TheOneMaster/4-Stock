@@ -5,12 +5,12 @@ import { queryAPI, tournamentDetailsQuery } from "../api";
 import { FullTournamentDetails, TournamentAPIQuery } from "../types";
 
 import { useTheme } from "@react-navigation/native";
-import ContactButton from "../Shared/ContactButton";
-import EventCard from "./EventCard";
-import { TopBar } from "./TopBar";
 import { TournamentViewProps } from "../navTypes";
+import ContactButton from "../Shared/ContactButton";
 import { MainText } from "../Shared/ThemedText";
 import DetailSection from "./DetailSection";
+import EventCard from "./EventCard";
+import { TopBar } from "./TopBar";
 
 const RegisterButton = (props) => {
 
@@ -40,43 +40,43 @@ const RegisterButton = (props) => {
         <View style={style.container}>
             <Button title="Register" onPress={register}></Button>
         </View>
-        
+
     )
 
 
 }
 
-const TournamentView = ({navigation, route}: TournamentViewProps) => {
+const TournamentView = ({ navigation, route }: TournamentViewProps) => {
 
     // 
     // 
     // TODO: Rewrite this component using FlatList or SectionList instead of using map inside a ScrollView
     // 
     // 
-    
+
     const [data, setData] = useState({} as FullTournamentDetails);
     const [loading, setLoading] = useState(false);
     const [dataReady, setdataReady] = useState(false);
     const [failed, setFailedAPI] = useState(false);
     const [refreshing, setRefreshing] = useState(false)
-    
+
     const tournament = route.params.tournamentDetails;
 
     const { colors } = useTheme();
 
 
-    const getTournamentData = async() => {
-        try{
+    const getTournamentData = async () => {
+        try {
             setLoading(true);
             const tournamentQuery = tournamentDetailsQuery(tournament.id);
             const api_data = await queryAPI(tournamentQuery) as TournamentAPIQuery;
             const tournament_data = api_data.tournament;
             setData(tournament_data);
             setdataReady(true);
-        } catch(err) {
+        } catch (err) {
             setFailedAPI(true);
         }
-        
+
         setLoading(false);
     }
 
@@ -91,13 +91,13 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
     }
 
     return (
-        <View style={{flex: 1}}>
-            
+        <View style={{ flex: 1 }}>
+
             <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
                 <TopBar {...tournament}></TopBar>
-                
-                { loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator> }    
-                
+
+                {loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator>}
+
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Details</MainText>
                     <DetailSection {...data}></DetailSection>
@@ -105,21 +105,21 @@ const TournamentView = ({navigation, route}: TournamentViewProps) => {
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Events</MainText>
-                    { dataReady && data.events.map(event => (
+                    {dataReady && data.events.map(event => (
                         <View style={styles.eventCard} key={event.id}>
                             <EventCard event={event}></EventCard>
                         </View>
-                        )) }
+                    ))}
                 </View>
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Contact</MainText>
-                    { dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
+                    {dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
                 </View>
-            
+
             </ScrollView>
 
-            { dataReady && <RegisterButton open={data.isRegistrationOpen}></RegisterButton> }
+            {dataReady && <RegisterButton open={data.isRegistrationOpen}></RegisterButton>}
         </View>
     )
 }

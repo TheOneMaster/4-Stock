@@ -1,13 +1,12 @@
 
-import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import { useNavigation, useTheme } from "@react-navigation/native";
 
 import { PlaceholderGame } from "../Shared/Logos";
-import { EventDetails, ImageType } from "../types";
-import { useState } from "react";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText } from "../Shared/ThemedText";
+import { EventDetails, ImageType } from "../types";
 
 
 function getVideogameImageUrl(images: ImageType[]): string {
@@ -24,7 +23,7 @@ function getVideogameImageUrl(images: ImageType[]): string {
 }
 
 
-const EventCard = ({ event }: {event: EventDetails}) => {
+const EventCard = ({ event }: { event: EventDetails }) => {
 
 
     const navigation = useNavigation();
@@ -88,7 +87,7 @@ const EventCard = ({ event }: {event: EventDetails}) => {
         <TouchableOpacity onPress={eventTouch} delayPressIn={50}>
             <View style={[styles.container, colorCSS.container]}>
                 <View style={[styles.game_container, colorCSS.game_container]}>
-                    <PlaceholderImage imageSrc={imageLogo} placeholder={PlaceholderGame} style={styles.game_image}/>
+                    <PlaceholderImage imageSrc={imageLogo} placeholder={PlaceholderGame} style={styles.game_image} />
                 </View>
                 <View style={styles.event_text}>
                     <MainText style={styles.event_title}>{name}</MainText>

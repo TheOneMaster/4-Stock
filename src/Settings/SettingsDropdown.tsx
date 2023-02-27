@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native"
-import { useTheme } from "@react-navigation/native";
-import { DropdownOption, SettingsDropdownProps } from "./types";
-import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
-import { SettingsItemStyles } from "./types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
+import { FlatList, StyleProp, StyleSheet, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native";
+import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { MainText } from "../Shared/ThemedText";
+import { DropdownOption, SettingsDropdownProps, SettingsItemStyles } from "./types";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
