@@ -32,7 +32,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
   const filters: StorageVariables = settings.debug
     ? { name: "Genesis" }
-    : { beforeDate: addMonthsToDate(new Date(), 1)};
+    : { beforeDate: addMonthsToDate(new Date(), 1) };
 
   const [filterParams, setFilterParams] = useState(filters);
 
@@ -91,8 +91,13 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
         name: "Genesis"
       };
       setFilterParams(filters);
+    } else {
+      const filters: StorageVariables = {
+        beforeDate: addMonthsToDate(new Date(), 1)
+      }
+      setFilterParams(filters);
     }
-  }, [settings])
+  }, [settings.debug])
 
   useEffect(() => {
     setRefreshing(true);
@@ -129,7 +134,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, {backgroundColor: colors.background}]}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, { backgroundColor: colors.background }]}
         data={data}
         renderItem={(tournament) => tournamentItem(tournament.item, tournament.index)}
         keyExtractor={tournament => `tournament_${tournament.id.toString()}`}
