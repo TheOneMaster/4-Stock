@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { queryAPI, tournamentDetailsQuery } from "../api";
-import { convertDateToString } from "../helper";
 import { FullTournamentDetails, TournamentAPIQuery } from "../types";
 
 import { useTheme } from "@react-navigation/native";
@@ -10,6 +9,8 @@ import ContactButton from "../Shared/ContactButton";
 import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
 import { TournamentViewProps } from "../navTypes";
+import { MainText } from "../Shared/ThemedText";
+import DetailSection from "./DetailSection";
 
 const RegisterButton = (props) => {
 
@@ -44,46 +45,6 @@ const RegisterButton = (props) => {
 
 
 }
-
-const DetailSection = (props: FullTournamentDetails) => {
-    if (Object.keys(props).length === 0) {
-        return null;
-    }
-
-    const { colors } = useTheme();
-
-    const style = StyleSheet.create({
-        container: {
-            flex: 1,
-        },
-        url: {
-            color: "blue",
-        },
-        text: {
-            color: colors.text
-        }
-    });
-
-    const startDate = convertDateToString(props.startAt);
-    const lastDateRegister = convertDateToString(props.eventRegistrationClosesAt);
-
-    return (
-        <View style={style.container}>
-            <View>
-                <Text style={style.text}>City: {props.city}</Text>
-                <Text style={style.text}>Starting At: {startDate}</Text>
-                <Text style={style.text}>Country: {props.countryCode}</Text>
-                <Text style={style.text}>Currency: {props.currency}</Text>
-                { props.eventRegistrationClosesAt && <Text style={style.text}>Last date for registration: {lastDateRegister}</Text> }
-                <Text style={style.text}>Number of attendees: {props.numAttendees}</Text>
-                <Text style={style.text}>Venue Address: {props.venueAddress}</Text>
-            </View>
-        </View>
-    )
-
-}
-
-
 
 const TournamentView = ({navigation, route}: TournamentViewProps) => {
 
