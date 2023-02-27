@@ -1,7 +1,6 @@
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 
 export interface DropdownOption {
-    id?: string,
     label: string,
     value: number
 }
@@ -36,3 +35,8 @@ export const SettingsItemStyles = StyleSheet.create({
         marginLeft: 'auto'
     }
 })
+
+export interface AppSettings {
+    debug: boolean,
+    mainGame: DropdownOption
+}
