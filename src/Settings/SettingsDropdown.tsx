@@ -1,67 +1,30 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
-import { DropdownOption, SettingsDropdownProps } from "./types";
+import React, { useEffect, useState } from "react";
+import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native";
+import { useMMKVObject } from "react-native-mmkv";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
-import { SettingsItemStyles } from "./types";
-import { SettingsContext } from "../Contexts/SettingsContext";
+import { AppSettings, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItemStyles } from "./types";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
-    const [selected, setSelected] = useState(value ?? null);
-    const mounted = useRef(false);
+    const [settings, setSettings] = useMMKVObject<AppSettings>("settings");
+    const [option, setOption] = useState(settings["general.mainGame"])
     const [drawerState, setDrawerState] = useState(false);
 
+
     const { colors } = useTheme();
-    const {settings, setSettings} = useContext(SettingsContext);
 
     useEffect(() => {
-        if (!mounted.current) {
-            const option = settings[setting];
-            if (typeof(option) === 'object') {
-                setSelected(option.value);
-                mounted.current = true;
-                return
-            }
-        }
-        const selectedItem = getSelectedItem();
-
-        if (setting in settings) {
-            const newSettings = Object.assign({}, settings, {[setting]: selectedItem});
-            setSettings(newSettings);
-        }
-
-    }, [selected])
-
-
+        setDrawerState(false);
+        const newSettings = Object.assign({}, settings, { [setting]: option });
+        setSettings(newSettings)
+    }, [option])
 
     function toggleDrawer() {
         requestAnimationFrame(() => {
             const newState = !drawerState;
             setDrawerState(newState);
         })
-    }
-
-    function closeDrawer() {
-        requestAnimationFrame(() => {
-            setDrawerState(false);
-        })
-    }
-
-
-    function selectItem(val: number) {
-        requestAnimationFrame(() => {
-            setSelected(val);
-        })
-    }
-
-    function getSelectedItem() {
-        return data.reduce<DropdownOption>((prev, cur) => {
-            if (cur.value === selected) {
-                return cur
-            }
-            return prev
-        }, {} as DropdownOption);
     }
 
 
@@ -83,9 +46,9 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
             {/* Top bar that you click on to create the dropdown menu */}
             <TouchableHighlight onPress={toggleDrawer} {...highlightProps}>
                 <View style={[SettingsItemStyles.container, topBarStyle]}>
-                    <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+                    <Text style={[SettingsItemStyles.title, { color: colors.text }]}>{title}</Text>
                     <View style={styles.placeholder}>
-                        <Text style={[styles.placeholderText, { color: colors.text }]}>{selected !== null ? getSelectedItem().label : "Select a value"}</Text>
+                        <Text style={[styles.placeholderText, { color: colors.text }]}>{option !== null ? option.label : "Select a value"}</Text>
                         {drawerState
                             ? <ArrowLeft width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
                             : <ArrowDown width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
@@ -99,7 +62,7 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
             {drawerState &&
                 <FlatList
                     data={data}
-                    renderItem={({ item, index }) => <DropdownItem item={item} active={item.value === selected} selectItem={selectItem} closeDrawer={closeDrawer} />}
+                    renderItem={({ item, index }) => <DropdownItem setting={setting} item={item} active={option ? item.value === option.value : false} selectItem={setOption} setDrawerState={setDrawerState} />}
                     initialNumToRender={20}
                     style={[styles.options, { backgroundColor: backgroundColor }]}
                 />
@@ -111,25 +74,17 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
 
 }
 
-interface DropdownItemProps {
-    item: DropdownOption,
-    active: boolean,
-    selectItem: React.Dispatch<React.SetStateAction<number>>,
-    closeDrawer: () => void,
-}
-
-const DropdownItem = ({ item, selectItem, active, closeDrawer }: DropdownItemProps) => {
-
+const DropdownItem = ({ item, selectItem, active, setting, setDrawerState }: DropdownItemProps) => {
     const label = item.label;
     const value = item.value;
 
     const { colors } = useTheme();
 
     function pressed() {
-        selectItem(value);
-        closeDrawer();
-    }
+        setDrawerState(false);
+        active ? selectItem(null) : selectItem(item);
 
+    }
 
     return (
         <TouchableOpacity onPress={pressed}>

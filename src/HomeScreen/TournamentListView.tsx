@@ -1,40 +1,57 @@
-import { useTheme } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, ToastAndroid, View } from "react-native";
+import { useIsFocused, useTheme } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, FlatList, RefreshControl, Settings, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { queryAPI, tournamentListQuery } from "../api";
 import { addMonthsToDate } from "../helper";
 
+// import { SettingsContext } from "../Contexts/SettingsContext";
+// import { TournamentListViewProps } from "../navTypes";
 import { BasicTournamentDetails, StorageVariables, TournamentListAPIQuery } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
-import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeDrawerParamList, RootStackParamList, TournamentListViewProps } from "../navTypes";
-import { SettingsContext } from "../Contexts/SettingsContext";
+
+import { useMMKVListener, useMMKVBoolean, useMMKVObject, useMMKV } from "react-native-mmkv";
+import { AppSettings, DropdownOption } from "../Settings/types";
 
 
 const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
+  const storage = useMMKV();
+
   const [data, setData] = useState([] as BasicTournamentDetails[]);
+  const updatedSettings = useRef<boolean>(false);
+
+  useMMKVListener(() => {
+    updatedSettings.current = true;
+  })
+
 
   // UI State elements
+  const focused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [finished, setFinished] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
-  const { settings } = useContext(SettingsContext);
 
   // Filters
   const [page, setPage] = useState(1);
+  const [filterParams, setFilterParams] = useState<StorageVariables>({
+    beforeDate: addMonthsToDate(new Date(), 1),
+    videogameIds: getMainGame()
+  });
 
-  const filters: StorageVariables = settings.debug
-    ? { name: "Genesis" }
-    : { beforeDate: addMonthsToDate(new Date(), 1) };
+  function getMainGame() {
+    const settings: AppSettings = JSON.parse(storage.getString("settings"));
+    return settings["general.mainGame"] ? [settings["general.mainGame"].value] : undefined;
+  }
 
-  const [filterParams, setFilterParams] = useState(filters);
+  function updateFilters(filter: StorageVariables) {
+    const newFilters = Object.assign({}, filterParams, filter);
+    setFilterParams(newFilters)
+  }
 
   async function getTournamentData() {
     setRefreshing(true);
@@ -63,6 +80,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
     params.page = page;
 
     const body = tournamentListQuery(params);
+    console.log(body);
     const query_data = await queryAPI(body) as TournamentListAPIQuery;
     const current_data = query_data.tournaments.nodes;
 
@@ -84,20 +102,35 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   }
 
   useEffect(() => {
-    const debug = settings.debug;
 
-    if (debug) {
-      const filters: StorageVariables = {
-        name: "Genesis"
-      };
-      setFilterParams(filters);
-    } else {
-      const filters: StorageVariables = {
-        beforeDate: addMonthsToDate(new Date(), 1)
-      }
-      setFilterParams(filters);
+    if (!focused || !updatedSettings.current) {
+      return
     }
-  }, [settings.debug])
+
+    const settingsString = storage.getString("settings");
+    const settings: AppSettings = JSON.parse(settingsString);
+
+    console.log(settings);
+    updatedSettings.current = false;
+
+    if (settings["general.debug"]) {
+      const newFilters: StorageVariables = {
+        name: "Genesis",
+        videogameIds: [1]
+      }
+      setFilterParams(newFilters);
+      return
+    }
+
+    const newFilters: StorageVariables = {
+      beforeDate: addMonthsToDate(new Date(), 1),
+      videogameIds: settings["general.mainGame"] ? [settings["general.mainGame"].value] : undefined
+    }
+
+    setFilterParams(newFilters);
+
+
+  }, [focused])
 
   useEffect(() => {
     setRefreshing(true);
@@ -105,7 +138,6 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
     getTournamentData().then(() => setRefreshing(false))
 
-    // setRefreshing(false);
   }, [filterParams]);
 
   useEffect(() => {
@@ -151,7 +183,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
       }
 
 
-      <FilterView updateFilters={setFilterParams} setShow={setShowFilter} show={showFilter}></FilterView>
+      <FilterView updateFilters={updateFilters} setShow={setShowFilter} show={showFilter}></FilterView>
 
 
     </View>
