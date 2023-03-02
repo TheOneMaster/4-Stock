@@ -2,8 +2,8 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env";
 
-import { APIQuery, APIVariables, APIFiltersTemplate, StorageVariables } from "./types";
-import { addMonthsToDate, cleanObject, convertDateToUnixSeconds, convertStorageToAPI } from "./helper";
+import { convertStorageToAPI } from "./helper";
+import { APIQuery, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -54,7 +54,7 @@ export function tournamentDetailsQuery(Id: number): string {
     return JSON.stringify({ query, variables });
 }
 
-export function EventDetailsQuery(Id: number, singles=true): string {
+export function EventDetailsQuery(Id: number, singles = true): string {
     const query = `
     query getEventData($id: ID, $singles: Boolean!) {
         event(id: $id){
@@ -106,7 +106,7 @@ export function EventDetailsQuery(Id: number, singles=true): string {
         singles: singles
     }
 
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 export function EventStandingsQuery(Id: number, perPage: number, page: number, singles: boolean, filter?: string) {
@@ -164,58 +164,40 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
         filter: filter
     }
 
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 
 
-export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
-    const params = convertStorageToAPI(storageParams);
-    const paramsUsed = cleanObject(params);
-    const variableString = createVariableString(paramsUsed);
-
-    const bodyVariables = ['page', 'perPage'];
-    let bodyObj = bodyVariables.reduce((prev, cur) => {
-        if (cur in paramsUsed) {
-            return { ...prev, [cur]: paramsUsed[cur] }
-        }
-        return prev
-    }, {});
-
-    const bodyConstraints = createGraphQLString(bodyObj, 1);
-    const filters = Object.keys(paramsUsed)
-        .filter(param => !(bodyVariables.includes(param)))
-        .reduce((prev, cur) => ({ ...prev, [cur]: paramsUsed[cur] }), {});
-
-    const filterString = createGraphQLString(filters, 2);
-
+export function tournamentListQuery(storageParams: StorageVariables): string {
     const query = `
-    query getTournaments${variableString} {
+    query getTournaments($name: String, $page: Int, $perPage: Int, $beforeDate: Timestamp, $videogameIds: [ID]) {
         tournaments(query: {
-            ${bodyConstraints}
+            page: $page
+            perPage: $perPage
             filter: {
-                ${filterString}
-            }
-        }) {
-            nodes {
-                id
-                name
-                city
-                startAt
-                numAttendees
-                images {
-                    id
-                    type
-                    url
+                name: $name
+                beforeDate: $beforeDate
+                videogameIds: $videogameIds
                 }
+            }) {
+                nodes {
+                    id
+                    name
+                    city
+                    startAt
+                    numAttendees
+                    images {
+                        id
+                        type
+                        url
+                        }
+                        
+                    }
+                }
+            }`;
 
-            }
-        }
-    }`
-
-
-    const variables = getFlatObject(paramsUsed);
-
+    const variables = convertStorageToAPI(storageParams);
     return JSON.stringify({ query, variables });
 }
 
@@ -246,73 +228,4 @@ export async function queryAPI(query_body: string) {
 
         throw err;
     }
-}
-
-// Object manipulation functions
-
-function flattenVariables<T extends Object>(params: T): Object[] {
-    let returnVariables = [];
-    for (const param in params) {
-        const value = params[param];
-        if (typeof value === 'object' && !(value instanceof Date)) {
-            returnVariables.push(...flattenVariables(value));
-            continue;
-        }
-        const t = {[param]: value}
-        returnVariables.push(t)
-    }
-    return returnVariables
-}
-
-function getFlatObject(obj: Object): Object {
-    const flatArray = flattenVariables(obj);
-    return Object.assign({}, ...flatArray);
-} 
-
-function createVariableString(params): string {
-    const flatVariables = getFlatObject(params);
-    // console.log(flatVariables);
-
-    let variablesChosenTemplate = {};
-    for (const variable in flatVariables) {
-        if (variable in APIFiltersTemplate) {
-            variablesChosenTemplate[variable] = APIFiltersTemplate[variable];
-        }
-    };
-
-    let variableStringList = [];
-    for (const variable in variablesChosenTemplate) {
-        variableStringList.push(`$${variable}: ${variablesChosenTemplate[variable]}`);
-    };
-    
-    let variableString = variableStringList.join(", ");
-
-    // console.log(variableString);
-
-    if (variableString !== '') {
-        variableString = "(" + variableString + ")"; 
-    }
-
-    return variableString
-}
-
-function createGraphQLString(filters: any, spacing = 0): string {
-    if (typeof filters !== 'object') {
-        return '$' + filters + '\n'
-    }
-
-    const test = Object.keys(filters)
-        .map(key => {
-            const value = filters[key];
-            const initalSpacing = '  '.repeat(spacing);
-            if (typeof value !== 'object') {
-                return `${initalSpacing}${key}: ${createGraphQLString(key)}`
-            }
-
-            return initalSpacing + key + ":{\n" + createGraphQLString(value, spacing + 1) + "}";
-        })
-        .join("\n");
-
-    return test
-
 }
