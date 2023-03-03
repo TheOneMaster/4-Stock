@@ -2,13 +2,13 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env";
 
-import { convertStorageToAPI } from "./helper";
+import { cleanObject, convertStorageToAPI } from "./helper";
 import { APIQuery, StorageVariables } from "./types";
 
 // API Query functions
 
 export function tournamentDetailsQuery(Id: number): string {
-    const query = `
+  const query = `
     query getTournamentDetails($ID: ID!) {
         tournament(id: $ID) {
           id
@@ -47,15 +47,15 @@ export function tournamentDetailsQuery(Id: number): string {
         }
       }`
 
-    const variables = {
-        "ID": Id,
-    }
+  const variables = {
+    "ID": Id,
+  }
 
-    return JSON.stringify({ query, variables });
+  return JSON.stringify({ query, variables });
 }
 
 export function EventDetailsQuery(Id: number, singles = true): string {
-    const query = `
+  const query = `
     query getEventData($id: ID, $singles: Boolean!) {
         event(id: $id){
           id
@@ -101,24 +101,24 @@ export function EventDetailsQuery(Id: number, singles = true): string {
         }
     }`;
 
-    const variables = {
-        id: Id,
-        singles: singles
-    }
+  const variables = {
+    id: Id,
+    singles: singles
+  }
 
-    return JSON.stringify({ query, variables });
+  return JSON.stringify({ query, variables });
 }
 
 export function EventStandingsQuery(Id: number, perPage: number, page: number, singles: boolean, filter?: string) {
-    const filterString = filter ? `filter: {
+  const filterString = filter ? `filter: {
         search: {
             searchString: $filter
         }
     }` : '';
 
-    let variableString = filter ? '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!, $filter: String' : '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!';
+  let variableString = filter ? '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!, $filter: String' : '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!';
 
-    const query = `
+  const query = `
     query getEventStandings(${variableString}) {
         event(id: $id) {
           standings(query: {
@@ -156,21 +156,21 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
         }
     }`;
 
-    const variables = {
-        id: Id,
-        perPage: perPage,
-        page: page,
-        singles: singles,
-        filter: filter
-    }
+  const variables = {
+    id: Id,
+    perPage: perPage,
+    page: page,
+    singles: singles,
+    filter: filter
+  }
 
-    return JSON.stringify({ query, variables });
+  return JSON.stringify({ query, variables });
 }
 
 
 
 export function tournamentListQuery(storageParams: StorageVariables): string {
-    const query = `
+  const query = `
     query getTournaments($name: String, $page: Int, $perPage: Int, $beforeDate: Timestamp, $videogameIds: [ID]) {
         tournaments(query: {
             page: $page
@@ -197,35 +197,36 @@ export function tournamentListQuery(storageParams: StorageVariables): string {
                 }
             }`;
 
-    const variables = convertStorageToAPI(storageParams);
-    return JSON.stringify({ query, variables });
+  const cleanedParams = cleanObject(storageParams);
+  const variables = convertStorageToAPI(cleanedParams);
+  return JSON.stringify({ query, variables });
 }
 
 export async function queryAPI(query_body: string) {
-    try {
-        const api_url = "https://api.start.gg/gql/alpha";
-        const response = await fetch(api_url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${API_TOKEN}`
-            },
-            body: query_body
-        });
+  try {
+    const api_url = "https://api.start.gg/gql/alpha";
+    const response = await fetch(api_url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_TOKEN}`
+      },
+      body: query_body
+    });
 
-        const json_data: APIQuery = await response.json();
-        const data = json_data.data;
-        if (data === undefined) {
-            throw new TypeError("API request failed. Please try again later.")
-        }
-
-        return data;
-    } catch (err) {
-        console.error("data not got");
-        if (Platform.OS === 'android') {
-            ToastAndroid.show(err.message, ToastAndroid.SHORT);
-        }
-
-        throw err;
+    const json_data: APIQuery = await response.json();
+    const data = json_data.data;
+    if (data === undefined) {
+      throw new TypeError("API request failed. Please try again later.")
     }
+
+    return data;
+  } catch (err) {
+    console.error("data not got");
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(err.message, ToastAndroid.SHORT);
+    }
+
+    throw err;
+  }
 }
