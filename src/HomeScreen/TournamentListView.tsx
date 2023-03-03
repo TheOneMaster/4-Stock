@@ -25,6 +25,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   const updatedSettings = useRef<boolean>(false);
 
   useMMKVListener(() => {
+    // TODO: Make sure it only updates after the MMKV store has loaded.
     updatedSettings.current = true;
   })
 
