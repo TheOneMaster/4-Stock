@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHighlightProps, TouchableOpacity, View, ViewStyle } from "react-native";
 import { useMMKVObject } from "react-native-mmkv";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
-import { AppSettings, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItemStyles } from "./types";
+import { AppSettings, DropdownItemProps, SettingsDropdownProps, SettingsItemStyles } from "./types";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
     const [settings, setSettings] = useMMKVObject<AppSettings>("settings");
-    const [option, setOption] = useState(settings["general.mainGame"])
+    const [option, setOption] = useState(settings[setting])
     const [drawerState, setDrawerState] = useState(false);
 
 
