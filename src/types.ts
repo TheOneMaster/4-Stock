@@ -45,7 +45,7 @@ interface APIHint {
 }
 export interface APIQuery {
     actionRecords: [],
-    data: TournamentAPIQuery | TournamentListAPIQuery | EventAPIQuery,
+    data: TournamentAPIQuery | TournamentListAPIQuery | EventAPIQuery | SetAPIQuery,
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -67,6 +67,10 @@ export interface TournamentAPIQuery extends APIQuery {
 
 export interface EventAPIQuery extends APIQuery {
     event: FullEventDetails
+}
+
+export interface SetAPIQuery extends APIQuery {
+    phaseGroup: Pick<PhaseGroup, "sets">
 }
 
 export interface TournamentQueryVariables {
@@ -114,10 +118,10 @@ interface Participant {
 }
 
 export interface Entrant {
-    id?: number,
-    name: string,
-    participants: Participant[],
-    placement: number
+    id: number,
+    name?: string,
+    participants?: Participant[],
+    placement?: number
 }
 
 export interface Wave {
@@ -152,9 +156,16 @@ export interface PhaseGroup {
     id: number,
     wave: Wave
     displayIdentifier?: string,
-    sets?: {
-        nodes: GameSet[]
+    sets?: GameSetPage
+}
+
+export interface GameSetPage {
+    pageInfo: {
+        total: number
+        perPage: number
+        page?: number
     }
+    nodes: GameSet[]
 }
 
 export interface GameSet {
@@ -166,6 +177,15 @@ export interface GameSet {
 }
 
 interface SetSlot {
-    id: number,
-    entrant?: Partial<Entrant>
+    standing: Standing
+}
+
+interface Standing {
+    entrant: Pick<Entrant, "id" | "name">
+    placement: number
+    stats: {
+        score: {
+            value: number
+        }
+    }
 }

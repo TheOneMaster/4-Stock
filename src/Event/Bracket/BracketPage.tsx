@@ -1,20 +1,15 @@
-import { StyleSheet, Text, View } from "react-native"
-import { BracketViewProps } from "../../navTypes";
-import { FlatList } from "react-native-gesture-handler";
 import { useTheme } from "@react-navigation/native";
+import { StyleSheet, Text, View } from "react-native";
+import { BracketViewProps } from "../../navTypes";
 
-import PhaseButton from "./PhaseButton";
-import BracketPhases from "./BracketPhases";
 import { useEffect, useRef, useState } from "react";
-import { PhaseGroup, GameSet, Wave } from "../../types";
-import BracketTree from "./BracketTree";
+import { GameSet, PhaseGroup, SetAPIQuery, Wave } from "../../types";
+import BracketPhases from "./BracketPhases";
 
-import testSets from "./test_sets.json";
-import BracketWaves from "./BracketWaves";
-import BracketFilters from "./BracketFilters";
 import { Dropdown } from "react-native-element-dropdown";
+import testSets from "../../../assets/dev/test_sets.json";
 import { DropdownOption } from "../../Shared/types";
-import { DropdownProps } from "react-native-element-dropdown/lib/typescript/components/Dropdown/model";
+import { getAllSets, PhaseSetsQuery, queryAPI } from "../../api";
 
 function convertWavesToDropdown(waves: Wave[]): DropdownOption[] {
     return waves.reduce((prev, cur) => {
@@ -41,7 +36,8 @@ function convertPGroupsToDropdown(pGroups: PhaseGroup[]): DropdownOption[] {
 
 const BracketPage = ({ navigation, route }: BracketViewProps) => {
 
-    const [sets, updateSets] = useState<GameSet[]>(testSets);
+    const [sets, updateSets] = useState<GameSet[]>(null);
+
     const phases = useRef(route.params.phases);
     const waves = useRef(route.params.waves);
     const phaseGroups = useRef(
@@ -76,8 +72,9 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         )
     }
 
+
     const [selectedPhase, setSelectedPhase] = useState(phases.current[0]);
-    const [selectedPGroup, setSelectedPGroup] = useState<PhaseGroup>(phases.current[0].phaseGroups[0]);
+    const [selectedPGroup, setSelectedPGroup] = useState<PhaseGroup>(phases.current[0].phaseGroups.nodes[0]);
     const [selectedWave, setSelectedWave] = useState<Wave>(null);
 
     const [dropdownWaves, setDropdownWaves] = useState<Wave[]>([]);
@@ -116,6 +113,17 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         setSelectedPGroup(curPGroups[0]);
     }, [selectedWave]);
 
+    useEffect(() => {
+        const curSets = getAllSets(selectedPGroup.id);
+        curSets.then(data => updateSets(data));
+    }, [selectedPGroup]);
+
+    useEffect(() => {
+        if (sets === null) {
+            return
+        }
+        console.info(`Total sets: ${sets.length}`)
+    }, [sets])
 
     function updateWave(ddOption: DropdownOption) {
         const curWave = waves.current.reduce((prev, cur) => {

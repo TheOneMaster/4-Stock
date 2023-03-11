@@ -2,7 +2,7 @@ import { Platform, ToastAndroid } from "react-native";
 
 import { API_TOKEN } from "@env";
 
-import { APIQuery, APIFiltersTemplate, StorageVariables } from "./types";
+import { APIQuery, APIFiltersTemplate, StorageVariables, SetAPIQuery, GameSet } from "./types";
 import { cleanObject, convertStorageToAPI } from "./helper";
 
 // API Query functions
@@ -183,16 +183,79 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
     return JSON.stringify({ query, variables });
 }
 
-export function PhaseSetsQuery(Id: number) {
+export function PhaseSetsQuery(Id: number, perPage = 20, page = 1) {
 
     const query = `
-    query `
+    query getSets($id: ID, $pageNum: Int, $perPage: Int) {
+        phaseGroup(id: $id) {
+          sets(
+            page: $pageNum
+            perPage: $perPage
+            ) {
+            pageInfo {
+              perPage
+              total
+            }
+            nodes {
+              id
+              round
+              identifier
+              slots {
+                standing {
+                  entrant {
+                    id
+                    name
+                  }
+                  placement
+                  stats {
+                    score {
+                      value
+                      
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      `
 
+    const variables = {
+        id: Id,
+        perPage: perPage,
+        pageNum: page
+    }
 
-
-
+    return JSON.stringify({ query, variables });
 }
 
+export async function getAllSets(id: number) {
+    const sets: GameSet[] = [];
+    let page = 1;
+    let perPage = 20;
+
+    let moreSets = true;
+
+    while (moreSets) {
+        const body = PhaseSetsQuery(id, perPage, page);
+        try {
+            const data = await queryAPI(body) as SetAPIQuery;
+            sets.push.apply(sets, data.phaseGroup.sets.nodes);
+
+            console.log(`Current Sets Obtained: ${sets.length}`);
+            console.log(`Total sets: ${data.phaseGroup.sets.pageInfo.total}`)
+
+            moreSets = !(data.phaseGroup.sets.pageInfo.total === sets.length)
+            page += 1
+        } catch (e) {
+            console.error(e);
+            break
+        }
+    }
+
+    return sets
+}
 
 
 export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
