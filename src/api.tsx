@@ -57,7 +57,7 @@ export function tournamentDetailsQuery(Id: number): string {
     return JSON.stringify({ query, variables });
 }
 
-export function EventDetailsQuery(Id: number, singles=true): string {
+export function EventDetailsQuery(Id: number, singles = true): string {
     const query = `
     query getEventData($id: ID, $singles: Boolean!) {
         event(id: $id){
@@ -70,11 +70,19 @@ export function EventDetailsQuery(Id: number, singles=true): string {
             id
             name
             bracketType
+            phaseGroups {
+                nodes {
+                    id
+                    displayIdentifier
+                    wave {
+                        id
+                    }
+                }
+            }
           }
           waves{
             id
             identifier
-            startAt
           }
           standings(query: {
             page: 1
@@ -114,7 +122,7 @@ export function EventDetailsQuery(Id: number, singles=true): string {
         singles: singles
     }
 
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
 }
 
 export function EventStandingsQuery(Id: number, perPage: number, page: number, singles: boolean, filter?: string) {
@@ -172,7 +180,17 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
         filter: filter
     }
 
-    return JSON.stringify({query, variables});
+    return JSON.stringify({ query, variables });
+}
+
+export function PhaseSetsQuery(Id: number) {
+
+    const query = `
+    query `
+
+
+
+
 }
 
 
@@ -266,7 +284,7 @@ function flattenVariables<T extends Object>(params: T): Object[] {
             returnVariables.push(...flattenVariables(value));
             continue;
         }
-        const t = {[param]: value}
+        const t = { [param]: value }
         returnVariables.push(t)
     }
     return returnVariables
@@ -275,7 +293,7 @@ function flattenVariables<T extends Object>(params: T): Object[] {
 function getFlatObject(obj: Object): Object {
     const flatArray = flattenVariables(obj);
     return Object.assign({}, ...flatArray);
-} 
+}
 
 function createVariableString(params): string {
     const flatVariables = getFlatObject(params);
@@ -292,13 +310,13 @@ function createVariableString(params): string {
     for (const variable in variablesChosenTemplate) {
         variableStringList.push(`$${variable}: ${variablesChosenTemplate[variable]}`);
     };
-    
+
     let variableString = variableStringList.join(", ");
 
     // console.log(variableString);
 
     if (variableString !== '') {
-        variableString = "(" + variableString + ")"; 
+        variableString = "(" + variableString + ")";
     }
 
     return variableString

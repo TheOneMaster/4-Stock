@@ -13,7 +13,7 @@ export interface BasicTournamentDetails {
     images: ImageType[]
 }
 
-export interface FullTournamentDetails extends BasicTournamentDetails{
+export interface FullTournamentDetails extends BasicTournamentDetails {
     countryCode: string,
     currency: string,
     eventRegistrationClosesAt: number,
@@ -35,9 +35,7 @@ export interface EventDetails {
         displayName: string
         images: ImageType[]
     },
-    phases: {
-        id: number
-    }[]
+    phases: Pick<Phase, "id">[]
 }
 
 interface APIHint {
@@ -47,7 +45,7 @@ interface APIHint {
 }
 export interface APIQuery {
     actionRecords: [],
-    data: TournamentAPIQuery|TournamentListAPIQuery|EventAPIQuery,
+    data: TournamentAPIQuery | TournamentListAPIQuery | EventAPIQuery,
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -122,10 +120,10 @@ export interface Entrant {
     placement: number
 }
 
-interface Wave {
+export interface Wave {
     id: number,
-    identifier: string,
-    startAt: number
+    identifier?: string,
+    startAt?: number
 }
 
 export interface FullEventDetails {
@@ -138,39 +136,36 @@ export interface FullEventDetails {
     startAt: number,
     state: string,
     waves: Wave[],
-    phases: {
-        id: number,
-        name: string,
-        bracketType: string
-    }[]
+    phases: Phase[]
 }
 
 export interface Phase {
-    id?: number,
-    name: string,
-    bracketType: string
-    phaseGroups: {
+    id: number,
+    name?: string,
+    bracketType?: string
+    phaseGroups?: {
         nodes: PhaseGroup[]
     }
 }
 
 export interface PhaseGroup {
-    id?: number,
-    displayIdentifier: string,
+    id: number,
+    wave: Wave
+    displayIdentifier?: string,
     sets?: {
-        nodes: Set[]
+        nodes: GameSet[]
     }
 }
 
-export interface Set {
-    id?: number,
-    displayScore: string,
-    identifier: string,
-    round: number,
-    slots: SetSlot[]
+export interface GameSet {
+    id: number,
+    displayScore?: string,
+    identifier?: string,
+    round?: number,
+    slots?: SetSlot[]
 }
 
 interface SetSlot {
-    id?: number,
-    entrant: Partial<Entrant>
+    id: number,
+    entrant?: Partial<Entrant>
 }
