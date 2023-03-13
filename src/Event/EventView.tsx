@@ -3,7 +3,7 @@ import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import ResultsPage from "./ResultsPage";
+import ResultsPage from "./Results/ResultsPage";
 import BracketPage from "./Bracket/BracketPage";
 import { EventAPIQuery, FullEventDetails } from "../types";
 import { EventTabParamList, EventViewProps } from "../navTypes";
@@ -11,7 +11,7 @@ import { EventTabParamList, EventViewProps } from "../navTypes";
 
 const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
-const EventPage = ({navigation, route}: EventViewProps) => {
+const EventPage = ({ navigation, route }: EventViewProps) => {
 
     const [data, setData] = useState({} as FullEventDetails);
     const [loading, setLoading] = useState(true);
@@ -19,7 +19,7 @@ const EventPage = ({navigation, route}: EventViewProps) => {
     const singles = route.params.type === 1;
     const firstPhase = route.params.phases[0];
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
 
     useEffect(() => {
         const eventId = route.params.id;
@@ -43,7 +43,7 @@ const EventPage = ({navigation, route}: EventViewProps) => {
 
     return (
         <Tab.Navigator>
-            { data.standings.nodes.length > 0 && <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes, id: data.id, singles: singles}} /> }
+            {data.standings.nodes.length > 0 && <Tab.Screen name="Results" component={ResultsPage} initialParams={{ standings: data.standings.nodes, id: data.id, singles: singles }} />}
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )
