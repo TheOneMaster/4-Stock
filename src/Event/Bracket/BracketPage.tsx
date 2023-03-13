@@ -2,15 +2,10 @@ import { useTheme } from "@react-navigation/native";
 import { StyleSheet, Text, View } from "react-native";
 import { BracketViewProps } from "../../navTypes";
 
-import { useEffect, useRef, useState } from "react";
-import { GameSet, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
-import BracketPhases from "./BracketPhases";
+import { useState } from "react";
+import { PhaseGroupSetInfo } from "../../types";
 
-import { Dropdown } from "react-native-element-dropdown";
-import { getPGroupSetInfo } from "../../api";
-import { DropdownOption } from "../../Shared/types";
 import BracketFilters from "./BracketFilters";
-import { convertAPITimeToDate, convertDateToUnixSeconds } from "../../helper";
 
 const BracketPage = ({ navigation, route }: BracketViewProps) => {
 
@@ -55,26 +50,6 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
 const styles = StyleSheet.create({
     default: {
         flexGrow: 1,
-    },
-    filters: {
-        marginHorizontal: 10
-    },
-    dropdowns: {
-        flexDirection: "row",
-        width: "100%",
-    },
-    wavesDropdown: {
-        flexGrow: 1,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        marginRight: 10,
-        paddingLeft: 10
-    },
-    pGroupsDropdown: {
-        flexGrow: 1,
-        borderWidth: 1,
-        borderStyle: "solid",
-        paddingLeft: 10
     }
 })
 
