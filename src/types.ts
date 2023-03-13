@@ -70,7 +70,7 @@ export interface EventAPIQuery extends APIQuery {
 }
 
 export interface SetAPIQuery extends APIQuery {
-    phaseGroup: Pick<PhaseGroup, "sets">
+    phaseGroup: Pick<PhaseGroup, "sets" | "startAt" | "state">
 }
 
 export interface TournamentQueryVariables {
@@ -154,18 +154,20 @@ export interface Phase {
 
 export interface PhaseGroup {
     id: number,
-    wave: Wave
+    wave?: Wave
     displayIdentifier?: string,
     sets?: GameSetPage
+    startAt?: number
+    state?: number
 }
 
 export interface GameSetPage {
-    pageInfo: {
+    nodes: GameSet[]
+    pageInfo?: {
         total: number
         perPage: number
         page?: number
     }
-    nodes: GameSet[]
 }
 
 export interface GameSet {
@@ -188,4 +190,10 @@ interface Standing {
             value: number
         }
     }
+}
+
+export interface PhaseGroupSetInfo {
+    sets: GameSet[]
+    startAt: number
+    state: number
 }
