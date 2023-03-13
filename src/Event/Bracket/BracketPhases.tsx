@@ -13,8 +13,8 @@ function BracketPhases(props: BracketPhasesProps) {
             <FlatList
                 data={props.phases}
                 renderItem={({ item, index }) => index === (props.phases.length - 1)
-                    ? <PhaseButton phase={item} selectPhase={props.selectPhase} />
-                    : <PhaseButton phase={item} selectPhase={props.selectPhase} style={{ marginRight: 10 }} />}
+                    ? <PhaseButton phase={item} selectPhase={props.selectPhase} selected={props.value.id === item.id} />
+                    : <PhaseButton phase={item} selectPhase={props.selectPhase} selected={props.value.id === item.id} style={{ marginRight: 10 }} />}
                 horizontal={true}
                 contentContainerStyle={styles.container}
             />

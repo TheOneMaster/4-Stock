@@ -1,10 +1,10 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
-import { DropdownOption } from "../../Shared/types";
 import { Phase } from "../../types";
 
 interface PhaseButtonProps {
     phase: Phase
+    selected?: boolean
     selectPhase: React.Dispatch<React.SetStateAction<Phase>>
     style?: StyleProp<ViewStyle>
 }
@@ -16,13 +16,12 @@ const PhaseButton = (props: PhaseButtonProps) => {
 
     const colorsCSS = StyleSheet.create({
         container: {
-            borderColor: colors.border,
+            borderColor: props.selected ? colors.primary : colors.border,
             backgroundColor: colors.card2
         }
     });
 
     const testClick = () => {
-        console.log(props.phase.name);
         requestAnimationFrame(() => {
             props.selectPhase(props.phase)
         })
@@ -31,20 +30,21 @@ const PhaseButton = (props: PhaseButtonProps) => {
 
     return (
         <TouchableOpacity onPress={testClick} style={[styles.container, colorsCSS.container, props.style]}>
-            <Text style={{ color: colors.text }}>{props.phase.name}</Text>
+            <Text style={[styles.text, { color: colors.text }]}>{props.phase.name}</Text>
         </TouchableOpacity>
-
-        // <Text>{name}</Text>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        // flex: 0,
         borderWidth: 1,
         borderStyle: 'solid',
         padding: 10,
-        // marginLeft: 10
+        elevation: 2
+    },
+    text: {
+        fontSize: 16,
+        fontWeight: '500',
     }
 })
 
