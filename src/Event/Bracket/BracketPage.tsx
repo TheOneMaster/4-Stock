@@ -6,10 +6,13 @@ import { useState } from "react";
 import { PhaseGroupSetInfo } from "../../types";
 
 import BracketFilters from "./BracketFilters";
+import { convertAPITimeToDate } from "../../helper";
 
 const BracketPage = ({ navigation, route }: BracketViewProps) => {
 
     const [pGroupInfo, setPGroupInfo] = useState<PhaseGroupSetInfo>({
+        id: null,
+        phaseID: null,
         sets: [],
         startAt: null,
         state: null
@@ -39,10 +42,12 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         )
     }
 
-
     return (
         <View style={styles.default}>
             <BracketFilters eventDetails={route.params} pGroupInfo={pGroupInfo} updatePGroupInfo={setPGroupInfo} />
+            {pGroupInfo.id
+                ? <Text style={[colorCSS.text]}>{convertAPITimeToDate(pGroupInfo.startAt).toLocaleDateString()}</Text>
+                : null}
         </View>
     )
 }

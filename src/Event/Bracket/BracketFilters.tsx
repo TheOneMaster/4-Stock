@@ -117,6 +117,8 @@ function BracketFilters(props: BracketFiltersProps) {
             }
 
             const clone: PhaseGroupSetInfo = {
+                id: selectedPGroup.id,
+                phaseID: selectedPhase.id,
                 sets: pGroupInfo.sets,
                 startAt: pGroupInfo.startAt,
                 state: pGroupInfo.state

@@ -193,6 +193,8 @@ interface Standing {
 }
 
 export interface PhaseGroupSetInfo {
+    id: number
+    phaseID: number
     sets: GameSet[]
     startAt: number
     state: number
