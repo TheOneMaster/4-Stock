@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { GameSet, Standing } from "../../types";
 import { useTheme } from "@react-navigation/native";
+import { MainText } from "../../Shared/ThemedText";
 
 interface SetResultProps {
     set: GameSet
@@ -41,17 +42,12 @@ function SetResult(props: SetResultProps) {
         }
     })
 
-
     return (
         <View style={[styles.container, colorCSS.container, props.style]}>
             <EntrantRow name={winner.current.entrant.name} score={winner.current.stats.score.value} winner style={{ borderTopWidth: 0 }} />
             <EntrantRow name={losers.current[0].entrant.name} score={losers.current[0].stats.score.value} />
         </View>
     )
-
-
-
-
 }
 
 interface EntrantRowProps {
@@ -62,7 +58,6 @@ interface EntrantRowProps {
 }
 
 function EntrantRow(props: EntrantRowProps) {
-
     const { colors } = useTheme()
 
     const colorCSS = StyleSheet.create({
@@ -72,16 +67,12 @@ function EntrantRow(props: EntrantRowProps) {
         entrantRowScoreBox: {
             borderColor: colors.border,
             backgroundColor: props.winner ? "green" : "red"
-        },
-        text: {
-            color: colors.text
         }
     })
 
-
     return (
         <View style={[styles.entrantRow, colorCSS.entrantRow, props.style]}>
-            <Text style={[styles.entrantRowName, colorCSS.text]}>{props.name}</Text>
+            <MainText style={styles.entrantRowName}>{props.name}</MainText>
             <View style={[styles.entrantRowScoreBox, colorCSS.entrantRowScoreBox]}>
                 <Text style={styles.entrantRowScore}>{props.score === -1 ? "DQ" : props.score.toString()}</Text>
             </View>
@@ -103,7 +94,6 @@ const styles = StyleSheet.create({
     },
     entrantRowName: {
         flexGrow: 1,
-        color: 'white',
         padding: 5
     },
     entrantRowScore: {

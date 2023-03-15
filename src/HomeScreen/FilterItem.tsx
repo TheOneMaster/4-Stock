@@ -1,30 +1,13 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { MainText } from "../Shared/ThemedText";
 
 
 function FilterItem({ element, title }: { element: JSX.Element, title: string }) {
-
-    const { colors } = useTheme();
-
-    const styles = StyleSheet.create({
-        container: {
-            padding: 10,
-            // borderColor: colors.border,
-            // borderWidth: 1,
-            // borderStyle: 'solid',
-            // backgroundColor: colors.card
-        },
-        title: {
-            marginBottom: 5,
-            fontSize: 17,
-            color: colors.text
-        }
-    });
-
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{title}</Text>
+            <MainText style={styles.title}>{title}</MainText>
             {element}
         </View>
     )
@@ -33,20 +16,15 @@ function FilterItem({ element, title }: { element: JSX.Element, title: string })
 export function FilterText({ title, onUpdate = undefined, ...props }) {
 
     const [selected, setSelected] = useState(false);
-
     const { colors } = useTheme();
-    const style = StyleSheet.create({
-        input: {
-            padding: 7,
-            borderColor: colors.border,
-            borderWidth: 1,
-            borderStyle: 'solid',
-            color: colors.text,
-            fontSize: 15
+    const LIGHT_GREY = useRef("#d3d3d3");
 
+    const colorCSS = StyleSheet.create({
+        input: {
+            borderColor: colors.border,
+            color: colors.text
         }
-    });
-    const LIGHT_GREY = "#d3d3d3";
+    })
 
     function handleFocus(event) {
         setSelected(true);
@@ -60,18 +38,37 @@ export function FilterText({ title, onUpdate = undefined, ...props }) {
         setSelected(false);
     }
 
-    const input = <TextInput
-        style={style.input}
-        placeholder={'Genesis'}
-        placeholderTextColor={colors.secondaryText}
-        onFocus={handleFocus}
-        onChangeText={newText => onUpdate(newText)}
-        onBlur={handleBlur}
-        selectionColor={colors.primary}
-        underlineColorAndroid={selected ? colors.primary : LIGHT_GREY}
+    return (
+        <View style={styles.container}>
+            <MainText style={styles.title}>{title}</MainText>
+            <TextInput
+                style={[styles.input, colorCSS.input]}
+                placeholder={'Genesis'}
+                placeholderTextColor={colors.secondaryText}
+                onFocus={handleFocus}
+                onChangeText={newText => onUpdate(newText)}
+                onBlur={handleBlur}
+                selectionColor={colors.primary}
+                underlineColorAndroid={selected ? colors.primary : LIGHT_GREY.current}
 
-        {...props}
-    />
-
-    return <FilterItem element={input} title={title}></FilterItem>
+                {...props}
+            />
+        </View>
+    )
 }
+
+const styles = StyleSheet.create({
+    input: {
+        padding: 7,
+        borderWidth: 1,
+        borderStyle: "solid",
+        fontSize: 15
+    },
+    title: {
+        marginBottom: 5,
+        fontSize: 17,
+    },
+    container: {
+        padding: 10
+    }
+})

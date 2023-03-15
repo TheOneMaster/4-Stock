@@ -1,5 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
+import { MainText } from "../../Shared/ThemedText";
 import { Phase } from "../../types";
 
 interface PhaseButtonProps {
@@ -30,7 +31,7 @@ const PhaseButton = (props: PhaseButtonProps) => {
 
     return (
         <TouchableOpacity onPress={testClick} style={[styles.container, colorsCSS.container, props.style]}>
-            <Text style={[styles.text, { color: colors.text }]}>{props.phase.name}</Text>
+            <MainText style={styles.text}>{props.phase.name}</MainText>
         </TouchableOpacity>
     )
 }
