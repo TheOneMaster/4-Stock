@@ -32,7 +32,9 @@ export const SearchButton = ({ showFilter }) => {
     })
 
     const test = () => {
-        showFilter(true);
+        requestAnimationFrame(() => {
+            showFilter(true);
+        })
     }
 
     return (

@@ -1,5 +1,7 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "resolveJsonModule": true
+  },
   "extends": "expo/tsconfig.base",
   "typeRoots": ["./types"],
   "include": ["src", "src/declarations.d.ts"]

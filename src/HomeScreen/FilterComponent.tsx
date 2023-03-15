@@ -111,8 +111,10 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
         }
 
         const filters = Object.assign({}, defaultVariables, filtersUsed);
-        updateFilters(filters);
-        setShow(false);
+        requestAnimationFrame(() => {
+            updateFilters(filters);
+            setShow(false);
+        })
     }
 
     useEffect(() => {

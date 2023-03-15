@@ -7,7 +7,8 @@ import { MaterialTopTabBarProps, MaterialTopTabNavigationProp, MaterialTopTabScr
 // Navigator types
 export type HomeDrawerParamList = {
     Tournaments: NavigatorScreenParams<RootStackParamList>,
-    Settings: undefined
+    Settings: undefined,
+    About: undefined
 }
 
 export type RootStackParamList = {
