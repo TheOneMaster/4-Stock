@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { FullEventDetails, GameSet, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
+import { FullEventDetails, GameSet, Phase, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
 import { useTheme } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { getPGroupSetInfo } from "../../api";
@@ -11,7 +11,7 @@ import { convertAPITimeToDate } from "../../helper";
 interface BracketFiltersProps {
     eventDetails: FullEventDetails
     pGroupInfo: PhaseGroupSetInfo
-    updatePGroupInfo: React.Dispatch<React.SetStateAction<PhaseGroupSetInfo>>
+    updatePGroupInfo: (pGroup: PhaseGroup, phase: Phase) => () => void
 }
 
 
@@ -108,30 +108,7 @@ function BracketFilters(props: BracketFiltersProps) {
     useEffect(() => {
         console.log(`Getting sets from group ${selectedPGroup.displayIdentifier}`)
 
-        const controller = new AbortController();
-        const data = getPGroupSetInfo(selectedPGroup.id, controller)
-
-        data.then(pGroupInfo => {
-            if (pGroupInfo.sets.length === 0) {
-                return
-            }
-
-            const clone: PhaseGroupSetInfo = {
-                id: selectedPGroup.id,
-                phaseID: selectedPhase.id,
-                sets: pGroupInfo.sets,
-                startAt: pGroupInfo.startAt,
-                state: pGroupInfo.state
-            };
-
-            props.updatePGroupInfo(clone);
-        }).catch(e => {
-            console.log(e)
-        })
-
-        return () => {
-            controller.abort();
-        }
+        return props.updatePGroupInfo(selectedPGroup, selectedPhase);
     }, [selectedPGroup]);
 
     useEffect(() => {
