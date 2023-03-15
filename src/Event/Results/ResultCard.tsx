@@ -1,10 +1,10 @@
-import { useTheme } from "@react-navigation/native";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Text } from "react-native"
+import { useTheme } from "@react-navigation/native"
 
-import { getNumberOrdinal } from "../helper";
-import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText, SubtitleText } from "../Shared/ThemedText";
-import { Standing, User } from "./types";
+import { ImageType } from "../../types";
+import PlaceholderImage from "../../Shared/PlaceholderImage";
+import { Standing, User } from "../types";
+import { getNumberOrdinal } from "../../helper";
 
 function getImages(participants: { user: User }[]): string[] {
     const images = participants.map((participant) => {
@@ -25,6 +25,7 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
     const placementString = getNumberOrdinal(placement);
 
     const containerStyle = {
+        ...styles.container,
         borderColor: colors.border,
         backgroundColor: colors.card,
         marginTop: index === 0 ? 10 : undefined
@@ -34,21 +35,27 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
     if (playerData.player) {
         const player = playerData.player;
         const user = player.user;
-        const image = user.images[0];
-        const profileImage = image ? image.url : '';
+
+        let profileImage: string;
+        if (user) {
+            const image = user.images[0];
+            profileImage = image ? image.url : '';
+        } else {
+            profileImage = ''
+        }
 
         return (
-            <View style={[styles.container, containerStyle]}>
+            <View style={containerStyle}>
                 <View style={styles.imageContainer}>
                     <PlaceholderImage imageSrc={profileImage} placeholder='player' style={styles.image} />
                 </View>
                 <View style={styles.detailsContainer}>
                     <View style={styles.playerTitle}>
-                        <MainText style={styles.playerTag}>{player.gamerTag}</MainText>
-                        {player.prefix && <SubtitleText style={styles.playerSponsor}>{player.prefix}</SubtitleText>}
-                        {user.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
+                        <Text style={{ ...styles.playerTag, color: colors.text }}>{player.gamerTag}</Text>
+                        {player.prefix && <Text style={{ ...styles.playerSponsor, color: colors.secondaryText }}>{player.prefix}</Text>}
+                        {user !== null && user.genderPronoun && <Text style={{ ...styles.playerPronoun, color: colors.secondaryText }}>{user.genderPronoun}</Text>}
                     </View>
-                    <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                    <Text style={{ ...styles.playerPlacement, color: colors.text }}>{placementString}</Text>
                 </View>
             </View>
         )
@@ -66,9 +73,9 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.playerTitle}>
-                    <MainText style={styles.playerTag}>{entrant.name}</MainText>
+                    <Text style={{ ...styles.playerTag, color: colors.text }}>{entrant.name}</Text>
                 </View>
-                <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                <Text style={{ ...styles.playerPlacement, color: colors.text }}>{placementString}</Text>
             </View>
         </View>
     )

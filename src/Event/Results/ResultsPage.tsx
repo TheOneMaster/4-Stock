@@ -1,23 +1,20 @@
-import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
-import { EventStandingsQuery, queryAPI } from "../api";
-import SearchBar from "../Shared/SearchBar";
-import { MainText } from "../Shared/ThemedText";
-import { Entrant, EventAPIQuery } from "../types";
 import ResultCard from "./ResultCard";
+import { Entrant, EventAPIQuery } from "../../types";
+import { EventStandingsQuery, queryAPI } from "../../api";
+import SearchBar from "../../Shared/SearchBar";
 
 const PER_PAGE = 24    // Show 24 players per page (instead of the default 25).
 
 const ResultsPage = ({ navigation, route }) => {
 
     // UI state 
-    const [refreshing, setRefresh] = useState(false);
+    const [refresh, setRefresh] = useState(false);
     const [updating, setUpdating] = useState(false);
     const [finished, setFinished] = useState(false);
-
-    console.log(refreshing);
 
     // Data state
     const [standings, setStandings] = useState(route.params.standings as Entrant[]);
@@ -48,9 +45,9 @@ const ResultsPage = ({ navigation, route }) => {
     }
 
     async function filterEntrants() {
-        setPage(1);
         setUpdating(true);
         setFinished(false);
+        setPage(1);
 
         const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles, filter);
         const data = await queryAPI(queryBody) as EventAPIQuery;
@@ -67,28 +64,6 @@ const ResultsPage = ({ navigation, route }) => {
         setUpdating(false);
     }
 
-    function handleEndReached(event) {
-        if (finished) {
-            return
-        }
-        setPage(page + 1);
-    }
-
-    async function refreshPage() {
-        setRefresh(true);
-        setPage(1);
-
-        const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles);
-        const data = await queryAPI(queryBody) as EventAPIQuery;
-
-        const event_standings = data.event.standings.nodes;
-
-        setStandings(event_standings);
-        setRefresh(false)
-    }
-
-
-
     useEffect(() => {
         if (finished || page === 1) {
             return
@@ -101,7 +76,6 @@ const ResultsPage = ({ navigation, route }) => {
     useEffect(() => {
         if (finished && page > 1) {
             console.info("No more players");
-            console.log(page)
             ToastAndroid.show("No more players", ToastAndroid.SHORT);
         }
     }, [finished])
@@ -110,22 +84,17 @@ const ResultsPage = ({ navigation, route }) => {
         <View style={{ flex: 1 }}>
             <FlatList
                 style={styles.container}
-                ListHeaderComponent={<SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
+                ListHeaderComponent={<SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
                 data={standings}
                 renderItem={({ index, item }) => <ResultCard playerData={item} index={index} />}
-
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refreshPage} />}
-
 
                 contentContainerStyle={{ flexGrow: 1 }}
                 ListEmptyComponent={
                     <View style={styles.centerText}>
-                        <MainText>No entrants were found</MainText>
+                        <Text style={{ color: colors.text }}>No entrants were found</Text>
                     </View>}
 
-                keyboardShouldPersistTaps='handled'
-
-                onEndReached={handleEndReached}
+                onEndReached={() => setPage(page + 1)}
                 onEndReachedThreshold={0.1}
             />
 
