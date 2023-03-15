@@ -1,27 +1,27 @@
-import { useState } from "react"
-import { Linking, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native"
+import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native"
+import { MainText } from "../Shared/ThemedText"
 
 interface UserLoginProps {
     loggedIn: boolean
     style?: StyleProp<ViewStyle>
 }
 
-const UserLogin = ({loggedIn, style}: UserLoginProps) => {
+const UserLogin = ({ loggedIn, style }: UserLoginProps) => {
 
     const { colors } = useTheme();
 
     if (loggedIn) {
         return (
             <View style={[styles.container, style]}>
-                <Text style={{color: colors.text}}>Logged In</Text>
+                <MainText>Logged In</MainText>
             </View>
         )
     }
 
     return (
         <View style={[styles.container, style]}>
-            <Text style={[{color: colors.link}]}>Log In</Text>
+            <Text style={{ color: colors.link }}>Log In</Text>
         </View>
     )
 

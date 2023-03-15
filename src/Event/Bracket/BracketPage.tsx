@@ -1,14 +1,13 @@
-import { useTheme } from "@react-navigation/native";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { BracketViewProps } from "../../navTypes";
 
 import { useState } from "react";
 import { Phase, PhaseGroup, PhaseGroupSetInfo } from "../../types";
 
-import BracketFilters from "./BracketFilters";
-import { convertAPITimeToDate } from "../../helper";
-import BracketSetsList from "./BracketSetsList";
 import { getPGroupSetInfo } from "../../api";
+import { MainText } from "../../Shared/ThemedText";
+import BracketFilters from "./BracketFilters";
+import BracketSetsList from "./BracketSetsList";
 
 const BracketPage = ({ navigation, route }: BracketViewProps) => {
 
@@ -21,27 +20,11 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
     });
     const [loading, setLoading] = useState(true);
 
-    const { colors } = useTheme();
-
-    const colorCSS = StyleSheet.create({
-        dropdown: {
-            backgroundColor: colors.card,
-            borderColor: colors.border
-        },
-        text: {
-            // backgroundColor: colors.card,
-            color: colors.text
-        },
-        dropdownContainer: {
-            backgroundColor: colors.card
-        }
-    });
-
     if (route.params.phases.length === 0) {
         return (
             <View style={styles.default}>
                 <View style={styles.centerText}>
-                    <Text style={colorCSS.text}>No brackets found</Text>
+                    <MainText>No brackets found</MainText>
                 </View>
             </View>
         )
@@ -80,7 +63,7 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
             <View style={{ flex: 1 }}>
                 {loading
                     ? <View style={styles.centerText}>
-                        <Text style={colorCSS.text}>Loading...</Text>
+                        <MainText>Loading...</MainText>
                     </View>
                     : <BracketSetsList sets={pGroupInfo.sets} containerStyle={styles.resultContainer} />
                 }

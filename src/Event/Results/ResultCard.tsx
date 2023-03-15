@@ -5,6 +5,7 @@ import { ImageType } from "../../types";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
 import { Standing, User } from "../types";
 import { getNumberOrdinal } from "../../helper";
+import { MainText, SubtitleText } from "../../Shared/ThemedText";
 
 function getImages(participants: { user: User }[]): string[] {
     const images = participants.map((participant) => {
@@ -51,11 +52,11 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
                 </View>
                 <View style={styles.detailsContainer}>
                     <View style={styles.playerTitle}>
-                        <Text style={{ ...styles.playerTag, color: colors.text }}>{player.gamerTag}</Text>
-                        {player.prefix && <Text style={{ ...styles.playerSponsor, color: colors.secondaryText }}>{player.prefix}</Text>}
-                        {user !== null && user.genderPronoun && <Text style={{ ...styles.playerPronoun, color: colors.secondaryText }}>{user.genderPronoun}</Text>}
+                        <MainText style={styles.playerTag}>{player.gamerTag}</MainText>
+                        {player.prefix && <SubtitleText style={styles.playerSponsor}>{player.prefix}</SubtitleText>}
+                        {user !== null && user.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
                     </View>
-                    <Text style={{ ...styles.playerPlacement, color: colors.text }}>{placementString}</Text>
+                    <MainText style={styles.playerPlacement}>{placementString}</MainText>
                 </View>
             </View>
         )
@@ -73,9 +74,9 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.playerTitle}>
-                    <Text style={{ ...styles.playerTag, color: colors.text }}>{entrant.name}</Text>
+                    <MainText style={styles.playerTag}>{entrant.name}</MainText>
                 </View>
-                <Text style={{ ...styles.playerPlacement, color: colors.text }}>{placementString}</Text>
+                <MainText style={styles.playerPlacement}>{placementString}</MainText>
             </View>
         </View>
     )

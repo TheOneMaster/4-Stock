@@ -1,16 +1,17 @@
-import 'react-native-gesture-handler'
+import 'react-native-gesture-handler';
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { registerRootComponent } from "expo";
-import { LogBox, StatusBar, useColorScheme } from "react-native";
+import { LogBox, useColorScheme } from "react-native";
 
 import { RootStackParamList } from './navTypes';
-import { customLightTheme, customDarkTheme } from "./Themes";
+import { customDarkTheme, customLightTheme } from "./Themes";
 
-import TournamentView from "./Tournament/TournamentView";
+import { StatusBar } from 'expo-status-bar';
 import EventPage from "./Event/EventView";
 import HomeScreen from './HomeScreen/HomeScreen';
+import TournamentView from "./Tournament/TournamentView";
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -18,19 +19,20 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function App() {
 
   const colorScheme = useColorScheme();
-  
+  const colorTheme = colorScheme === "dark" ? customDarkTheme : customLightTheme;
+  const statusbarBackground = colorScheme === "dark" ? "black" : colorTheme.colors.primary;
 
-    return (
-      <NavigationContainer theme={colorScheme === 'dark' ? customDarkTheme : customLightTheme}>
-        <StatusBar/>
-        <Stack.Navigator initialRouteName="Home" screenOptions={{headerShown: false}}>
-          <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
-          <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
-          <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
-        </Stack.Navigator>
-      </NavigationContainer>
-    
-    )
+  return (
+    <NavigationContainer theme={colorTheme}>
+      <StatusBar animated={true} backgroundColor={statusbarBackground} translucent={false} />
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
+        <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
+        <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
+
+  )
 }
 
 registerRootComponent(App);
