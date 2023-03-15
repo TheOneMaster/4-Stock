@@ -1,6 +1,6 @@
 export interface ImageType {
-    id: string,
-    type: string,
+    id?: string,
+    type?: string,
     url: string
 }
 
@@ -13,7 +13,7 @@ export interface BasicTournamentDetails {
     images: ImageType[]
 }
 
-export interface FullTournamentDetails extends BasicTournamentDetails{
+export interface FullTournamentDetails extends BasicTournamentDetails {
     countryCode: string,
     currency: string,
     eventRegistrationClosesAt: number,
@@ -33,7 +33,9 @@ export interface EventDetails {
     videogame: {
         id: number,
         displayName: string
-    }
+        images: ImageType[]
+    },
+    phases: Pick<Phase, "id">[]
 }
 
 interface APIHint {
@@ -43,7 +45,7 @@ interface APIHint {
 }
 export interface APIQuery {
     actionRecords: [],
-    data: TournamentAPIQuery|TournamentListAPIQuery|EventAPIQuery,
+    data: TournamentAPIQuery | TournamentListAPIQuery | EventAPIQuery | SetAPIQuery,
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -65,6 +67,10 @@ export interface TournamentAPIQuery extends APIQuery {
 
 export interface EventAPIQuery extends APIQuery {
     event: FullEventDetails
+}
+
+export interface SetAPIQuery extends APIQuery {
+    phaseGroup: Pick<PhaseGroup, "sets" | "startAt" | "state">
 }
 
 export interface TournamentQueryVariables {
@@ -113,15 +119,15 @@ interface Participant {
 
 export interface Entrant {
     id: number,
-    name: string,
-    participants: Participant[],
-    placement: number
+    name?: string,
+    participants?: Participant[],
+    placement?: number
 }
 
-interface Wave {
+export interface Wave {
     id: number,
-    identifier: string,
-    startAt: number
+    identifier?: string,
+    startAt?: number
 }
 
 export interface FullEventDetails {
@@ -133,5 +139,63 @@ export interface FullEventDetails {
     },
     startAt: number,
     state: string,
-    waves: Wave[]
+    waves: Wave[],
+    phases: Phase[]
+}
+
+export interface Phase {
+    id: number,
+    name?: string,
+    bracketType?: string
+    phaseGroups?: {
+        nodes: PhaseGroup[]
+    }
+}
+
+export interface PhaseGroup {
+    id: number,
+    wave?: Wave
+    displayIdentifier?: string,
+    sets?: GameSetPage
+    startAt?: number
+    state?: number
+}
+
+export interface GameSetPage {
+    nodes: GameSet[]
+    pageInfo?: {
+        total: number
+        perPage: number
+        page?: number
+    }
+}
+
+export interface GameSet {
+    id: number,
+    displayScore?: string,
+    identifier?: string,
+    round?: number,
+    slots?: SetSlot[]
+}
+
+export interface SetSlot {
+    standing: Standing
+}
+
+export interface Standing {
+    entrant: Pick<Entrant, "id" | "name">
+    placement: number
+    stats: {
+        score: {
+            value: number
+        }
+    }
+}
+
+export interface PhaseGroupSetInfo {
+    id: number
+    phaseID: number
+    sets: GameSet[]
+    startAt: number
+    state: number
 }

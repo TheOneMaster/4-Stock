@@ -1,7 +1,11 @@
 import { APIVariables, StorageVariables } from "./types";
 
+export function convertAPITimeToDate(date: number): Date {
+    return new Date(date * 1000);
+}
+
 export function convertDateToString(date: number): string {
-    const given_date = new Date(date * 1000);
+    const given_date = convertAPITimeToDate(date);
 
     // Unnecessary for now. Might need this later if localeDateString stops working. Previously stopped working because
     // React-Native uses a very old version of JavascriptCore. Fixed by changing to the Hermes engine.
@@ -36,7 +40,7 @@ export function convertStorageToAPI(params: Partial<StorageVariables>): Partial<
     return final
 };
 
-export function addMonthsToDate(date: Date, months=1) {
+export function addMonthsToDate(date: Date, months = 1) {
     const dateTemp = new Date();
     dateTemp.setMonth(date.getMonth() + months);
     return dateTemp;

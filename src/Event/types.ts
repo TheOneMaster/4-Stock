@@ -1,3 +1,6 @@
+import React from "react"
+import { Phase } from "../types"
+
 export interface User {
     id?: number,
     images?: API_Image[],
@@ -26,4 +29,9 @@ export interface Standing {
             user: User
         }[]
     }
+}
+export interface BracketPhasesProps {
+    phases: Phase[]
+    value: Phase
+    selectPhase: React.Dispatch<React.SetStateAction<Phase>>
 }
