@@ -1,5 +1,5 @@
 # Start GG mobile app
-Little project to improve my typescript and learn React. Also helps understand mobile app development and GraphQL.
+Little project to improve my typescript and learn React. Also helps me understand mobile app development and GraphQL.
 
 ## Features implemented
 * Tournament Search
@@ -7,9 +7,8 @@ Little project to improve my typescript and learn React. Also helps understand m
 * Tournament Details
 * Pages for event Details (results, brackets, etc)
 
-
-
 ## Features to be implemented
 * Get better sorting for tournament search (check API for something I missed or message maintaners)
 * Additional filtering options for tournaments
-* Brackets page must be implemented
+* Add proper location support (use Google dev API for maps)
+* Brackets page currently only lists the sets present in the bracket. Change to display tree formatting when possible
