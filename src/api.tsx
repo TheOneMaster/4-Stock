@@ -232,8 +232,8 @@ export function PhaseSetsQuery(Id: number, perPage = 20, page = 1) {
   return JSON.stringify({ query, variables });
 }
 
-export async function getPGroupSetInfo(id: number, controller: AbortController): Promise<PhaseGroupSetInfo> {
-  const pGroupInfo: PhaseGroupSetInfo = {
+export async function getPGroupSetInfo(id: number, controller: AbortController): Promise<Pick<PhaseGroupSetInfo, "sets" | "startAt" | "state">> {
+  const pGroupInfo: Pick<PhaseGroupSetInfo, "sets" | "startAt" | "state"> = {
     sets: [],
     startAt: null,
     state: null

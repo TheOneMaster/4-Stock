@@ -178,11 +178,11 @@ export interface GameSet {
     slots?: SetSlot[]
 }
 
-interface SetSlot {
+export interface SetSlot {
     standing: Standing
 }
 
-interface Standing {
+export interface Standing {
     entrant: Pick<Entrant, "id" | "name">
     placement: number
     stats: {
