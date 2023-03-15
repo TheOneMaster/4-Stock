@@ -23,7 +23,6 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
     const { colors } = useTheme();
     const placement = playerData.placement;
     const placementString = getNumberOrdinal(placement);
-    // console.log(placementString);
 
     const containerStyle = {
         ...styles.container,
@@ -36,8 +35,14 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
     if (playerData.player) {
         const player = playerData.player;
         const user = player.user;
-        const image = user.images[0];
-        const profileImage = image ? image.url : '';
+
+        let profileImage: string;
+        if (user) {
+            const image = user.images[0];
+            profileImage = image ? image.url : '';
+        } else {
+            profileImage = ''
+        }
 
         return (
             <View style={containerStyle}>
@@ -48,7 +53,7 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
                     <View style={styles.playerTitle}>
                         <Text style={{ ...styles.playerTag, color: colors.text }}>{player.gamerTag}</Text>
                         {player.prefix && <Text style={{ ...styles.playerSponsor, color: colors.secondaryText }}>{player.prefix}</Text>}
-                        {user.genderPronoun && <Text style={{ ...styles.playerPronoun, color: colors.secondaryText }}>{user.genderPronoun}</Text>}
+                        {user !== null && user.genderPronoun && <Text style={{ ...styles.playerPronoun, color: colors.secondaryText }}>{user.genderPronoun}</Text>}
                     </View>
                     <Text style={{ ...styles.playerPlacement, color: colors.text }}>{placementString}</Text>
                 </View>

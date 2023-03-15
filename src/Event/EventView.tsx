@@ -43,7 +43,8 @@ const EventPage = ({ navigation, route }: EventViewProps) => {
 
     return (
         <Tab.Navigator>
-            {data.standings.nodes.length > 0 && <Tab.Screen name="Results" component={ResultsPage} initialParams={{ standings: data.standings.nodes, id: data.id, singles: singles }} />}
+            {data.standings && data.standings.nodes.length > 0 &&
+                <Tab.Screen name="Results" component={ResultsPage} initialParams={{ standings: data.standings.nodes, id: data.id, singles: singles }} />}
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )
