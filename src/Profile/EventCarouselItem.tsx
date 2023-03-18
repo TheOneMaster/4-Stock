@@ -38,9 +38,13 @@ function EventCarouselItem(props: EventCarouselItemProps) {
             <View style={{ flexShrink: 1 }}>
                 <MainText style={styles.title} numberOfLines={2}>{props.event.tournament.name}</MainText>
                 <View style={styles.placementContainer}>
-                    <MainText>{getNumberOrdinal(props.event.userEntrant.standing.placement).toString()}</MainText>
-                    <MainText> at </MainText>
-                    <Text style={{ color: colors.primary, flexShrink: 1, flexWrap: "wrap" }}>{props.event.name}</Text>
+
+                    <Text style={{ flexShrink: 1, flexWrap: "wrap" }}>
+                        <MainText>{getNumberOrdinal(props.event.userEntrant.standing.placement).toString()}</MainText>
+                        <MainText> at </MainText>
+                        <Text style={{ color: colors.primary }}>{props.event.name}</Text>
+                    </Text>
+
                 </View>
             </View>
 
@@ -52,7 +56,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         padding: 10,
-        maxWidth: 300,
+        maxWidth: 350,
         borderWidth: 1,
         borderRadius: 10
     },
@@ -61,8 +65,8 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     tournamentImageContainer: {
-        width: 70,
-        height: 70,
+        width: 100,
+        height: 100,
 
 
         borderRadius: 10,
