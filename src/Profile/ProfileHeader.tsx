@@ -1,10 +1,10 @@
+import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
+
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { Location } from "../Shared/SVG";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
 import { ImageType, User } from "../types";
-import { ProfileDetails } from "./types";
-import { useTheme } from "@react-navigation/native";
 
 interface ProfileHeaderProps {
     profileDetails: User
