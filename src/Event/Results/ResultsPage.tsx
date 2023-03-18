@@ -3,7 +3,7 @@ import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } fro
 import { useTheme } from "@react-navigation/native";
 
 import ResultCard from "./ResultCard";
-import { Entrant, EventAPIQuery } from "../../types";
+import { Entrant, EventDetails } from "../../types";
 import { EventStandingsQuery, queryAPI } from "../../api";
 import SearchBar from "../../Shared/SearchBar";
 
@@ -30,7 +30,7 @@ const ResultsPage = ({ navigation, route }) => {
         setUpdating(true);
 
         const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
-        const data = await queryAPI(queryBody) as EventAPIQuery;
+        const data = await queryAPI(queryBody) as EventDetails;
 
         const event_standings = data.event.standings.nodes;
 
@@ -50,7 +50,7 @@ const ResultsPage = ({ navigation, route }) => {
         setPage(1);
 
         const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles, filter);
-        const data = await queryAPI(queryBody) as EventAPIQuery;
+        const data = await queryAPI(queryBody) as EventDetails;
         const event_standings = data.event.standings;
 
         const standings = event_standings ? event_standings.nodes : [] as Entrant[];

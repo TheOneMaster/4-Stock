@@ -5,7 +5,7 @@ import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import ResultsPage from "./Results/ResultsPage";
 import BracketPage from "./Bracket/BracketPage";
-import { EventAPIQuery, FullEventDetails } from "../types";
+import { EventDetails, FullEventDetails } from "../types";
 import { EventTabParamList, EventViewProps } from "../navTypes";
 
 
@@ -24,7 +24,7 @@ const EventPage = ({ navigation, route }: EventViewProps) => {
     useEffect(() => {
         const eventId = route.params.id;
         const queryBody = EventDetailsQuery(eventId, singles);
-        const queryData = queryAPI(queryBody) as Promise<EventAPIQuery>;
+        const queryData = queryAPI(queryBody) as Promise<EventDetails>;
         queryData.then(details => {
             setData(details.event)
             setLoading(false);

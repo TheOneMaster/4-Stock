@@ -1,3 +1,5 @@
+import { PlayerType } from "./Profile/types"
+
 export interface ImageType {
     id?: string,
     type?: string,
@@ -45,7 +47,7 @@ interface APIHint {
 }
 export interface APIQuery {
     actionRecords: [],
-    data: TournamentAPIQuery | TournamentListAPIQuery | EventAPIQuery | SetAPIQuery,
+    data: TournamentDetails | TournamentListData | EventDetails | PhaseGroupSets | UserDetails,
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -55,22 +57,26 @@ export interface APIQuery {
     }
 }
 
-export interface TournamentListAPIQuery extends APIQuery {
+export interface TournamentListData {
     tournaments: {
         nodes: BasicTournamentDetails[]
     }
 }
 
-export interface TournamentAPIQuery extends APIQuery {
+export interface TournamentDetails {
     tournament: FullTournamentDetails
 }
 
-export interface EventAPIQuery extends APIQuery {
+export interface EventDetails {
     event: FullEventDetails
 }
 
-export interface SetAPIQuery extends APIQuery {
+export interface PhaseGroupSets {
     phaseGroup: Pick<PhaseGroup, "sets" | "startAt" | "state">
+}
+
+export interface UserDetails {
+    user: User
 }
 
 export interface TournamentQueryVariables {
@@ -198,4 +204,38 @@ export interface PhaseGroupSetInfo {
     sets: GameSet[]
     startAt: number
     state: number
+}
+
+export interface User {
+    id: number
+    genderPronoun?: string
+    images?: ImageType[]
+    player?: PlayerType & {
+        user: {
+            id: number
+            name: string
+        }
+    },
+    location?: {
+        country: string
+        state?: string
+    }
+    events?: {
+        nodes: UserEvent[]
+    }
+}
+
+export interface UserEvent {
+    name: string
+    tournament: {
+        id: number
+        name: string
+        images: ImageType[]
+    }
+    userEntrant: {
+        standing: {
+            id: number
+            placement: number
+        }
+    }
 }

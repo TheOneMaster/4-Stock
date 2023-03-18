@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
 
 import { queryAPI, tournamentDetailsQuery } from "../api";
-import { FullTournamentDetails, TournamentAPIQuery } from "../types";
+import { FullTournamentDetails, TournamentDetails } from "../types";
 
 import { useTheme } from "@react-navigation/native";
 import { TournamentViewProps } from "../navTypes";
@@ -69,7 +69,7 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
         try {
             setLoading(true);
             const tournamentQuery = tournamentDetailsQuery(tournament.id);
-            const api_data = await queryAPI(tournamentQuery) as TournamentAPIQuery;
+            const api_data = await queryAPI(tournamentQuery) as TournamentDetails;
             const tournament_data = api_data.tournament;
             setData(tournament_data);
             setdataReady(true);

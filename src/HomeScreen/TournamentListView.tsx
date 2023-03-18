@@ -5,7 +5,7 @@ import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, Toa
 import { queryAPI, tournamentListQuery } from "../api";
 import { addMonthsToDate } from "../helper";
 
-import { BasicTournamentDetails, StorageVariables, TournamentListAPIQuery } from "../types";
+import { BasicTournamentDetails, StorageVariables, TournamentListData } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import TopBar from "./TopBar";
@@ -37,7 +37,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
     try {
       const body = tournamentListQuery(filterParams);
-      const json_data = await queryAPI(body) as TournamentListAPIQuery;
+      const json_data = await queryAPI(body) as TournamentListData;
       const currentData = json_data.tournaments.nodes
       setData(currentData);
     } catch (err) {
@@ -59,7 +59,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
     params.page = page;
 
     const body = tournamentListQuery(params);
-    const query_data = await queryAPI(body) as TournamentListAPIQuery;
+    const query_data = await queryAPI(body) as TournamentListData;
     const current_data = query_data.tournaments.nodes;
 
     if (current_data.length > 0) {
@@ -75,7 +75,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   const onRefresh = async () => {
     setPage(1);
     setFinished(false);
-    
+
     await setTournamentData();
   };
 
@@ -114,7 +114,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
   return (
     <View style={{ flex: 1 }}>
       <FlatList
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, {backgroundColor: colors.background}]}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}></RefreshControl>} style={[styles.container, { backgroundColor: colors.background }]}
         data={data}
         renderItem={(tournament) => tournamentItem(tournament.item, tournament.index)}
         keyExtractor={tournament => `tournament_${tournament.id.toString()}`}

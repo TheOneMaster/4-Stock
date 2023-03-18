@@ -6,8 +6,8 @@ import { MaterialTopTabBarProps, MaterialTopTabNavigationProp, MaterialTopTabScr
 
 // Navigator types
 export type HomeDrawerParamList = {
-    Tournaments: NavigatorScreenParams<RootStackParamList>,
-    Settings: undefined,
+    Tournaments: NavigatorScreenParams<RootStackParamList>
+    Settings: undefined
     About: undefined
 }
 
@@ -23,6 +23,9 @@ export type RootStackParamList = {
         }
     },
     Event: EventDetails
+    Profile: {
+        id: number
+    }
 }
 
 export type EventTabParamList = {
@@ -38,17 +41,23 @@ export type EventTabParamList = {
 export type TournamentViewProps = NativeStackScreenProps<RootStackParamList, 'Tournament'>;
 export type EventViewProps = NativeStackScreenProps<RootStackParamList, 'Event'>;
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
+export type UserProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 
 export type TournamentsTopBarNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<RootStackParamList, "Home">,
     DrawerNavigationProp<HomeDrawerParamList, "Tournaments">
-    >
+>
 
 export type TournamentListViewProps = CompositeScreenProps<
     HomeScreenProps,
     DrawerScreenProps<HomeDrawerParamList, "Tournaments">
-    >;
+>;
 export type SettingsViewProps = DrawerScreenProps<HomeDrawerParamList, "Settings">;
 
 export type ResultsViewProps = MaterialTopTabScreenProps<EventTabParamList, "Results">;
 export type BracketViewProps = MaterialTopTabScreenProps<EventTabParamList, "Bracket">;
+
+export type ResultsNavigationProp = CompositeNavigationProp<
+    NativeStackNavigationProp<RootStackParamList, "Event">,
+    MaterialTopTabNavigationProp<EventTabParamList, "Results">
+>
