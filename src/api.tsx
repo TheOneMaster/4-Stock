@@ -297,6 +297,9 @@ export function userDetailsQuery(id: number) {
           tournament {
             id
             name
+            images(type: "profile") {
+              url
+            }
           }
           userEntrant(userId: $id) {
             standing {
