@@ -3,7 +3,7 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { cleanObject, convertStorageToAPI } from "./helper";
-import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, SetAPIQuery, StorageVariables } from "./types";
+import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -95,6 +95,7 @@ export function EventDetailsQuery(Id: number, singles = true): string {
                     prefix
                     gamerTag
                     user {
+                        id
                         images(type: "profile") {
                             url
                         }
@@ -184,7 +185,6 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
 }
 
 export function PhaseSetsQuery(Id: number, perPage = 20, page = 1) {
-
   const query = `
     query getSets($id: ID, $pageNum: Int, $perPage: Int) {
         phaseGroup(id: $id) {
@@ -246,7 +246,7 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
   while (moreSets) {
     const body = PhaseSetsQuery(id, perPage, page);
     try {
-      const data = await queryAPI(body, controller) as SetAPIQuery;
+      const data = await queryAPI(body, controller) as PhaseGroupSets;
       page += 1
 
       pGroupInfo.sets.push.apply(pGroupInfo.sets, data.phaseGroup.sets.nodes);
@@ -259,8 +259,8 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
 
     } catch (error) {
       if (error.name === "AbortError") {
-        pGroupInfo.sets = []
-        break
+        throw error
+        // break
       }
     }
   }

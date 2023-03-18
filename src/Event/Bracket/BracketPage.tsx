@@ -36,21 +36,21 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         const data = getPGroupSetInfo(selectedPGroup.id, controller);
 
         data.then(curInfo => {
-            if (curInfo.sets.length === 0) {
-                return
-            }
-
             const clone: PhaseGroupSetInfo = {
                 id: selectedPGroup.id,
                 phaseID: selectedPhase.id,
                 sets: curInfo.sets,
                 startAt: curInfo.startAt,
                 state: curInfo.state
-            };
+            }
 
             setPGroupInfo(clone);
             setLoading(false);
-        })
+        }).catch(error => {
+            if (error.name === "AbortError") {
+                return
+            }
+        });
 
         return () => {
             controller.abort();
