@@ -12,6 +12,7 @@ import { StatusBar } from 'expo-status-bar';
 import EventPage from "./Event/EventView";
 import HomeScreen from './HomeScreen/HomeScreen';
 import TournamentView from "./Tournament/TournamentView";
+import UserProfilePage from './Profile/ProfilePage';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,6 +30,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen}></Stack.Screen>
         <Stack.Screen name="Tournament" component={TournamentView}></Stack.Screen>
         <Stack.Screen name="Event" component={EventPage}></Stack.Screen>
+        <Stack.Screen name="Profile" component={UserProfilePage} />
       </Stack.Navigator>
     </NavigationContainer>
 
