@@ -3,7 +3,7 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { cleanObject, convertStorageToAPI } from "./helper";
-import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, SetAPIQuery, StorageVariables } from "./types";
+import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -95,6 +95,7 @@ export function EventDetailsQuery(Id: number, singles = true): string {
                     prefix
                     gamerTag
                     user {
+                        id
                         images(type: "profile") {
                             url
                         }
@@ -135,42 +136,41 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
   let variableString = filter ? '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!, $filter: String' : '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!';
 
   const query = `
-    query getEventStandings(${variableString}) {
-        event(id: $id) {
-          standings(query: {
-            page: $page
-            perPage: $perPage
-            ${filterString}
-                    }) {
-                nodes {
-                  id
-                  placement
-                  player @include(if: $singles) {
-                        id
-                        prefix
-                        gamerTag
-                        user {
-                            images(type: "profile") {
-                                url
-                            }
-                        genderPronoun
-                        }
-                    }
-                  entrant @skip(if: $singles) {
-                    id
-                    name
-                    participants {
-                      user {
-                        images(type: "profile") {
-                          url
-                        }
-                      }
-                    }
-                  }
+  query getEventStandings(${variableString}) {
+    event(id: $id) {
+      standings(query: {page: $page, perPage: $perPage, ${filterString}}) {
+        nodes {
+          id
+          placement
+          player @include(if: $singles) {
+            id
+            prefix
+            gamerTag
+            user {
+              id
+              images(type: "profile") {
+                url
+              }
+              genderPronoun
+            }
+          }
+          entrant @skip(if: $singles) {
+            id
+            name
+            participants {
+              user {
+                id
+                images(type: "profile") {
+                  url
                 }
+              }
+            }
           }
         }
-    }`;
+      }
+    }
+  }
+  `;
 
   const variables = {
     id: Id,
@@ -184,7 +184,6 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
 }
 
 export function PhaseSetsQuery(Id: number, perPage = 20, page = 1) {
-
   const query = `
     query getSets($id: ID, $pageNum: Int, $perPage: Int) {
         phaseGroup(id: $id) {
@@ -246,7 +245,7 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
   while (moreSets) {
     const body = PhaseSetsQuery(id, perPage, page);
     try {
-      const data = await queryAPI(body, controller) as SetAPIQuery;
+      const data = await queryAPI(body, controller) as PhaseGroupSets;
       page += 1
 
       pGroupInfo.sets.push.apply(pGroupInfo.sets, data.phaseGroup.sets.nodes);
@@ -267,6 +266,57 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
 
   return pGroupInfo
 }
+
+
+export function userDetailsQuery(id: number) {
+  const query = `
+  query getUserInfo($id: ID, $slug: String) {
+    user(id: $id, slug: $slug) {
+      id
+      genderPronoun
+      images {
+        id
+        type
+        url
+      }
+      location {
+        country
+        state
+      }
+      player {
+        gamerTag
+        prefix
+        user {
+          id
+          name
+        }
+      }
+      events(query: {perPage: 5}) {
+        nodes {
+          name
+          tournament {
+            id
+            name
+          }
+          userEntrant(userId: $id) {
+            standing {
+              id
+              placement
+            }
+          }
+        }
+      }
+    }
+  }
+  `
+
+  const variables = {
+    id: id
+  }
+
+  return JSON.stringify({ query, variables })
+}
+
 
 
 export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
