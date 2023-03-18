@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import { getNumberOrdinal } from "../helper";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText } from "../Shared/ThemedText";
@@ -37,7 +37,11 @@ function EventCarouselItem(props: EventCarouselItemProps) {
 
             <View style={{ flexShrink: 1 }}>
                 <MainText style={styles.title} numberOfLines={2}>{props.event.tournament.name}</MainText>
-                <MainText>{placementString}</MainText>
+                <View style={styles.placementContainer}>
+                    <MainText>{getNumberOrdinal(props.event.userEntrant.standing.placement).toString()}</MainText>
+                    <MainText> at </MainText>
+                    <Text style={{ color: colors.primary, flexShrink: 1, flexWrap: "wrap" }}>{props.event.name}</Text>
+                </View>
             </View>
 
         </View>
@@ -71,6 +75,10 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         flexShrink: 1,
         flexWrap: "wrap"
+    },
+    placementContainer: {
+        flexDirection: "row",
+        flexShrink: 1,
     }
 })
 
