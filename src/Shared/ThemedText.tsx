@@ -1,20 +1,26 @@
 import { useTheme } from "@react-navigation/native";
-import { Text, TextProps } from "react-native";
+import { StyleProp, Text, TextProps, TextStyle } from "react-native";
 
 export function MainText(props: TextProps) {
     const { colors } = useTheme();
-    const propStyle = props.style;
 
-    delete props.style;
+    const newProps = Object.assign({}, props);
+    const colorText: StyleProp<TextStyle> = {
+        color: colors.text
+    }
+    newProps.style = [props.style, colorText]
 
-    return <Text style={[{ color: colors.text }, propStyle]} {...props}>{props.children}</Text>
+    return <Text {...newProps} />
 }
 
 export function SubtitleText(props: TextProps) {
     const { colors } = useTheme();
-    const propStyle = props.style;
 
-    delete props.style;
+    const newProps = Object.assign({}, props);
+    const colorText: StyleProp<TextStyle> = {
+        color: colors.secondaryText
+    }
+    newProps.style = [props.style, colorText]
 
-    return <Text style={[{ color: colors.secondaryText }, propStyle]} {...props}>{props.children}</Text>
+    return <Text {...newProps} />
 }

@@ -74,13 +74,6 @@ function BracketFilters(props: BracketFiltersProps) {
 
     useEffect(() => {
 
-        if (waves.current === null) {
-            const curPGroups = selectedPhase.phaseGroups.nodes;
-            setDropdownPGroups(curPGroups);
-            setSelectedPGroup(curPGroups[0]);
-            return
-        }
-
         const phaseWavesId = selectedPhase.phaseGroups.nodes.reduce((prev, cur) => {
             if (cur.wave === null) {
                 return prev
@@ -88,6 +81,17 @@ function BracketFilters(props: BracketFiltersProps) {
             prev.add(cur.wave.id);
             return prev
         }, new Set<number>());
+
+        if (waves.current === null || waves.current.length === 0 || phaseWavesId.size === 0) {
+            const curPGroups = selectedPhase.phaseGroups.nodes;
+            setDropdownPGroups(curPGroups);
+            setSelectedPGroup(curPGroups[0]);
+
+            setDropdownWaves([]);
+            setSelectedWave(null);
+            return
+        }
+
 
         const phaseWaves = waves.current
             .filter(wave => phaseWavesId.has(wave.id))
@@ -98,6 +102,7 @@ function BracketFilters(props: BracketFiltersProps) {
     }, [selectedPhase]);
 
     useEffect(() => {
+
         const curPGroups = selectedPhase.phaseGroups.nodes
             .filter(pGroup => pGroup.wave && selectedWave ? pGroup.wave.id === selectedWave.id : true);
 
@@ -106,8 +111,6 @@ function BracketFilters(props: BracketFiltersProps) {
     }, [selectedWave]);
 
     useEffect(() => {
-        console.log(`Getting sets from group ${selectedPGroup.displayIdentifier}`)
-
         return props.updatePGroupInfo(selectedPGroup, selectedPhase);
     }, [selectedPGroup]);
 

@@ -1,7 +1,14 @@
 import { PlaceholderGame, PlaceHolderPlayer, PlaceholderTournament } from "../Shared/Logos"
 import { ImageSourcePropType, Image, StyleSheet, StyleProp, ViewStyle, RegisteredStyle, ImageStyle, ImageURISource } from "react-native"
 
-const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc: string, placeholder?: 'tournament'|'game'|'player', style?: StyleProp<ImageStyle>}) => {
+
+interface PlaceholderImageProps {
+    imageSrc: string
+    placeholder?: "tournament" | "game" | "player"
+    style?: StyleProp<ImageStyle>
+}
+
+const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: PlaceholderImageProps) => {
     let placeholderFinal: ImageSourcePropType;
 
     switch (placeholder) {
@@ -19,17 +26,17 @@ const PlaceholderImage = ({imageSrc, placeholder='tournament', style}: {imageSrc
 
     if (imageSrc) {
         return (
-            <Image 
+            <Image
                 style={[styles.image, style]}
-                source={{uri: imageSrc}}
-                defaultSource={placeholderFinal as ImageURISource|number}/>
+                source={{ uri: imageSrc }}
+                defaultSource={placeholderFinal as ImageURISource | number} />
         )
     }
 
     const image = <Image
-                    style={[styles.image, style]}
-                    source={placeholderFinal}/>;
-    
+        style={[styles.image, style]}
+        source={placeholderFinal} />;
+
     return image
 }
 
