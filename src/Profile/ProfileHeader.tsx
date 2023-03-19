@@ -5,7 +5,7 @@ import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { Location } from "../Shared/SVG";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
-import { ImageType, User } from "../types";
+import { User } from "../types";
 
 interface ProfileHeaderProps {
     profileDetails: User
@@ -62,10 +62,6 @@ function ProfileHeader(props: ProfileHeaderProps) {
             </View>
         </View>
     )
-
-
-
-
 
     return (
 
