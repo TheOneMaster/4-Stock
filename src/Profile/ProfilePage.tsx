@@ -48,9 +48,9 @@ function UserProfilePage({ navigation, route }: UserProfileProps) {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 10
     },
     infoSection: {
+        paddingHorizontal: 10,
         marginTop: 10
     }
 })

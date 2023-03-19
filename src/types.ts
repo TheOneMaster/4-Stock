@@ -1,8 +1,7 @@
-import { PlayerType } from "./Profile/types"
 
 export interface ImageType {
     id?: string,
-    type?: string,
+    type?: "profile" | "banner",
     url: string
 }
 
@@ -206,11 +205,17 @@ export interface PhaseGroupSetInfo {
     state: number
 }
 
+export interface Player {
+    id: number
+    gamerTag?: string
+    prefix?: string
+}
+
 export interface User {
     id: number
     genderPronoun?: string
     images?: ImageType[]
-    player?: PlayerType & {
+    player?: Player & {
         user: {
             id: number
             name: string

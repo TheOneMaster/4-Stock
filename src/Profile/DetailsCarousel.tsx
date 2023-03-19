@@ -35,7 +35,6 @@ function EventDetailsCarousel(props: EventDetailsCarouselProps) {
 
 const styles = StyleSheet.create({
     container: {
-        // borderWidth: 1,
         paddingVertical: 5
     },
     title: {

@@ -22,7 +22,6 @@ function EventCarouselItem(props: EventCarouselItemProps) {
         }
     });
 
-    const placementString = `${getNumberOrdinal(props.event.userEntrant.standing.placement)} at ${props.event.name}`;
     const tournamentProfileImageUrl = props.event.tournament.images.reduce<string>((prev, cur) => {
         return cur.url
     }, "");
@@ -37,14 +36,13 @@ function EventCarouselItem(props: EventCarouselItemProps) {
 
             <View style={{ flexShrink: 1 }}>
                 <MainText style={styles.title} numberOfLines={2}>{props.event.tournament.name}</MainText>
-                <View style={styles.placementContainer}>
 
-                    <Text style={{ flexShrink: 1, flexWrap: "wrap" }}>
+                <View style={styles.placementContainer}>
+                    <Text style={{ flexShrink: 1, flexWrap: "wrap" }} numberOfLines={2}>
                         <MainText>{getNumberOrdinal(props.event.userEntrant.standing.placement).toString()}</MainText>
                         <MainText> at </MainText>
                         <Text style={{ color: colors.primary }}>{props.event.name}</Text>
                     </Text>
-
                 </View>
             </View>
 
@@ -67,8 +65,6 @@ const styles = StyleSheet.create({
     tournamentImageContainer: {
         width: 100,
         height: 100,
-
-
         borderRadius: 10,
         borderWidth: 2,
         overflow: "hidden",
@@ -77,7 +73,6 @@ const styles = StyleSheet.create({
     title: {
         flexGrow: 1,
         fontWeight: "500",
-        flexShrink: 1,
         flexWrap: "wrap"
     },
     placementContainer: {
