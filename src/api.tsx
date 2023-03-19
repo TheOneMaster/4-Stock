@@ -291,7 +291,7 @@ export function userDetailsQuery(id: number) {
           name
         }
       }
-      events(query: {perPage: 5}) {
+      events(query: {perPage: 10}) {
         nodes {
           name
           tournament {
