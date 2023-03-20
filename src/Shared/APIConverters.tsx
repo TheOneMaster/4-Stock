@@ -1,11 +1,11 @@
 import { Text } from "react-native";
 import { getNumberOrdinal } from "../helper";
-import { BasicTournamentDetails, ImageType, League, UserEvent } from "../types";
+import { BasicTournamentDetails, APIImage, League, UserEvent, APIImageType } from "../types";
 import { CarouselDataItem } from "./DetailsCarousel/types";
 import { MainText } from "./ThemedText";
 
 
-export function getImageByType(images: ImageType[], type: "profile" | "banner"): ImageType {
+export function getImageByType(images: APIImage[], type: APIImageType): APIImage {
     return images.reduce((prev, cur) => {
         if (cur.type === type) return cur
         return prev

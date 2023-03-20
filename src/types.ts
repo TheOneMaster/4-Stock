@@ -1,52 +1,74 @@
+type NodeArray<Type> = {
+    nodes: Type[]
+    pageInfo?: {
+        perPage?: number
+        total?: number
+        page?: number
+    }
+}
 
-export interface ImageType {
+interface Tournament {
+    id?: number
+    name?: string
+    city?: string
+    startAt?: number
+    numAttendees?: number
+    images?: APIImage[]
+    countryCode?: string
+    currency?: string
+    eventRegistrationClosesAt?: number
+    events?: Event[]
+    isRegistrationOpen?: boolean
+    mapsPlaceId?: string
+    primaryContact?: string
+    primaryContactType?: string
+    venueName?: string | null
+    venueAddress?: string | null
+}
+
+export type APIImageType = "profile" | "banner" | "primary" | "primary-quality";
+
+export interface APIImage {
     id?: string,
-    type?: "profile" | "banner",
+    type?: APIImageType,
     url: string
 }
 
-export interface BasicTournamentDetails {
-    id: number,
-    name: string,
-    city: string,
-    startAt: number,
-    numAttendees?: number,
-    images: ImageType[]
+export type BasicTournamentDetails = Pick<Tournament, "id" | "name" | "city" | "startAt" | "numAttendees" | "images">;
+export type TournamentPageDetails = Tournament & { events: BasicEventDetails[] }
+export type FullTournamentDetails = Tournament;
+
+interface Event {
+    id?: number
+    name?: string
+    type?: number
+    videogame?: VideoGame
+    isOnline?: boolean
+    startAt?: number
+    state?: string
+    phases?: Phase[]
+    waves?: Wave[]
+    standings?: NodeArray<Entrant>
 }
 
-export interface FullTournamentDetails extends BasicTournamentDetails {
-    countryCode: string,
-    currency: string,
-    eventRegistrationClosesAt: number,
-    events: EventDetails[],
-    isRegistrationOpen: boolean,
-    mapsPlaceId: string,
-    primaryContact: string,
-    primaryContactType: string,
-    venueName?: string,
-    venueAddress: string,
+interface VideoGame {
+    id?: number
+    displayName?: string
+    images?: APIImage[]
 }
 
-export interface EventDetails {
-    id: number,
-    name: string,
-    type: number,
-    videogame: {
-        id: number,
-        displayName: string
-        images: ImageType[]
-    },
-    phases: Pick<Phase, "id">[]
-}
+export type BasicEventDetails = Pick<Event, "id" | "name" | "type" | "videogame"> & { phases: Pick<Phase, "id">[] };
+export type EventPageDetails = Omit<Event, "videogame" | "type">;
+export type FullEventDetails = Event;
 
 interface APIHint {
     maxAge: number,
     path: string[],
     scope: string
 }
-export interface APIQuery {
+interface APIReturn {
     actionRecords: [],
-    data: TournamentDetails | TournamentListData | EventDetails | PhaseGroupSets | UserDetails,
+    data: any
     extensions: {
         cacheControl: {
             hints: APIHint[],
@@ -55,28 +77,39 @@ export interface APIQuery {
         queryComplexity: number
     }
 }
-
-export interface TournamentListData {
-    tournaments: {
-        nodes: BasicTournamentDetails[]
-    }
+interface APITournamentListData {
+    tournaments: NodeArray<BasicTournamentDetails>
 }
 
-export interface TournamentDetails {
+interface APITournamentDetails {
     tournament: FullTournamentDetails
 }
 
-export interface EventDetails {
-    event: FullEventDetails
+interface APIEventDetails {
+    event: EventPageDetails
 }
 
-export interface PhaseGroupSets {
+interface APIPhaseGroupSets {
     phaseGroup: Pick<PhaseGroup, "sets" | "startAt" | "state">
 }
 
-export interface UserDetails {
+interface APIUserDetails {
     user: User
 }
+
+interface APIResultsDetails {
+    event: Pick<Event, "standings">
+}
+
+
+export type APIQuery = Readonly<APIReturn>;
+export type TournamentListData = Readonly<APITournamentListData>;
+export type TournamentDetails = Readonly<APITournamentDetails>;
+export type EventDetails = Readonly<APIEventDetails>;
+export type PhaseGroupSets = Readonly<APIPhaseGroupSets>;
+export type UserDetails = Readonly<APIUserDetails>;
+export type ResultsDetails = Readonly<APIResultsDetails>
+
 
 export interface TournamentQueryVariables {
     name?: string,
@@ -118,65 +151,42 @@ export const APIFiltersTemplate = {
     distance: "String"
 } as const;
 
-interface Participant {
-
+export interface Participant {
+    id?: number
+    user?: User
 }
 
 export interface Entrant {
-    id: number,
-    name?: string,
-    participants?: Participant[],
+    id?: number
+    name?: string
+    participants?: Participant[]
     placement?: number
 }
 
 export interface Wave {
-    id: number,
-    identifier?: string,
+    id?: number
+    identifier?: string
     startAt?: number
 }
 
-export interface FullEventDetails {
-    id: number,
-    isOnline: boolean,
-    name: string,
-    standings: {
-        nodes: Entrant[]
-    },
-    startAt: number,
-    state: string,
-    waves: Wave[],
-    phases: Phase[]
-}
-
 export interface Phase {
-    id: number,
+    id?: number
     name?: string,
     bracketType?: string
-    phaseGroups?: {
-        nodes: PhaseGroup[]
-    }
+    phaseGroups?: NodeArray<PhaseGroup>
 }
 
 export interface PhaseGroup {
-    id: number,
+    id?: number
     wave?: Wave
-    displayIdentifier?: string,
-    sets?: GameSetPage
+    displayIdentifier?: string
+    sets?: NodeArray<GameSet>
     startAt?: number
     state?: number
 }
 
-export interface GameSetPage {
-    nodes: GameSet[]
-    pageInfo?: {
-        total: number
-        perPage: number
-        page?: number
-    }
-}
-
 export interface GameSet {
-    id: number,
+    id?: number,
     displayScore?: string,
     identifier?: string,
     round?: number,
@@ -184,18 +194,12 @@ export interface GameSet {
 }
 
 export interface SetSlot {
-    standing: Standing
+    standing: Pick<Standing, "placement" | "stats"> & {
+        entrant: Pick<Entrant, "id" | "name">
+    } | null
 }
 
-export interface Standing {
-    entrant: Pick<Entrant, "id" | "name">
-    placement: number
-    stats: {
-        score: {
-            value: number
-        }
-    }
-}
+
 
 export interface PhaseGroupSetInfo {
     id: number
@@ -206,41 +210,49 @@ export interface PhaseGroupSetInfo {
 }
 
 export interface Player {
-    id: number
+    id?: number
     gamerTag?: string
     prefix?: string
+    user?: User
 }
 
 export interface User {
-    id: number
+    id?: number
+    name?: string
     genderPronoun?: string
-    images?: ImageType[]
-    player?: Player & {
-        user: {
-            id: number
-            name: string
-        }
-    },
+    images?: APIImage[]
+    player?: Omit<Player, "user"> & { user: Pick<User, "id" | "name"> }
     location?: {
         country: string
         state?: string
     }
-    events?: {
-        nodes: UserEvent[]
-    }
+    events?: NodeArray<UserEvent>
+    tournaments?: NodeArray<Pick<Tournament, "id" | "images" | "name">>
+    leagues?: NodeArray<League>
 }
 
 export interface UserEvent {
     name: string
-    tournament: {
-        id: number
-        name: string
-        images: ImageType[]
-    }
+    tournament: Pick<Tournament, "id" | "name" | "images">
     userEntrant: {
-        standing: {
-            id: number
-            placement: number
+        standing: Pick<Standing, "id" | "placement">
+    }
+}
+
+export interface League {
+    id?: number
+    name?: string
+    images?: APIImage[]
+}
+
+export interface Standing {
+    id?: number
+    placement?: number | null
+    player?: Player
+    entrant?: Entrant
+    stats?: {
+        score: {
+            value: number | null
         }
     }
 }

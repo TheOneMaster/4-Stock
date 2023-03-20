@@ -1,17 +1,15 @@
 import { useTheme } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, StatusBar, StyleSheet, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { queryAPI, tournamentListQuery } from "../api";
 import { addMonthsToDate } from "../helper";
 
+import { TournamentListViewProps } from "../navTypes";
 import { BasicTournamentDetails, StorageVariables, TournamentListData } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
-import TopBar from "./TopBar";
 import { TournamentCard } from "./TournamentCard";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { HomeDrawerParamList, RootStackParamList, TournamentListViewProps } from "../navTypes";
 
 
 const TournamentListView = ({ navigation }: TournamentListViewProps) => {

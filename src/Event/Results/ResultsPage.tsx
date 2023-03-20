@@ -1,11 +1,11 @@
+import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
-import { useTheme } from "@react-navigation/native";
 
-import ResultCard from "./ResultCard";
-import { Entrant, EventDetails } from "../../types";
 import { EventStandingsQuery, queryAPI } from "../../api";
 import SearchBar from "../../Shared/SearchBar";
+import { Entrant, EventDetails, ResultsDetails } from "../../types";
+import ResultCard from "./ResultCard";
 
 const PER_PAGE = 24    // Show 24 players per page (instead of the default 25).
 
@@ -30,7 +30,7 @@ const ResultsPage = ({ navigation, route }) => {
         setUpdating(true);
 
         const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
-        const data = await queryAPI(queryBody) as EventDetails;
+        const data = await queryAPI(queryBody) as ResultsDetails;
 
         const event_standings = data.event.standings.nodes;
 
@@ -84,7 +84,7 @@ const ResultsPage = ({ navigation, route }) => {
         <View style={{ flex: 1 }}>
             <FlatList
                 style={styles.container}
-                ListHeaderComponent={<SearchBar setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
+                ListHeaderComponent={<SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
                 data={standings}
                 renderItem={({ index, item }) => <ResultCard playerData={item} index={index} />}
 

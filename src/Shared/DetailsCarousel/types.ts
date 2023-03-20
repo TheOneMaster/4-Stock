@@ -1,5 +1,5 @@
 import { StyleProp, ViewStyle } from "react-native";
-import { ImageType } from "../../types";
+import { APIImage } from "../../types";
 
 export interface DetailsCarouselProps {
     data: CarouselDataItem[]
@@ -19,7 +19,7 @@ export interface CarouselEmptyTextProps {
 
 export interface CarouselDataItem {
     title: string
-    image: ImageType
+    image: APIImage
     dataType: "tournament" | "player" | "game"
     subtitle?: string
     subtitleItem?: React.ReactNode

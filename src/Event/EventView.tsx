@@ -5,7 +5,7 @@ import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
 import ResultsPage from "./Results/ResultsPage";
 import BracketPage from "./Bracket/BracketPage";
-import { EventDetails, FullEventDetails } from "../types";
+import { EventDetails, EventPageDetails } from "../types";
 import { EventTabParamList, EventViewProps } from "../navTypes";
 
 
@@ -13,7 +13,7 @@ const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
 const EventPage = ({ navigation, route }: EventViewProps) => {
 
-    const [data, setData] = useState({} as FullEventDetails);
+    const [data, setData] = useState({} as EventPageDetails);
     const [loading, setLoading] = useState(true);
 
     const singles = route.params.type === 1;
