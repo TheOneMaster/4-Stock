@@ -3,7 +3,7 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { cleanObject, convertStorageToAPI } from "./helper";
-import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
+import { APIFiltersTemplate, APIQuery, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -270,8 +270,8 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
 
 export function userDetailsQuery(id: number) {
   const query = `
-  query getUserInfo($id: ID, $slug: String) {
-    user(id: $id, slug: $slug) {
+  query getUserInfo($id: ID, $perPage: Int) {
+    user(id: $id) {
       id
       genderPronoun
       images {
@@ -291,7 +291,7 @@ export function userDetailsQuery(id: number) {
           name
         }
       }
-      events(query: {perPage: 10}) {
+      events(query: {perPage: $perPage}) {
         nodes {
           name
           tournament {
@@ -309,12 +309,33 @@ export function userDetailsQuery(id: number) {
           }
         }
       }
+      tournaments(query: {perPage: $perPage}) {
+        nodes {
+          id
+          name
+          images(type: "profile") {
+            url
+          }
+        }
+      }
+      leagues(query: {perPage: $perPage}) {
+        nodes {
+          id
+          name
+          images(type: "profile") {
+            height
+            url
+          }
+        }
+      }
     }
   }
+  
   `
 
   const variables = {
-    id: id
+    id: id,
+    perPage: 10
   }
 
   return JSON.stringify({ query, variables })
