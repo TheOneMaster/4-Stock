@@ -34,6 +34,7 @@ function SetResult(props: SetResultProps) {
     const winner = useRef(getWinner(props.set));
     const losers = useRef(getLosers(props.set));
 
+
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
         container: {
@@ -41,6 +42,8 @@ function SetResult(props: SetResultProps) {
             backgroundColor: colors.card
         }
     })
+
+    if (winner.current === null || losers.current.length === 0) return null
 
     return (
         <View style={[styles.container, colorCSS.container, props.style]}>
@@ -74,7 +77,10 @@ function EntrantRow(props: EntrantRowProps) {
         <View style={[styles.entrantRow, colorCSS.entrantRow, props.style]}>
             <MainText style={styles.entrantRowName}>{props.name}</MainText>
             <View style={[styles.entrantRowScoreBox, colorCSS.entrantRowScoreBox]}>
-                <Text style={styles.entrantRowScore}>{props.score === -1 ? "DQ" : props.score.toString()}</Text>
+                {props.score
+                    ? <Text style={styles.entrantRowScore}>{props.score === -1 ? "DQ" : props.score.toString()}</Text>
+                    : <Text style={styles.entrantRowScore}>{props.winner ? "W" : "L"}</Text>
+                }
             </View>
         </View>
     )

@@ -22,7 +22,7 @@ const PhaseButton = (props: PhaseButtonProps) => {
         }
     });
 
-    const testClick = () => {
+    const handleClick = () => {
         requestAnimationFrame(() => {
             props.selectPhase(props.phase)
         })
@@ -30,7 +30,7 @@ const PhaseButton = (props: PhaseButtonProps) => {
 
 
     return (
-        <TouchableOpacity onPress={testClick} style={[styles.container, colorsCSS.container, props.style]}>
+        <TouchableOpacity onPress={handleClick} style={[styles.container, colorsCSS.container, props.style]}>
             <MainText style={styles.text}>{props.phase.name}</MainText>
         </TouchableOpacity>
     )

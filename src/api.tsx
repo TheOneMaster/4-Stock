@@ -258,8 +258,8 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
 
     } catch (error) {
       if (error.name === "AbortError") {
-        pGroupInfo.sets = []
-        break
+        throw error
+        // break
       }
     }
   }
