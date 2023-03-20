@@ -7,3 +7,7 @@ export interface EventDetailsCarouselProps {
     containerStyle?: StyleProp<ViewStyle>
     titleStyle?: StyleProp<TextStyle>
 }
+
+export interface ProfileHeaderProps {
+    profileDetails: User
+}
