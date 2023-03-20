@@ -62,7 +62,6 @@ function ProfileHeader(props: ProfileHeaderProps) {
     )
 
     return (
-
         <View style={[styles.container, { marginTop: 10 }]}>
 
             <View style={[styles.profileImageBox, colorCSS.profileImageBox]}>

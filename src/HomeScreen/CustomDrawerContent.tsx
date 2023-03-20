@@ -41,7 +41,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     bottomBox: {
-        flex: 1,
         marginBottom: "auto",
         paddingVertical: 10,
         paddingHorizontal: 20

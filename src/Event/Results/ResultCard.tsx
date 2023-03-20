@@ -54,9 +54,7 @@ const ResultCard = ({ playerData, index }: ResultCardProps) => {
         }
 
         function showUserProfile() {
-            navigator.navigate("Profile", {
-                id: user.id
-            })
+            navigator.navigate("Profile", { id: playerData.player.user.id })
         }
 
 
