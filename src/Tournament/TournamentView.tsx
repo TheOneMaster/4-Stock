@@ -38,7 +38,7 @@ const RegisterButton = (props) => {
 
     return (
         <View style={style.container}>
-            <Button title="Register" onPress={register}></Button>
+            <Button title="Register" onPress={register} disabled={true}></Button>
         </View>
 
     )
