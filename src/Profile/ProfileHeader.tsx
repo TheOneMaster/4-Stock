@@ -5,11 +5,9 @@ import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { Location } from "../Shared/SVG";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
-import { User } from "../types";
+import { ProfileHeaderProps } from "./types";
 
-interface ProfileHeaderProps {
-    profileDetails: User
-}
+
 
 
 function ProfileHeader(props: ProfileHeaderProps) {
@@ -38,7 +36,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
             <View style={[styles.container, bannerStyles.container]}>
 
                 <View style={[styles.profileImageBox, colorCSS.profileImageBox]}>
-                    <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
+                    <PlaceholderImage placeholder="player" imageSrc={profileImageUrl ? profileImageUrl.url : ""} style={styles.profileImage} />
                 </View>
 
                 <View style={[styles.profileInfo, bannerStyles.profileInfo]}>
@@ -68,7 +66,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
         <View style={[styles.container, { marginTop: 10 }]}>
 
             <View style={[styles.profileImageBox, colorCSS.profileImageBox]}>
-                <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
+                <PlaceholderImage placeholder="player" imageSrc={profileImageUrl ? profileImageUrl.url : ""} style={styles.profileImage} />
             </View>
 
             <View style={styles.profileInfo}>
