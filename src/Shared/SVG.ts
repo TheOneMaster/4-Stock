@@ -6,6 +6,7 @@ import ArrowLeft from "../../assets/arrowLeft.svg"
 import CheckMark from "../../assets/checkMark.svg"
 import MagnifyingGlassIcon from "../../assets/icons8-search.svg"
 import BackIcon from "../../assets/backIcon.svg"
+import Location from "../../assets/location.svg"
 
 export {
     DiscordDark,
@@ -15,5 +16,6 @@ export {
     ArrowLeft,
     CheckMark,
     MagnifyingGlassIcon,
-    BackIcon
+    BackIcon,
+    Location
 }

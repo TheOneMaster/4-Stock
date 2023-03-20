@@ -12,4 +12,5 @@ declare module "*.png" {
 }
 declare module '@env' {
   export const API_TOKEN: string;
+  export const USER_ID: string;
 }

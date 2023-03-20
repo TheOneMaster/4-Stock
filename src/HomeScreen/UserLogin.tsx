@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native"
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native"
-import { MainText } from "../Shared/ThemedText"
+import { MainText, SubtitleText } from "../Shared/ThemedText"
 
 interface UserLoginProps {
     loggedIn: boolean
@@ -21,17 +21,14 @@ const UserLogin = ({ loggedIn, style }: UserLoginProps) => {
 
     return (
         <View style={[styles.container, style]}>
-            <Text style={{ color: colors.link }}>Log In</Text>
+            <SubtitleText>Log In (disabled)</SubtitleText>
         </View>
     )
-
-
 }
 
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        flex: 1,
         alignItems: 'center'
     },
     userImageContainer: {

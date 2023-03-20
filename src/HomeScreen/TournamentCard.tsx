@@ -3,7 +3,7 @@ import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-n
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { convertDateToString } from "../helper";
-import { ImageType } from "../types";
+import { APIImage } from "../types";
 import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
 
 import PlaceholderImage from "../Shared/PlaceholderImage";
@@ -15,7 +15,7 @@ type TournamentCardProps = {
     name: string,
     city: string,
     startAt: number,
-    images: ImageType[],
+    images: APIImage[],
     navigation: NativeStackNavigationProp<RootStackParamList, "Home">,
     style?: StyleProp<ViewStyle>
 }
@@ -27,7 +27,7 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
             return cur;
         }
         return prev;
-    }, {} as ImageType);
+    }, {} as APIImage);
 
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({

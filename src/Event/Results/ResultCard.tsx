@@ -1,13 +1,16 @@
-import { StyleSheet, View, Text } from "react-native"
-import { useTheme } from "@react-navigation/native"
+import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from "react-native"
+import { useNavigation, useTheme } from "@react-navigation/native"
 
-import { ImageType } from "../../types";
+import { APIImage, Participant, Standing } from "../../types";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { Standing, User } from "../types";
+import { User } from "../types";
 import { getNumberOrdinal } from "../../helper";
 import { MainText, SubtitleText } from "../../Shared/ThemedText";
+import { ResultsNavigationProp } from "../../navTypes";
 
-function getImages(participants: { user: User }[]): string[] {
+
+
+function getImagesFromParticipants(participants: Participant[]): string[] {
     const images = participants.map((participant) => {
         const user = participant.user;
         const image = user.images[0];
@@ -17,11 +20,16 @@ function getImages(participants: { user: User }[]): string[] {
     return images;
 }
 
+interface ResultCardProps {
+    playerData: Omit<Standing, "stats">
+    index: number
+}
 
 
-const ResultCard = ({ playerData, index }: { playerData: Standing, index: number }) => {
+const ResultCard = ({ playerData, index }: ResultCardProps) => {
 
     const { colors } = useTheme();
+    const navigator = useNavigation<ResultsNavigationProp>();
     const placement = playerData.placement;
     const placementString = getNumberOrdinal(placement);
 
@@ -45,27 +53,37 @@ const ResultCard = ({ playerData, index }: { playerData: Standing, index: number
             profileImage = ''
         }
 
+        function showUserProfile() {
+            navigator.navigate("Profile", {
+                id: user.id
+            })
+        }
+
+
         return (
-            <View style={containerStyle}>
-                <View style={styles.imageContainer}>
-                    <PlaceholderImage imageSrc={profileImage} placeholder='player' style={styles.image} />
-                </View>
-                <View style={styles.detailsContainer}>
-                    <View style={styles.playerTitle}>
-                        <MainText style={styles.playerTag}>{player.gamerTag}</MainText>
-                        {player.prefix && <SubtitleText style={styles.playerSponsor}>{player.prefix}</SubtitleText>}
-                        {user !== null && user.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
+            <TouchableOpacity onPress={showUserProfile} activeOpacity={0.75}>
+                <View style={containerStyle}>
+                    <View style={styles.imageContainer}>
+                        <PlaceholderImage imageSrc={profileImage} placeholder='player' style={styles.image} />
                     </View>
-                    <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                    <View style={styles.detailsContainer}>
+                        <View style={styles.playerTitle}>
+                            <MainText style={styles.playerTag}>{player.gamerTag}</MainText>
+                            {player.prefix && <SubtitleText style={styles.playerSponsor}>{player.prefix}</SubtitleText>}
+                            {user !== null && user.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
+                        </View>
+                        <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                    </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         )
     }
 
     // Teams (not singles) events
     const entrant = playerData.entrant;
     const participants = entrant.participants;
-    const images = getImages(participants);
+    const images = getImagesFromParticipants(participants);
+
 
     return (
         <View style={containerStyle}>

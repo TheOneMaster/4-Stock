@@ -24,20 +24,14 @@ const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: Place
     }
 
 
-    if (imageSrc) {
-        return (
-            <Image
-                style={[styles.image, style]}
-                source={{ uri: imageSrc }}
-                defaultSource={placeholderFinal as ImageURISource | number} />
-        )
-    }
+    if (imageSrc) return <Image
+        style={[styles.image, style]}
+        source={{ uri: imageSrc }}
+        defaultSource={placeholderFinal as ImageURISource | number} />
 
-    const image = <Image
+    return <Image
         style={[styles.image, style]}
         source={placeholderFinal} />;
-
-    return image
 }
 
 const styles = StyleSheet.create({

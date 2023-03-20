@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { FullEventDetails, GameSet, Phase, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
+import { EventPageDetails, GameSet, Phase, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
 import { useTheme } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { getPGroupSetInfo } from "../../api";
@@ -9,7 +9,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { convertAPITimeToDate } from "../../helper";
 
 interface BracketFiltersProps {
-    eventDetails: FullEventDetails
+    eventDetails: EventPageDetails
     pGroupInfo: PhaseGroupSetInfo
     updatePGroupInfo: (pGroup: PhaseGroup, phase: Phase) => () => void
 }

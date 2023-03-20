@@ -3,7 +3,7 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { cleanObject, convertStorageToAPI } from "./helper";
-import { APIFiltersTemplate, APIQuery, GameSet, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
+import { APIFiltersTemplate, APIQuery, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -136,42 +136,41 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
   let variableString = filter ? '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!, $filter: String' : '$id: ID, $perPage: Int, $page: Int, $singles: Boolean!';
 
   const query = `
-    query getEventStandings(${variableString}) {
-        event(id: $id) {
-          standings(query: {
-            page: $page
-            perPage: $perPage
-            ${filterString}
-                    }) {
-                nodes {
-                  id
-                  placement
-                  player @include(if: $singles) {
-                        id
-                        prefix
-                        gamerTag
-                        user {
-                            images(type: "profile") {
-                                url
-                            }
-                        genderPronoun
-                        }
-                    }
-                  entrant @skip(if: $singles) {
-                    id
-                    name
-                    participants {
-                      user {
-                        images(type: "profile") {
-                          url
-                        }
-                      }
-                    }
-                  }
+  query getEventStandings(${variableString}) {
+    event(id: $id) {
+      standings(query: {page: $page, perPage: $perPage, ${filterString}}) {
+        nodes {
+          id
+          placement
+          player @include(if: $singles) {
+            id
+            prefix
+            gamerTag
+            user {
+              id
+              images(type: "profile") {
+                url
+              }
+              genderPronoun
+            }
+          }
+          entrant @skip(if: $singles) {
+            id
+            name
+            participants {
+              user {
+                id
+                images(type: "profile") {
+                  url
                 }
+              }
+            }
           }
         }
-    }`;
+      }
+    }
+  }
+  `;
 
   const variables = {
     id: Id,
@@ -267,6 +266,81 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
 
   return pGroupInfo
 }
+
+
+export function userDetailsQuery(id: number) {
+  const query = `
+  query getUserInfo($id: ID, $perPage: Int) {
+    user(id: $id) {
+      id
+      genderPronoun
+      images {
+        id
+        type
+        url
+      }
+      location {
+        country
+        state
+      }
+      player {
+        gamerTag
+        prefix
+        user {
+          id
+          name
+        }
+      }
+      events(query: {perPage: $perPage}) {
+        nodes {
+          name
+          tournament {
+            id
+            name
+            images(type: "profile") {
+              url
+            }
+          }
+          userEntrant(userId: $id) {
+            standing {
+              id
+              placement
+            }
+          }
+        }
+      }
+      tournaments(query: {perPage: $perPage}) {
+        nodes {
+          id
+          name
+          images(type: "profile") {
+            url
+          }
+        }
+      }
+      leagues(query: {perPage: $perPage}) {
+        nodes {
+          id
+          name
+          images(type: "profile") {
+            height
+            url
+          }
+        }
+      }
+    }
+  }
+  
+  `
+
+  const variables = {
+    id: id,
+    perPage: 10
+  }
+
+  return JSON.stringify({ query, variables })
+}
+
 
 
 export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
