@@ -31,7 +31,6 @@ const UserLogin = ({ loggedIn, style }: UserLoginProps) => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
-        flex: 1,
         alignItems: 'center'
     },
     userImageContainer: {

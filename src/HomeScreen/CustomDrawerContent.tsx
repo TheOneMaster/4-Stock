@@ -1,30 +1,51 @@
 import { DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
 import { useState } from "react";
-import { Text, View } from "react-native";
-import UserLogin from "./UserLogin";
+import { StyleSheet, Text, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
+import Ionicons from "@expo/vector-icons/Ionicons"
 
-import { USER_ID } from "@env"
+import UserLogin from "./UserLogin";
+import { MainText } from "../Shared/ThemedText";
 
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
     const [loggedIn, setLoggedIn] = useState(false);
+    const { colors } = useTheme()
 
     return (
-        <DrawerContentScrollView {...props}>
+        <DrawerContentScrollView {...props} contentContainerStyle={{ flexGrow: 1 }}>
             <UserLogin loggedIn={loggedIn} />
 
-            <Text style={{ color: "green" }} onPress={() => {
+            <View style={[styles.navigationItemsList, { borderColor: colors.border }]}>
+                <DrawerItemList {...props} />
 
-                props.navigation.navigate("Profile", {
-                    id: parseInt(USER_ID)
-                });
+            </View>
 
-            }}>Profile</Text>
+            <View style={styles.bottomBox}>
+                <Text>
+                    <MainText>Thanks for using this app! </MainText>
+                    <Ionicons name="heart" size={14} color="red" />
+                </Text>
+            </View>
 
-            <DrawerItemList {...props} />
+
         </DrawerContentScrollView>
     )
 }
+
+const styles = StyleSheet.create({
+    navigationItemsList: {
+        flexGrow: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1
+    },
+    bottomBox: {
+        flex: 1,
+        marginBottom: "auto",
+        paddingVertical: 10,
+        paddingHorizontal: 20
+    }
+})
 
 export default CustomDrawerContent;
