@@ -159,7 +159,6 @@ export function EventStandingsQuery(Id: number, perPage: number, page: number, s
             name
             participants {
               user {
-                id
                 images(type: "profile") {
                   url
                 }

@@ -1,5 +1,5 @@
 import { StyleProp, TextStyle, ViewStyle } from "react-native"
-import { User, UserEvent } from "../types"
+import { UserEvent, UserProfileData } from "../types"
 
 export interface EventDetailsCarouselProps {
     profileDetails: UserEvent[]
@@ -9,5 +9,5 @@ export interface EventDetailsCarouselProps {
 }
 
 export interface ProfileHeaderProps {
-    profileDetails: User
+    profileDetails: UserProfileData
 }

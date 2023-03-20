@@ -94,7 +94,7 @@ interface APIPhaseGroupSets {
 }
 
 interface APIUserDetails {
-    user: User
+    user: UserProfileData
 }
 
 interface APIResultsDetails {
@@ -216,20 +216,28 @@ export interface Player {
     user?: User
 }
 
-export interface User {
+interface User {
     id?: number
     name?: string
     genderPronoun?: string
     images?: APIImage[]
-    player?: Omit<Player, "user"> & { user: Pick<User, "id" | "name"> }
+    player?: Player
     location?: {
         country: string
         state?: string
     }
     events?: NodeArray<UserEvent>
-    tournaments?: NodeArray<Pick<Tournament, "id" | "images" | "name">>
+    tournaments?: NodeArray<Tournament>
     leagues?: NodeArray<League>
 }
+
+export type UserProfileData = Omit<User, "player" | "tournaments"> & {
+    player: Pick<Player, "gamerTag" | "prefix"> & {
+        user: Pick<User, "id" | "name">
+    }
+    tournaments: NodeArray<Pick<Tournament, "id" | "images" | "name">>
+}
+
 
 export interface UserEvent {
     name: string

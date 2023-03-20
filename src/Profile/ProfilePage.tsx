@@ -7,12 +7,12 @@ import { UserProfileProps } from "../navTypes";
 import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "../Shared/APIConverters";
 import DetailsCarousel from "../Shared/DetailsCarousel/DetailsCarousel";
 import { MainText } from "../Shared/ThemedText";
-import { User, UserDetails } from "../types";
+import { UserDetails, UserProfileData } from "../types";
 import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {
     const [loading, setLoading] = useState(true);
-    const [profileDetails, setProfileDetails] = useState<User>(null);
+    const [profileDetails, setProfileDetails] = useState<UserProfileData>(null);
     const { colors } = useTheme();
 
     useEffect(() => {
