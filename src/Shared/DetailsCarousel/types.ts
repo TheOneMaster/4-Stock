@@ -14,7 +14,7 @@ export interface CarouselItemProps {
 }
 
 export interface CarouselEmptyTextProps {
-    text: string
+    text?: string
 }
 
 export interface CarouselDataItem {
