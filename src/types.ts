@@ -34,9 +34,9 @@ export interface APIImage {
     url: string
 }
 
-export type BasicTournamentDetails = Pick<Tournament, "id" | "name" | "city" | "startAt" | "numAttendees" | "images">;
-export type TournamentPageDetails = Tournament & { events: BasicEventDetails[] }
-export type FullTournamentDetails = Tournament;
+export type BasicTournamentDetails = Required<Pick<Tournament, "id" | "name" | "city" | "startAt" | "numAttendees" | "images">>;
+export type TournamentPageDetails = Required<Omit<Tournament, "events">> & { events: BasicEventDetails[] }
+export type FullTournamentDetails = Required<Tournament>;
 
 interface Event {
     id?: number
@@ -57,9 +57,10 @@ interface VideoGame {
     images?: APIImage[]
 }
 
-export type BasicEventDetails = Pick<Event, "id" | "name" | "type" | "videogame"> & { phases: Pick<Phase, "id">[] };
-export type EventPageDetails = Omit<Event, "videogame" | "type">;
-export type FullEventDetails = Event;
+
+export type BasicEventDetails = Required<Pick<Event, "id" | "name" | "type" | "videogame">> & { phases: Required<Pick<Phase, "id">>[] };
+export type EventPageDetails = Required<Omit<Event, "videogame" | "type">>;
+export type FullEventDetails = Required<Event>;
 
 interface APIHint {
     maxAge: number,
@@ -82,7 +83,7 @@ interface APITournamentListData {
 }
 
 interface APITournamentDetails {
-    tournament: FullTournamentDetails
+    tournament: TournamentPageDetails
 }
 
 interface APIEventDetails {

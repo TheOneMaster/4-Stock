@@ -1,4 +1,4 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { useFocusEffect, useTheme } from "@react-navigation/native";
 import React, { SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { Animated, BackHandler, Button, Keyboard, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
@@ -16,7 +16,7 @@ const defaultVariables: StorageVariables = {
     afterDate: undefined,
     beforeDate: undefined,
     location: {
-        distanceFrom: undefined,
+        distanceFrom: "",
         distance: undefined
     }
 };
@@ -47,7 +47,7 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
         transform: [{ translateY: fadeAnim }]
     }
 
-    function onDateChange(event, selectedDate) {
+    function onDateChange(event: DateTimePickerEvent, selectedDate?: Date) {
         setShowDate(false);
         setAfterDate(selectedDate);
     }
@@ -66,7 +66,7 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
             location: location
         };
 
-        if (Object.keys(location).length > 0) {
+        if (location && Object.keys(location).length > 0) {
             filtersUsed['location'] = location;
         }
 
@@ -127,7 +127,7 @@ export const FilterView = ({ updateFilters, setShow, show, height }: { updateFil
 
             <Animated.View style={[styles.container, containerStyle]}>
                 <View style={styles.formItem}>
-                    <FilterText title={'Name'} onUpdate={(name: string) => setName(name.trim())} onSubmitEditing={Keyboard.dismiss} />
+                    <FilterText title={'Name'} onUpdate={setName} onSubmitEditing={Keyboard.dismiss} />
                 </View>
                 <View style={styles.formItem}>
                     <View style={styles.innerFormItem}>

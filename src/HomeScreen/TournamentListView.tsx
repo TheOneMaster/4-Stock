@@ -12,7 +12,7 @@ import { SearchButton } from "./SearchButton";
 import { TournamentCard } from "./TournamentCard";
 
 
-const TournamentListView = ({ navigation }: TournamentListViewProps) => {
+const TournamentListView = ({ navigation, route }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
   const [data, setData] = useState([] as BasicTournamentDetails[]);

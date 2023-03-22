@@ -1,19 +1,16 @@
 import React, { useRef, useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { NativeSyntheticEvent, StyleSheet, Text, TextInput, TextInputFocusEventData, TextInputProps, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { MainText } from "../Shared/ThemedText";
 
-
-function FilterItem({ element, title }: { element: JSX.Element, title: string }) {
-    return (
-        <View style={styles.container}>
-            <MainText style={styles.title}>{title}</MainText>
-            {element}
-        </View>
-    )
+interface FilterTextProps extends TextInputProps {
+    title: string
+    onUpdate: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function FilterText({ title, onUpdate = undefined, ...props }) {
+export function FilterText(props: FilterTextProps) {
+
+    const { title, onUpdate } = props;
 
     const [selected, setSelected] = useState(false);
     const { colors } = useTheme();
@@ -26,7 +23,7 @@ export function FilterText({ title, onUpdate = undefined, ...props }) {
         }
     })
 
-    function handleFocus(event) {
+    function handleFocus(event: NativeSyntheticEvent<TextInputFocusEventData>) {
         setSelected(true);
 
         if (props.onFocus) {
@@ -34,19 +31,25 @@ export function FilterText({ title, onUpdate = undefined, ...props }) {
         }
     }
 
-    function handleBlur(event) {
+    function handleBlur() {
         setSelected(false);
+    }
+
+    function handleTextChange(newText: string) {
+        const trimmed = newText.trim();
+        onUpdate(trimmed);
     }
 
     return (
         <View style={styles.container}>
             <MainText style={styles.title}>{title}</MainText>
             <TextInput
+
                 style={[styles.input, colorCSS.input]}
                 placeholder={'Genesis'}
                 placeholderTextColor={colors.secondaryText}
                 onFocus={handleFocus}
-                onChangeText={newText => onUpdate(newText)}
+                onChangeText={handleTextChange}
                 onBlur={handleBlur}
                 selectionColor={colors.primary}
                 underlineColorAndroid={selected ? colors.primary : LIGHT_GREY.current}

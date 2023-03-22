@@ -43,9 +43,14 @@ export type TournamentsTopBarNavigationProp = CompositeNavigationProp<
 >
 
 export type TournamentListViewProps = CompositeScreenProps<
-    HomeScreenProps,
-    DrawerScreenProps<HomeDrawerParamList, "Tournaments">
+    DrawerScreenProps<HomeDrawerParamList, "Tournaments">,
+    HomeScreenProps
 >;
+export type TournamentCardNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<HomeDrawerParamList, "Tournaments">,
+    NativeStackNavigationProp<RootStackParamList, "Home">
+>;
+
 
 export type EventCardNavigationProp = NativeStackNavigationProp<RootStackParamList, "Tournament">;
 

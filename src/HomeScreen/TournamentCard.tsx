@@ -1,10 +1,9 @@
 import { useTheme } from "@react-navigation/native";
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { convertDateToString } from "../helper";
+import { TournamentCardNavigationProp } from "../navTypes";
 import { APIImage } from "../types";
-import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
 
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
@@ -16,7 +15,7 @@ type TournamentCardProps = {
     city: string,
     startAt: number,
     images: APIImage[],
-    navigation: NativeStackNavigationProp<RootStackParamList, "Home">,
+    navigation: TournamentCardNavigationProp,
     style?: StyleProp<ViewStyle>
 }
 

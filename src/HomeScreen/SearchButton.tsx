@@ -1,35 +1,15 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native"
 import { useNavigation, useTheme } from "@react-navigation/native";
 import search_icon from "../../assets/icons8-search.png"
+import React from "react";
 
-export const SearchButton = ({ showFilter }) => {
 
-    const navigation = useNavigation();
+interface SearchButtonProps {
+    showFilter: React.Dispatch<React.SetStateAction<boolean>>
+}
 
+export const SearchButton = ({ showFilter }: SearchButtonProps) => {
     const { colors } = useTheme();
-    const style = StyleSheet.create({
-        container: {
-            padding: 20,
-            width: 70,
-            height: 70,
-            
-            borderRadius: 70 / 2,
-
-            position: "absolute",
-            bottom: 20,
-            right: 20,
-            justifyContent: "center",
-            alignItems: "center",
-            
-            backgroundColor: colors.primary,
-        },
-        icon: {
-            width: 60,
-            height: 60,
-            resizeMode: 'center',
-            overflow: 'hidden'
-        }
-    })
 
     const test = () => {
         requestAnimationFrame(() => {
@@ -39,9 +19,31 @@ export const SearchButton = ({ showFilter }) => {
 
     return (
         <TouchableOpacity onPress={test}>
-            <View style={style.container}>
-                <Image source={search_icon} style={style.icon}></Image>
+            <View style={[styles.container, { backgroundColor: colors.primary }]}>
+                <Image source={search_icon} style={styles.icon}></Image>
             </View>
         </TouchableOpacity>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        padding: 20,
+        width: 70,
+        height: 70,
+
+        borderRadius: 70 / 2,
+
+        position: "absolute",
+        bottom: 20,
+        right: 20,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    icon: {
+        width: 60,
+        height: 60,
+        resizeMode: 'center',
+        overflow: 'hidden'
+    }
+})
