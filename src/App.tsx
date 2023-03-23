@@ -13,9 +13,11 @@ import EventPage from "./Event/EventView";
 import HomeScreen from './HomeScreen/HomeScreen';
 import TournamentView from "./Tournament/TournamentView";
 import UserProfilePage from './Profile/ProfilePage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const queryClient = new QueryClient();
 
 function App() {
 
@@ -24,16 +26,17 @@ function App() {
   const statusbarBackground = colorScheme === "dark" ? "black" : colorTheme.colors.primary;
 
   return (
-    <NavigationContainer theme={colorTheme}>
-      <StatusBar animated={true} backgroundColor={colorTheme.colors.primary} translucent={false} />
-      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Tournament" component={TournamentView} />
-        <Stack.Screen name="Event" component={EventPage} />
-        <Stack.Screen name="Profile" component={UserProfilePage} />
-      </Stack.Navigator>
-    </NavigationContainer>
-
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer theme={colorTheme}>
+        <StatusBar animated={true} backgroundColor={colorTheme.colors.primary} translucent={false} />
+        <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Tournament" component={TournamentView} />
+          <Stack.Screen name="Event" component={EventPage} />
+          <Stack.Screen name="Profile" component={UserProfilePage} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </QueryClientProvider>
   )
 }
 
