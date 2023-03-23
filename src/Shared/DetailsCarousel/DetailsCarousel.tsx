@@ -7,7 +7,6 @@ function DetailsCarousel(props: DetailsCarouselProps) {
 
 
     return (
-
         <View style={props.style}>
 
             {props.title ? <MainText style={styles.title}>{props.title}</MainText> : null}
@@ -15,7 +14,7 @@ function DetailsCarousel(props: DetailsCarouselProps) {
             <FlatList
                 contentContainerStyle={styles.container}
                 data={props.data}
-                renderItem={({ item }) => <CarouselItem item={item} />}
+                renderItem={({ item }) => <CarouselItem item={item} navigation={props.navigation} />}
                 ItemSeparatorComponent={() => <View style={styles.spacingView} />}
                 ListEmptyComponent={() => <CarouselEmptyText text={props.emptyText} />}
 

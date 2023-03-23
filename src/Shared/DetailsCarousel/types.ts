@@ -5,11 +5,13 @@ export interface DetailsCarouselProps {
     data: CarouselDataItem[]
     title?: string
     emptyText?: string
+    navigation?: (id: string) => void
     style?: StyleProp<ViewStyle>
 }
 
 export interface CarouselItemProps {
     item: CarouselDataItem
+    navigation?: (id: string) => void
     style?: StyleProp<ViewStyle>
 }
 
@@ -18,9 +20,10 @@ export interface CarouselEmptyTextProps {
 }
 
 export interface CarouselDataItem {
+    id: string
     title: string
-    image: APIImage
-    dataType: "tournament" | "player" | "game"
+    image: string | null
+    dataType: "Tournament" | "League" | "Event"
     subtitle?: string
     subtitleItem?: React.ReactNode
 }
