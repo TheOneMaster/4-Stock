@@ -1,15 +1,22 @@
 import { Text } from "react-native";
+import { Image } from "../gql/gql";
 import { getNumberOrdinal } from "../helper";
 import { BasicTournamentDetails, APIImage, League, UserEvent, APIImageType } from "../types";
 import { CarouselDataItem } from "./DetailsCarousel/types";
 import { MainText } from "./ThemedText";
 
 
-export function getImageByType(images: APIImage[], type: APIImageType): APIImage {
-    return images.reduce((prev, cur) => {
-        if (cur.type === type) return cur
+
+export function getImageByType<Type extends Pick<Image, "type"|"url">>(images: Type[], type: string| string[]): Type | Pick<Image, "url"> {
+    const finalImage = images.reduce<Type|null>((prev, cur) => {
+        const typeMatch = typeof type === 'string' ? cur.type === type : type.includes(cur.type ?? '');
+        if (typeMatch) return cur
         return prev
     }, null)
+
+    if (finalImage) return finalImage
+
+    return {url: ""}
 }
 
 export function convertUserEventToCarouselItem(events: UserEvent[], activeColor?: string): CarouselDataItem[] {
