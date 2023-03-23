@@ -3,7 +3,7 @@ import { ImageSourcePropType, Image, StyleSheet, StyleProp, ViewStyle, Registere
 
 
 interface PlaceholderImageProps {
-    imageSrc: string
+    imageSrc: string | null
     placeholder?: "tournament" | "game" | "player"
     style?: StyleProp<ImageStyle>
 }
@@ -21,6 +21,9 @@ const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: Place
         case 'player':
             placeholderFinal = PlaceHolderPlayer;
             break;
+        default:
+            placeholderFinal = PlaceholderTournament;
+            break
     }
 
 

@@ -57,8 +57,6 @@ export function CarouselEmptyText(props: CarouselEmptyTextProps) {
     )
 }
 
-
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
