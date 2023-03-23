@@ -2292,7 +2292,7 @@ export type UserDetailsQueryVariables = Exact<{
 }>;
 
 
-export type UserDetailsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string | null, genderPronoun: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null, location: { __typename?: 'Address', country: string | null, state: string | null } | null, player: { __typename?: 'Player', gamerTag: string | null, prefix: string | null, user: { __typename?: 'User', id: string | null, name: string | null } | null } | null, events: { __typename?: 'EventConnection', nodes: Array<{ __typename?: 'Event', name: string | null, tournament: { __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null, userEntrant: { __typename?: 'Entrant', standing: { __typename?: 'Standing', id: string | null, placement: number | null } | null } | null } | null> | null } | null, tournaments: { __typename?: 'TournamentConnection', nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null> | null } | null, leagues: { __typename?: 'LeagueConnection', nodes: Array<{ __typename?: 'League', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', height: number | null, url: string | null } | null> | null } | null> | null } | null } | null };
+export type UserDetailsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string | null, genderPronoun: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null, location: { __typename?: 'Address', country: string | null, state: string | null } | null, player: { __typename?: 'Player', gamerTag: string | null, prefix: string | null, user: { __typename?: 'User', id: string | null, name: string | null } | null } | null, events: { __typename?: 'EventConnection', nodes: Array<{ __typename?: 'Event', id: string | null, name: string | null, tournament: { __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null, userEntrant: { __typename?: 'Entrant', standing: { __typename?: 'Standing', id: string | null, placement: number | null } | null } | null } | null> | null } | null, tournaments: { __typename?: 'TournamentConnection', nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null> | null } | null, leagues: { __typename?: 'LeagueConnection', nodes: Array<{ __typename?: 'League', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', height: number | null, url: string | null } | null> | null } | null> | null } | null } | null };
 
 export type TournamentDetailsQueryVariables = Exact<{
   ID: Scalars['ID'];
@@ -2399,6 +2399,7 @@ export const UserDetailsDocument = `
     }
     events(query: {perPage: $perPage}) {
       nodes {
+        id
         name
         tournament {
           id

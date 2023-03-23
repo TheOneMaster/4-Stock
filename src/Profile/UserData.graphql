@@ -21,6 +21,7 @@ query UserDetails($ID: ID, $perPage: Int) {
     }
     events(query: { perPage: $perPage }) {
       nodes {
+        id
         name
         tournament {
           id
