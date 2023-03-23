@@ -3,14 +3,14 @@ import { StyleSheet, View } from "react-native";
 import { useUserDetailsQuery } from "../gql/gql";
 
 import { UserProfileProps } from "../navTypes";
-import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "../Shared/APIConverters";
 import DetailsCarousel from "../Shared/DetailsCarousel/DetailsCarousel";
+import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "./api";
 import { MainText } from "../Shared/ThemedText";
 import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {
     const { colors } = useTheme();
-    const {data, isLoading, isError, isFetching} = useUserDetailsQuery({ID: route.params.id.toString(), perPage: 10});
+    const { data, isLoading, isError, isFetching } = useUserDetailsQuery({ ID: route.params.id.toString(), perPage: 10 });
 
     if (isLoading) return (
         <View style={styles.centerView}>
@@ -41,6 +41,9 @@ function UserProfilePage({ navigation, route }: UserProfileProps) {
                     data={convertTournamentToCarouselItem(data.user.tournaments?.nodes ?? [])}
                     title="Tournaments"
                     emptyText="No tournaments found"
+                    navigation={(id: string) => {
+                        navigation.push("Tournament", { id: id })
+                    }}
                 />
 
                 <DetailsCarousel

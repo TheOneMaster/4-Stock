@@ -14,7 +14,7 @@ export type HomeDrawerParamList = {
 export type RootStackParamList = {
     Home: undefined,
     Tournament: {
-        tournamentDetails: Pick<FullTournamentDetails, "id" | "name" | "city" | "images"> & { date: number }
+        id: string
     },
     Event: Pick<FullEventDetails, "id" | "phases" | "type">
     Profile: {

@@ -11,7 +11,7 @@ import { TopBar } from "./TopBar";
 import { RegisterButtonProps } from "./types";
 
 
-const RegisterButton = ({ show , disabled = false }: RegisterButtonProps) => {
+const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
     if (!show) {
         return null;
     }
@@ -38,7 +38,7 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
     // 
     // 
 
-    const tournamentID = route.params.tournamentDetails.id.toString();
+    const tournamentID = route.params.id;
     const queryClient = useQueryClient();
     const { data, isLoading, isError, isFetching } = useTournamentDetailsQuery({ ID: tournamentID })
 
