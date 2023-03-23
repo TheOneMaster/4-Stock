@@ -40,7 +40,7 @@ export function convertStorageToAPI(params: Partial<StorageVariables>): Partial<
     return final
 };
 
-export function addMonthsToDate(date: Date, months = 1) {
+export function addMonthsToDate(date: Date, months = 1): Date {
     const dateTemp = new Date();
     dateTemp.setMonth(date.getMonth() + months);
     return dateTemp;
@@ -59,7 +59,10 @@ export function cleanObject<T extends Object>(obj: T): Partial<T> {
     }, {});
 }
 
-export function getNumberOrdinal(num: number) {
+export function getNumberOrdinal(num: number|null): string {
+
+    if (num === null) return ""
+
     var j = num % 10,
         k = num % 100;
     if (j == 1 && k != 11) {
@@ -72,4 +75,8 @@ export function getNumberOrdinal(num: number) {
         return num + "rd";
     }
     return num + "th";
+}
+
+export function truthyFilter<T>(x: T|null|undefined): x is T {
+    return !!x
 }
