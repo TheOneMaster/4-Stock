@@ -10,11 +10,11 @@ import { EventCardProps } from "./types";
 
 const EventCard = ({ event }: EventCardProps) => {
     const { colors } = useTheme();
-    
+
     if (event == undefined || Object.keys(event).length === 0) {
         return null
     }
-    
+
     const name = event.name;
     const videogameImages = event.videogame?.images?.flatMap(image => image ? [image] : []) ?? [];
     const imageLogo = getImageByType(videogameImages, ['primary', 'primary-quality']);
@@ -28,10 +28,10 @@ const EventCard = ({ event }: EventCardProps) => {
         }
     });
     const navigation = useNavigation<EventCardNavigationProp>();
-    
+
     const eventTouch = () => {
         console.log(event);
-        navigation.navigate("Event", event);
+        navigation.push("Event", event);
     }
 
     return (

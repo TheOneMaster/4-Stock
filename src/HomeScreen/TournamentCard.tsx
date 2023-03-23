@@ -43,17 +43,8 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
     });
 
     function navigateToTournament() {
-        console.log(id);
-
-        const tournamentDetails = {
-            id: id,
-            name: name,
-            city: city,
-            date: startAt,
-            images: images
-        }
-
-        navigation.navigate("Tournament", { tournamentDetails: tournamentDetails });
+        // console.log(id.toString());
+        navigation.push("Tournament", { id: id.toString() });
     }
 
     return (
