@@ -18,7 +18,7 @@ const SettingsSwitch = ({ title, setting, style }: SettingsSwitchProps) => {
 
     return (
         <View style={[SettingsItemStyles.container, { borderColor: colors.border }, style]}>
-            <Text style={[SettingsItemStyles.title, { color: colors.text }]}>{title}</Text>
+            <MainText style={SettingsItemStyles.title}>{title}</MainText>
             <View style={SettingsItemStyles.componentContainer}>
                 <Switch value={active} onValueChange={setActive} style={{ transform: [{ scale: 1.3 }] }} />
             </View>

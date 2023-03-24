@@ -4,6 +4,8 @@ import { FlatList, StyleProp, StyleSheet, Text, TouchableHighlight, TouchableHig
 import { useMMKVObject } from "react-native-mmkv";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { AppSettings, DropdownItemProps, SettingsDropdownProps, SettingsItemStyles } from "./types";
+import { MainText } from "../Shared/ThemedText";
+import { DropdownOption, SettingsDropdownProps, SettingsItemStyles } from "./types";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
@@ -46,9 +48,9 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
             {/* Top bar that you click on to create the dropdown menu */}
             <TouchableHighlight onPress={toggleDrawer} {...highlightProps}>
                 <View style={[SettingsItemStyles.container, topBarStyle]}>
-                    <Text style={[SettingsItemStyles.title, { color: colors.text }]}>{title}</Text>
+                    <MainText style={styles.title}>{title}</MainText>
                     <View style={styles.placeholder}>
-                        <Text style={[styles.placeholderText, { color: colors.text }]}>{option !== null ? option.label : "Select a value"}</Text>
+                        <MainText style={styles.placeholderText}>{selected !== null ? getSelectedItem().label : "Select a value"}</MainText>
                         {drawerState
                             ? <ArrowLeft width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
                             : <ArrowDown width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
@@ -89,7 +91,7 @@ const DropdownItem = ({ item, selectItem, active, setting, setDrawerState }: Dro
     return (
         <TouchableOpacity onPress={pressed}>
             <View style={[styles.itemContainer, { borderColor: colors.border }]}>
-                <Text style={[styles.itemText, { color: colors.text }]}>{label}</Text>
+                <MainText style={styles.itemText}>{label}</MainText>
                 {active &&
                     <View style={{ marginLeft: 'auto' }}>
                         <CheckMark width={20} height={20} color={colors.primary} />

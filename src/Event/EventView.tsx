@@ -3,25 +3,28 @@ import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { EventDetailsQuery, queryAPI } from "../api";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import ResultsPage from "./ResultsPage";
-import BracketPage from "./BracketPage";
-import { EventAPIQuery, FullEventDetails } from "../types";
+import ResultsPage from "./Results/ResultsPage";
+import BracketPage from "./Bracket/BracketPage";
+import { EventDetails, EventPageDetails } from "../types";
+import { EventTabParamList, EventViewProps } from "../navTypes";
 
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
-const EventPage = ({navigation, route}) => {
+const EventPage = ({ navigation, route }: EventViewProps) => {
 
-    const [data, setData] = useState({} as FullEventDetails);
+    const [data, setData] = useState({} as EventPageDetails);
     const [loading, setLoading] = useState(true);
 
     const singles = route.params.type === 1;
-    const {colors} = useTheme();
+    const firstPhase = route.params.phases[0];
+
+    const { colors } = useTheme();
 
     useEffect(() => {
         const eventId = route.params.id;
         const queryBody = EventDetailsQuery(eventId, singles);
-        const queryData = queryAPI(queryBody) as Promise<EventAPIQuery>;
+        const queryData = queryAPI(queryBody) as Promise<EventDetails>;
         queryData.then(details => {
             setData(details.event)
             setLoading(false);
@@ -40,7 +43,8 @@ const EventPage = ({navigation, route}) => {
 
     return (
         <Tab.Navigator>
-            { data.standings.nodes.length > 0 && <Tab.Screen name="Results" component={ResultsPage} initialParams={{standings: data.standings.nodes, id: data.id, singles: singles}} /> }
+            {data.standings && data.standings.nodes.length > 0 &&
+                <Tab.Screen name="Results" component={ResultsPage} initialParams={{ standings: data.standings.nodes, id: data.id, singles: singles }} />}
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )

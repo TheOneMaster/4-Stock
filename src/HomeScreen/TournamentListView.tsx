@@ -5,9 +5,8 @@ import { ActivityIndicator, FlatList, RefreshControl, Settings, StyleSheet, Toas
 import { queryAPI, tournamentListQuery } from "../api";
 import { addMonthsToDate } from "../helper";
 
-// import { SettingsContext } from "../Contexts/SettingsContext";
-// import { TournamentListViewProps } from "../navTypes";
-import { BasicTournamentDetails, StorageVariables, TournamentListAPIQuery } from "../types";
+import { TournamentListViewProps } from "../navTypes";
+import { BasicTournamentDetails, StorageVariables, TournamentListData } from "../types";
 import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import { TournamentCard } from "./TournamentCard";
@@ -16,7 +15,7 @@ import { useMMKVListener, useMMKVBoolean, useMMKVObject, useMMKV } from "react-n
 import { AppSettings, DropdownOption } from "../Settings/types";
 
 
-const TournamentListView = ({ navigation }: TournamentListViewProps) => {
+const TournamentListView = ({ navigation, route }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
   const storage = useMMKV();
@@ -59,8 +58,8 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
 
     try {
       const body = tournamentListQuery(filterParams);
-      const json_data = await queryAPI(body) as TournamentListAPIQuery;
-      const currentData = json_data.tournaments.nodes;
+      const json_data = await queryAPI(body) as TournamentListData;
+      const currentData = json_data.tournaments.nodes
       setData(currentData);
     } catch (err) {
       console.log(err);
@@ -81,8 +80,7 @@ const TournamentListView = ({ navigation }: TournamentListViewProps) => {
     params.page = page;
 
     const body = tournamentListQuery(params);
-    console.log(body);
-    const query_data = await queryAPI(body) as TournamentListAPIQuery;
+    const query_data = await queryAPI(body) as TournamentListData;
     const current_data = query_data.tournaments.nodes;
 
     if (current_data.length > 0) {

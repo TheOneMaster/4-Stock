@@ -1,12 +1,12 @@
 import { useTheme } from "@react-navigation/native";
-import { Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { convertDateToString } from "../helper";
-import { ImageType } from "../types";
-import { HomeDrawerParamList, RootStackParamList } from "../navTypes";
+import { TournamentCardNavigationProp } from "../navTypes";
+import { APIImage } from "../types";
 
 import PlaceholderImage from "../Shared/PlaceholderImage";
+import { MainText, SubtitleText } from "../Shared/ThemedText";
 
 
 type TournamentCardProps = {
@@ -14,19 +14,19 @@ type TournamentCardProps = {
     name: string,
     city: string,
     startAt: number,
-    images: ImageType[],
-    navigation: NativeStackNavigationProp<RootStackParamList, "Home">,
+    images: APIImage[],
+    navigation: TournamentCardNavigationProp,
     style?: StyleProp<ViewStyle>
 }
 
-export const TournamentCard = ({id, name, city, startAt, images, navigation, style}: TournamentCardProps) => {
+export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
     const dateString = convertDateToString(startAt);
     const profile_image = images.reduce((prev, cur) => {
         if (cur.type === 'profile') {
             return cur;
         }
         return prev;
-    }, {} as ImageType);
+    }, {} as APIImage);
 
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
@@ -53,20 +53,20 @@ export const TournamentCard = ({id, name, city, startAt, images, navigation, sty
             images: images
         }
 
-        navigation.navigate("Tournament", {tournamentDetails: tournamentDetails});
+        navigation.navigate("Tournament", { tournamentDetails: tournamentDetails });
     }
 
     return (
         <Pressable style={style} onPress={navigateToTournament}>
             <View style={[styles.container, colorCSS.container]}>
                 <View style={styles.imageContainer}>
-                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url}/>
+                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url} />
                 </View>
                 <View style={styles.textBox}>
-                    <Text style={[styles.title, colorCSS.title]}>{name}</Text>
+                    <MainText style={styles.title}>{name}</MainText>
                     <View style={styles.detailsText}>
-                        <Text style={colorCSS.text}>{city}</Text>
-                        <Text style={colorCSS.text}>{dateString}</Text>
+                        <SubtitleText style={colorCSS.text}>{city}</SubtitleText>
+                        <SubtitleText style={colorCSS.text}>{dateString}</SubtitleText>
                     </View>
                 </View>
             </View>
