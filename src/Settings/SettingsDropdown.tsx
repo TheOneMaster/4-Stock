@@ -5,7 +5,6 @@ import { useMMKVObject } from "react-native-mmkv";
 import { ArrowDown, ArrowLeft, CheckMark } from "../Shared/SVG";
 import { AppSettings, DropdownItemProps, SettingsDropdownProps, SettingsItemStyles } from "./types";
 import { MainText } from "../Shared/ThemedText";
-import { DropdownOption, SettingsDropdownProps, SettingsItemStyles } from "./types";
 
 const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style }: SettingsDropdownProps) => {
 
@@ -50,7 +49,7 @@ const SettingsDropdown = ({ data, setting, value, title, backgroundColor, style 
                 <View style={[SettingsItemStyles.container, topBarStyle]}>
                     <MainText style={styles.title}>{title}</MainText>
                     <View style={styles.placeholder}>
-                        <MainText style={styles.placeholderText}>{selected !== null ? getSelectedItem().label : "Select a value"}</MainText>
+                        <MainText style={styles.placeholderText}>{option !== null ? option.label : "Select a value"}</MainText>
                         {drawerState
                             ? <ArrowLeft width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />
                             : <ArrowDown width={20} height={20} color={colors.text} style={{ marginLeft: 10 }} />

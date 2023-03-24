@@ -12,7 +12,6 @@ import { customDarkTheme, customLightTheme } from "./Themes";
 import { StatusBar } from 'expo-status-bar';
 import EventPage from "./Event/EventView";
 import HomeScreen from './HomeScreen/HomeScreen';
-import TournamentView from "./Tournament/TournamentView";
 import UserProfilePage from './Profile/ProfilePage';
 import TournamentView from "./Tournament/TournamentView";
 import { AppSettings } from './Settings/types';
