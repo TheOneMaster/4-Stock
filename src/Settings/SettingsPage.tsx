@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-<<<<<<< HEAD
+
 import { useMMKV } from "react-native-mmkv"
 
 import SettingsDropdown from "./SettingsDropdown";
@@ -10,12 +10,8 @@ import SettingsSwitch from "./SettingsSwitch";
 import GameOptions from "./games.json";
 import { useEffect } from "react";
 import { AppSettings } from "./types";
-=======
-import SettingsDropdown from "./SettingsDropdown";
-import SettingsSwitch from "./SettingsSwitch";
+import { SettingsTextInput } from "./SettingsItems";
 
-import GameOptions from "./games.json";
->>>>>>> master
 
 const SettingsPage = ({ navigation, route }) => {
     const { colors } = useTheme();
