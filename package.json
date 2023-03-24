@@ -1,6 +1,6 @@
 {
   "name": "startggapp",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "main": "src/App.tsx",
   "scripts": {
     "start": "expo start --dev-client",
