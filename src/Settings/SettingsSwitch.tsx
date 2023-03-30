@@ -2,6 +2,7 @@ import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { Switch, Text, View } from "react-native";
 import { useMMKVObject } from "react-native-mmkv";
+import { MainText } from "../Shared/ThemedText";
 import { AppSettings, SettingsItemStyles, SettingsSwitchProps } from "./types";
 
 
