@@ -1,6 +1,6 @@
 import { useIsFocused, useTheme } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl, Settings, StyleSheet, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, ToastAndroid, View } from "react-native";
 
 import { queryAPI, tournamentListQuery } from "../api";
 import { addMonthsToDate } from "../helper";
@@ -11,23 +11,19 @@ import { FilterView } from "./FilterComponent";
 import { SearchButton } from "./SearchButton";
 import { TournamentCard } from "./TournamentCard";
 
-import { useMMKVListener, useMMKVBoolean, useMMKVObject, useMMKV } from "react-native-mmkv";
-import { AppSettings, DropdownOption } from "../Settings/types";
+import { useMMKV, useMMKVBoolean, useMMKVListener, useMMKVObject } from "react-native-mmkv";
+import { DropdownOption } from "../Shared/types";
 
 
 const TournamentListView = ({ navigation, route }: TournamentListViewProps) => {
 
   const { colors } = useTheme();
-  const storage = useMMKV();
 
-  const [data, setData] = useState([] as BasicTournamentDetails[]);
-  const updatedSettings = useRef<boolean>(false);
+  const [data, setData] = useState<BasicTournamentDetails[]>([]);
 
-  useMMKVListener(() => {
-    // TODO: Make sure it only updates after the MMKV store has loaded.
-    updatedSettings.current = true;
-  })
 
+  const [mainGame, __mainGame] = useMMKVObject<DropdownOption>("general.mainGame");
+  const [debug, __debug] = useMMKVBoolean("general.debug");
 
   // UI State elements
   const focused = useIsFocused();
@@ -40,13 +36,8 @@ const TournamentListView = ({ navigation, route }: TournamentListViewProps) => {
   const [page, setPage] = useState(1);
   const [filterParams, setFilterParams] = useState<StorageVariables>({
     beforeDate: addMonthsToDate(new Date(), 1),
-    videogameIds: getMainGame()
+    videogameIds: mainGame?.value
   });
-
-  function getMainGame() {
-    const settings: AppSettings = JSON.parse(storage.getString("settings"));
-    return settings["general.mainGame"] ? [settings["general.mainGame"].value] : undefined;
-  }
 
   function updateFilters(filter: StorageVariables) {
     const newFilters = Object.assign({}, filterParams, filter);
@@ -102,31 +93,18 @@ const TournamentListView = ({ navigation, route }: TournamentListViewProps) => {
 
   useEffect(() => {
 
-    if (!focused || !updatedSettings.current) {
+    if (!focused) {
       return
-    }
-
-    const settingsString = storage.getString("settings");
-    const settings: AppSettings = JSON.parse(settingsString);
-
-    console.log(settings);
-    updatedSettings.current = false;
-
-    if (settings["general.debug"]) {
+    }    
+    
+    if (debug) {
       const newFilters: StorageVariables = {
         name: "Genesis",
-        videogameIds: [1]
+        videogameIds: 1 
       }
       setFilterParams(newFilters);
       return
     }
-
-    const newFilters: StorageVariables = {
-      beforeDate: addMonthsToDate(new Date(), 1),
-      videogameIds: settings["general.mainGame"] ? [settings["general.mainGame"].value] : undefined
-    }
-
-    setFilterParams(newFilters);
 
 
   }, [focused])
