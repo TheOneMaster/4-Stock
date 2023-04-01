@@ -3,7 +3,7 @@ import { Platform, ToastAndroid } from "react-native";
 import { API_TOKEN } from "@env";
 
 import { cleanObject, convertStorageToAPI } from "./helper";
-import { APIFiltersTemplate, APIQuery, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
+import { APIQuery, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from "./types";
 
 // API Query functions
 
@@ -377,6 +377,7 @@ export function tournamentListQuery(storageParams: StorageVariables): string {
 
 export async function queryAPI(query_body: string, controller?: AbortController) {
   try {
+
     const api_url = "https://api.start.gg/gql/alpha";
     const response = await fetch(api_url, {
       method: "POST",

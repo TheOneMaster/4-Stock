@@ -1,3 +1,5 @@
+import { DropdownOption } from "./Shared/types"
+
 type NodeArray<Type> = {
     nodes: Type[]
     pageInfo?: {
@@ -140,6 +142,7 @@ export interface StorageVariables {
     afterDate?: Date,
     beforeDate?: Date,
     location?: LocationFilter
+    videogameIds?: number
 }
 
 export const APIFiltersTemplate = {
