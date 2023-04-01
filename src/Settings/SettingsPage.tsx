@@ -1,39 +1,29 @@
-import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 
-import { useMMKV } from "react-native-mmkv"
-
-import SettingsDropdown from "./SettingsDropdown";
-import SettingsSwitch from "./SettingsSwitch";
-
-
-import GameOptions from "./games.json";
-import { useEffect } from "react";
-import { AppSettings } from "./types";
-import { SettingsTextInput } from "./SettingsItems";
+import { SettingsViewProps } from "../navTypes";
+import SettingsGroup from "./SettingsGroup";
+import { SettingsDropdown, SettingsSwitch, SettingsTextInput } from "./SettingsItems";
+import GAME_LIST from "./games.json"
 
 
-const SettingsPage = ({ navigation, route }) => {
-    const { colors } = useTheme();
-    const storage = useMMKV()
-    useEffect(() => {
-
-        if (storage.contains("settings")) {
-            return
-        }
-
-        const DEFAULT_SETTINGS: AppSettings = {
-            "general.debug": false,
-            "general.mainGame": null
-        }
-
-        storage.set("settings", JSON.stringify(DEFAULT_SETTINGS));
-    }, [])
+const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
 
     return (
         <View style={styles.container}>
-            <SettingsSwitch title="Debug" setting="general.debug" />
-            <SettingsDropdown data={GameOptions} setting="general.mainGame" title="Main Game" />
+            {/* <SettingsSwitch title="Debug" setting="general.debug" /> */}
+            {/* <SettingsDropdown data={GameOptions} setting="general.mainGame" title="Main Game" /> */}
+
+            <SettingsGroup title="General">
+                <SettingsTextInput group="general" setting="apiKey" title="API Key" hidden style={{paddingVertical: 0}} />
+                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" />
+                <SettingsSwitch group="general" setting="debug" title="Debug" />
+            </SettingsGroup>
+
+            {/* <SettingsGroup title="Theming">
+                
+            </SettingsGroup> */}
+
+
         </View>
     )
 }
@@ -41,7 +31,6 @@ const SettingsPage = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginHorizontal: 10
     }
 });
 
