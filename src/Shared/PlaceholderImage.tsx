@@ -3,7 +3,7 @@ import { ImageSourcePropType, Image, StyleSheet, StyleProp, ViewStyle, Registere
 
 
 interface PlaceholderImageProps {
-    imageSrc: string | null
+    imageSrc?: string | null
     placeholder?: "tournament" | "game" | "player"
     style?: StyleProp<ImageStyle>
 }
