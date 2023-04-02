@@ -29,7 +29,8 @@ const config: CodegenConfig = {
         fetcher: "../fetchAPI#fetchData",
         avoidOptionals: true,
         exposeQueryKeys: true,
-        strict: true
+        strict: true,
+        addInfiniteQuery: true
       },
     },
     "./graphql.schema.json": {

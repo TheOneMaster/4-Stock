@@ -1,5 +1,5 @@
 //  THIS IS A GENERATED FILE. DO NOT EDIT.
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions } from '@tanstack/react-query';
 import { fetchData } from '../fetchAPI';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -2291,6 +2291,16 @@ export type FeaturedTournamentsQueryVariables = Exact<{ [key: string]: never; }>
 
 export type FeaturedTournamentsQuery = { __typename?: 'Query', tournaments: { __typename?: 'TournamentConnection', nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null> | null } | null };
 
+export type TournamentListDataQueryVariables = Exact<{
+  name: InputMaybe<Scalars['String']>;
+  afterDate: InputMaybe<Scalars['Timestamp']>;
+  beforeDate: InputMaybe<Scalars['Timestamp']>;
+  page: Scalars['Int'];
+}>;
+
+
+export type TournamentListDataQuery = { __typename?: 'Query', tournaments: { __typename?: 'TournamentConnection', pageInfo: { __typename?: 'PageInfo', page: number | null } | null, nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, city: string | null, startAt: any | null, numAttendees: number | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null> | null } | null };
+
 export type UserDetailsQueryVariables = Exact<{
   ID: InputMaybe<Scalars['ID']>;
   perPage: InputMaybe<Scalars['Int']>;
@@ -2380,6 +2390,25 @@ export const useEventDataQuery = <
 useEventDataQuery.getKey = (variables: EventDataQueryVariables) => ['EventData', variables];
 ;
 
+export const useInfiniteEventDataQuery = <
+      TData = EventDataQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof EventDataQueryVariables,
+      variables: EventDataQueryVariables,
+      options?: UseInfiniteQueryOptions<EventDataQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<EventDataQuery, TError, TData>(
+      ['EventData.infinite', variables],
+      (metaData) => fetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteEventDataQuery.getKey = (variables: EventDataQueryVariables) => ['EventData.infinite', variables];
+;
+
 export const FeaturedTournamentsDocument = `
     query FeaturedTournaments {
   tournaments(query: {perPage: 8, filter: {staffPicks: true, past: false}}) {
@@ -2409,6 +2438,83 @@ export const useFeaturedTournamentsQuery = <
     );
 
 useFeaturedTournamentsQuery.getKey = (variables?: FeaturedTournamentsQueryVariables) => variables === undefined ? ['FeaturedTournaments'] : ['FeaturedTournaments', variables];
+;
+
+export const useInfiniteFeaturedTournamentsQuery = <
+      TData = FeaturedTournamentsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof FeaturedTournamentsQueryVariables,
+      variables?: FeaturedTournamentsQueryVariables,
+      options?: UseInfiniteQueryOptions<FeaturedTournamentsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<FeaturedTournamentsQuery, TError, TData>(
+      variables === undefined ? ['FeaturedTournaments.infinite'] : ['FeaturedTournaments.infinite', variables],
+      (metaData) => fetchData<FeaturedTournamentsQuery, FeaturedTournamentsQueryVariables>(FeaturedTournamentsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteFeaturedTournamentsQuery.getKey = (variables?: FeaturedTournamentsQueryVariables) => variables === undefined ? ['FeaturedTournaments.infinite'] : ['FeaturedTournaments.infinite', variables];
+;
+
+export const TournamentListDataDocument = `
+    query TournamentListData($name: String, $afterDate: Timestamp, $beforeDate: Timestamp, $page: Int!) {
+  tournaments(
+    query: {page: $page, perPage: 25, filter: {name: $name, afterDate: $afterDate, beforeDate: $beforeDate}}
+  ) {
+    pageInfo {
+      page
+    }
+    nodes {
+      id
+      name
+      city
+      startAt
+      numAttendees
+      images {
+        id
+        type
+        url
+      }
+    }
+  }
+}
+    `;
+export const useTournamentListDataQuery = <
+      TData = TournamentListDataQuery,
+      TError = unknown
+    >(
+      variables: TournamentListDataQueryVariables,
+      options?: UseQueryOptions<TournamentListDataQuery, TError, TData>
+    ) =>
+    useQuery<TournamentListDataQuery, TError, TData>(
+      ['TournamentListData', variables],
+      fetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument, variables),
+      options
+    );
+
+useTournamentListDataQuery.getKey = (variables: TournamentListDataQueryVariables) => ['TournamentListData', variables];
+;
+
+export const useInfiniteTournamentListDataQuery = <
+      TData = TournamentListDataQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof TournamentListDataQueryVariables,
+      variables: TournamentListDataQueryVariables,
+      options?: UseInfiniteQueryOptions<TournamentListDataQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<TournamentListDataQuery, TError, TData>(
+      ['TournamentListData.infinite', variables],
+      (metaData) => fetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteTournamentListDataQuery.getKey = (variables: TournamentListDataQueryVariables) => ['TournamentListData.infinite', variables];
 ;
 
 export const UserDetailsDocument = `
@@ -2490,6 +2596,25 @@ export const useUserDetailsQuery = <
 useUserDetailsQuery.getKey = (variables?: UserDetailsQueryVariables) => variables === undefined ? ['UserDetails'] : ['UserDetails', variables];
 ;
 
+export const useInfiniteUserDetailsQuery = <
+      TData = UserDetailsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof UserDetailsQueryVariables,
+      variables?: UserDetailsQueryVariables,
+      options?: UseInfiniteQueryOptions<UserDetailsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<UserDetailsQuery, TError, TData>(
+      variables === undefined ? ['UserDetails.infinite'] : ['UserDetails.infinite', variables],
+      (metaData) => fetchData<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteUserDetailsQuery.getKey = (variables?: UserDetailsQueryVariables) => variables === undefined ? ['UserDetails.infinite'] : ['UserDetails.infinite', variables];
+;
+
 export const TournamentDetailsDocument = `
     query TournamentDetails($ID: ID!) {
   tournament(id: $ID) {
@@ -2546,4 +2671,23 @@ export const useTournamentDetailsQuery = <
     );
 
 useTournamentDetailsQuery.getKey = (variables: TournamentDetailsQueryVariables) => ['TournamentDetails', variables];
+;
+
+export const useInfiniteTournamentDetailsQuery = <
+      TData = TournamentDetailsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof TournamentDetailsQueryVariables,
+      variables: TournamentDetailsQueryVariables,
+      options?: UseInfiniteQueryOptions<TournamentDetailsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<TournamentDetailsQuery, TError, TData>(
+      ['TournamentDetails.infinite', variables],
+      (metaData) => fetchData<TournamentDetailsQuery, TournamentDetailsQueryVariables>(TournamentDetailsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteTournamentDetailsQuery.getKey = (variables: TournamentDetailsQueryVariables) => ['TournamentDetails.infinite', variables];
 ;
