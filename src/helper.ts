@@ -59,7 +59,7 @@ export function cleanObject<T extends Object>(obj: T): Partial<T> {
     }, {});
 }
 
-export function getNumberOrdinal(num: number|null): string {
+export function getNumberOrdinal(num: number | null): string {
 
     if (num === null) return ""
 
@@ -77,6 +77,14 @@ export function getNumberOrdinal(num: number|null): string {
     return num + "th";
 }
 
-export function truthyFilter<T>(x: T|null|undefined): x is T {
+export function truthyFilter<T>(x: T | null | undefined): x is T {
     return !!x
+}
+
+type IDType = {
+    id: string | null
+}
+
+export function checkID<T extends IDType>(x: T | null | undefined): x is T & { id: string } {
+    return !!x?.id;
 }
