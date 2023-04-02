@@ -67,7 +67,7 @@ export type ResultsNavigationProp = CompositeNavigationProp<
 
 
 export type FeaturedTournamentsScreenProps = CompositeScreenProps<
-    DrawerScreenProps<HomeDrawerParamList,  "Featured Tournaments">,
+    DrawerScreenProps<HomeDrawerParamList, "Featured Tournaments">,
     NativeStackScreenProps<RootStackParamList, "Home">
 >;
 
