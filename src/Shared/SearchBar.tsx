@@ -28,7 +28,7 @@ const SearchBarIcon = ({ selected, onBackPress }: { selected: boolean, onBackPre
 }
 
 type SearchBarProps = {
-    filter: string,
+    filter: string | null,
     filterAction: (filter: string) => void,
     setFilter?: (filter: string) => void,
     searchTitle?: string,
@@ -37,11 +37,10 @@ type SearchBarProps = {
 
 const SearchBar = ({ filter, setFilter, filterAction, searchTitle, style }: SearchBarProps) => {
 
-    const [selected, setSelected] = useState<boolean>(false);
+    const [selected, setSelected] = useState(false);
+    const [filterText, setFilterText] = useState(filter ?? "");
+
     const { colors } = useTheme();
-
-    const [filterText, setFilterText] = useState(filter);
-
 
 
     function handleFocus() {
