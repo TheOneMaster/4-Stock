@@ -1,12 +1,13 @@
-import { StyleSheet, View, Text, TouchableHighlight, TouchableOpacity } from "react-native"
-import { useNavigation, useTheme } from "@react-navigation/native"
+import { useNavigation, useTheme } from "@react-navigation/native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 
-import { APIImage, Participant, Standing } from "../../types";
-import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { User } from "../types";
-import { getNumberOrdinal } from "../../helper";
-import { MainText, SubtitleText } from "../../Shared/ThemedText";
+import { getNumberOrdinal, truthyFilter } from "../../helper";
 import { ResultsNavigationProp } from "../../navTypes";
+import { getImageByType } from "../../Shared/APIConverters";
+import PlaceholderImage from "../../Shared/PlaceholderImage";
+import { MainText, SubtitleText } from "../../Shared/ThemedText";
+import { Participant } from "../../types";
+import { ResultCardProps } from "./types";
 
 
 
@@ -20,10 +21,10 @@ function getImagesFromParticipants(participants: Participant[]): string[] {
     return images;
 }
 
-interface ResultCardProps {
-    playerData: Omit<Standing, "stats">
-    index: number
-}
+// interface ResultCardProps {
+//     playerData: Omit<Standing, "stats">
+//     index: number
+// }
 
 
 const ResultCard = ({ playerData, index }: ResultCardProps) => {
@@ -44,25 +45,19 @@ const ResultCard = ({ playerData, index }: ResultCardProps) => {
     if (playerData.player) {
         const player = playerData.player;
         const user = player.user;
+        const images = player.user?.images?.filter(truthyFilter) ?? []
 
-        let profileImage: string;
-        if (user) {
-            const image = user.images[0];
-            profileImage = image ? image.url : '';
-        } else {
-            profileImage = ''
+        const profileImage = getImageByType(images, "any")
+
+        const showUserProfile = () => {
+            navigator.push("Profile", { id: user?.id })
         }
-
-        function showUserProfile() {
-            navigator.push("Profile", { id: playerData.player.user.id })
-        }
-
 
         return (
             <TouchableOpacity onPress={showUserProfile} activeOpacity={0.75}>
                 <View style={containerStyle}>
                     <View style={styles.imageContainer}>
-                        <PlaceholderImage imageSrc={profileImage} placeholder='player' style={styles.image} />
+                        <PlaceholderImage imageSrc={profileImage.url} placeholder='player' style={styles.image} />
                     </View>
                     <View style={styles.detailsContainer}>
                         <View style={styles.playerTitle}>
@@ -78,8 +73,8 @@ const ResultCard = ({ playerData, index }: ResultCardProps) => {
     }
 
     // Teams (not singles) events
-    const entrant = playerData.entrant;
-    const participants = entrant.participants;
+    const entrant = playerData.entrant!;
+    const participants = entrant.participants?.filter(truthyFilter) ?? [];
     const images = getImagesFromParticipants(participants);
 
 

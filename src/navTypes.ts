@@ -24,12 +24,12 @@ export type RootStackParamList = {
 }
 
 export type EventTabParamList = {
+    Bracket: EventPageDetails,
+
     Results: {
-        standings: Entrant[],
-        id: number,
+        id: string,
         singles: boolean
-    },
-    Bracket: EventPageDetails
+    }
 }
 
 // Screen typing
