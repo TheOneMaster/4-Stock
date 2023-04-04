@@ -1,12 +1,13 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native"
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+
 import { EventDetailsQuery, queryAPI } from "../api";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
-import ResultsPage from "./Results/ResultsPage";
-import BracketPage from "./Bracket/BracketPage";
-import { EventDetails, EventPageDetails } from "../types";
 import { EventTabParamList, EventViewProps } from "../navTypes";
+import { EventDetails, EventPageDetails } from "../types";
+import BracketPage from "./Bracket/BracketPage";
+import ResultsPage from "./Results/ResultsPage";
 
 
 const Tab = createMaterialTopTabNavigator<EventTabParamList>();
@@ -44,7 +45,9 @@ const EventPage = ({ navigation, route }: EventViewProps) => {
     return (
         <Tab.Navigator>
             {data.standings && data.standings.nodes.length > 0 &&
-                <Tab.Screen name="Results" component={ResultsPage} initialParams={{ standings: data.standings.nodes, id: data.id, singles: singles }} />}
+                <Tab.Group>
+                    <Tab.Screen name="Results" component={ResultsPage} initialParams={{ id: data.id, singles: singles }} />
+                </Tab.Group>}
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
         </Tab.Navigator>
     )

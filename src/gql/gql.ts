@@ -2286,6 +2286,16 @@ export type EventDataQueryVariables = Exact<{
 
 export type EventDataQuery = { __typename?: 'Query', event: { __typename?: 'Event', id: string | null, name: string | null, isOnline: boolean | null, state: ActivityState | null, startAt: any | null, phases: Array<{ __typename?: 'Phase', id: string | null, name: string | null, bracketType: BracketType | null, phaseGroups: { __typename?: 'PhaseGroupConnection', nodes: Array<{ __typename?: 'PhaseGroup', id: string | null, displayIdentifier: string | null, wave: { __typename?: 'Wave', id: string | null } | null } | null> | null } | null } | null> | null, waves: Array<{ __typename?: 'Wave', id: string | null, identifier: string | null } | null> | null, standings: { __typename?: 'StandingConnection', nodes: Array<{ __typename?: 'Standing', id: string | null, placement: number | null, player?: { __typename?: 'Player', prefix: string | null, gamerTag: string | null, user: { __typename?: 'User', id: string | null, genderPronoun: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null, entrant?: { __typename?: 'Entrant', id: string | null, name: string | null, participants: Array<{ __typename?: 'Participant', user: { __typename?: 'User', images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null> | null } | null } | null> | null } | null } | null };
 
+export type EventResultsQueryVariables = Exact<{
+  ID: Scalars['ID'];
+  singles: Scalars['Boolean'];
+  page: Scalars['Int'];
+  name: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type EventResultsQuery = { __typename?: 'Query', event: { __typename?: 'Event', standings: { __typename?: 'StandingConnection', pageInfo: { __typename?: 'PageInfo', page: number | null } | null, nodes: Array<{ __typename?: 'Standing', id: string | null, placement: number | null, player?: { __typename?: 'Player', id: string | null, prefix: string | null, gamerTag: string | null, user: { __typename?: 'User', id: string | null, genderPronoun: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null, entrant?: { __typename?: 'Entrant', id: string | null, name: string | null, participants: Array<{ __typename?: 'Participant', user: { __typename?: 'User', images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null> | null } | null } | null> | null } | null } | null };
+
 export type FeaturedTournamentsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -2407,6 +2417,79 @@ export const useInfiniteEventDataQuery = <
 
 
 useInfiniteEventDataQuery.getKey = (variables: EventDataQueryVariables) => ['EventData.infinite', variables];
+;
+
+export const EventResultsDocument = `
+    query EventResults($ID: ID!, $singles: Boolean!, $page: Int!, $name: String) {
+  event(id: $ID) {
+    standings(query: {page: $page, filter: {search: {searchString: $name}}}) {
+      pageInfo {
+        page
+      }
+      nodes {
+        id
+        placement
+        player @include(if: $singles) {
+          id
+          prefix
+          gamerTag
+          user {
+            id
+            images(type: "profile") {
+              url
+            }
+            genderPronoun
+          }
+        }
+        entrant @skip(if: $singles) {
+          id
+          name
+          participants {
+            user {
+              images(type: "profile") {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useEventResultsQuery = <
+      TData = EventResultsQuery,
+      TError = unknown
+    >(
+      variables: EventResultsQueryVariables,
+      options?: UseQueryOptions<EventResultsQuery, TError, TData>
+    ) =>
+    useQuery<EventResultsQuery, TError, TData>(
+      ['EventResults', variables],
+      fetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument, variables),
+      options
+    );
+
+useEventResultsQuery.getKey = (variables: EventResultsQueryVariables) => ['EventResults', variables];
+;
+
+export const useInfiniteEventResultsQuery = <
+      TData = EventResultsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof EventResultsQueryVariables,
+      variables: EventResultsQueryVariables,
+      options?: UseInfiniteQueryOptions<EventResultsQuery, TError, TData>
+    ) =>{
+    
+    return useInfiniteQuery<EventResultsQuery, TError, TData>(
+      ['EventResults.infinite', variables],
+      (metaData) => fetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      options
+    )};
+
+
+useInfiniteEventResultsQuery.getKey = (variables: EventResultsQueryVariables) => ['EventResults.infinite', variables];
 ;
 
 export const FeaturedTournamentsDocument = `
