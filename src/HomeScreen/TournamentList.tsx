@@ -24,31 +24,23 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
     const [filters, setFilters] = useState<InputVariables>({
         name: "",
-
         afterDate: convertDateToUnixSeconds(subYears(new Date, 1)),
         beforeDate: convertDateToUnixSeconds(addMonths(new Date, 1)),
-
         page: 1
     });
 
     const queryClient = useQueryClient();
-
-
     const { data, status, isFetching, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.tournaments?.pageInfo?.page ? lastPage.tournaments.pageInfo.page + 1 : filters.page + 1
-            return {
-                page: nextPage
-            }
+            return {page: nextPage}
         }
     });
 
     const listData = data?.pages.map(page => page.tournaments?.nodes)
         .filter(truthyFilter)
         .flat()
-        .filter(truthyFilter)
         .filter(checkID)
-
         ?? [];
 
     function refresh() {
@@ -70,38 +62,37 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
     return (
         <View style={styles.container}>
             <FlatList
-                contentContainerStyle={{ flexGrow: 1 }}
+                // Main data rendering
                 data={listData}
-                renderItem={({ item, index }) => {
-                    if (!item || !item?.id) return null
-                    return <TournamentCard {...item} navigation={navigation} />
-                }}
-                keyExtractor={(tournament) => tournament?.id}
-                keyboardShouldPersistTaps="handled"
-                ListHeaderComponent={
-                    <View style={{ paddingHorizontal: 10 }}>
-                        <SearchBar filter={filters.name} filterAction={updateFilterName} />
-                    </View>
-                }
+                renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
+                contentContainerStyle={{ flexGrow: 1 }}
+                keyExtractor={(tournament) => tournament.id}
+                
+                // Header
+                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={updateFilterName} />}
+                ListHeaderComponentStyle={{paddingHorizontal: 10}}
+                
+                // Empty component
+                ListEmptyComponent={<EmptyTournamentList status={status} />}
+                
+                // Update/Refresh data 
+                refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
                 onEndReached={({ distanceFromEnd }) => {
                     if (distanceFromEnd >= 0.1) return;
                     fetchNextPage()
                 }}
-                refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
+                
+                // Misc. properties
                 showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<EmptyTournamentList status={status} />}
+                keyboardShouldPersistTaps="handled"
             />
         </View>
     )
-
-
 }
 
 
 
-function EmptyTournamentList(props: EmptyTournamentListProps) {
-
-    const { status } = props;
+function EmptyTournamentList({ status }: EmptyTournamentListProps) {
 
     let statusString = "";
 
@@ -119,7 +110,7 @@ function EmptyTournamentList(props: EmptyTournamentListProps) {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     centerView: {
         flex: 1,
