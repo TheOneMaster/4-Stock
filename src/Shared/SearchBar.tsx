@@ -104,8 +104,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        marginTop: 20,
-        marginBottom: 10,
         alignItems: 'center',
         borderRadius: 10,
         overflow: 'hidden'
