@@ -12,7 +12,7 @@ import { customDarkTheme, customLightTheme } from "./Themes";
 
 import TournamentView from './Tournament';
 import UserProfilePage from './Profile';
-import MainScreen from './HomeScreen';
+import MainScreen from './MainScreen';
 import EventView from './Event';
 
 LogBox.ignoreAllLogs();
