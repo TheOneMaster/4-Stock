@@ -1,34 +1,34 @@
-import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Entrant, FullEventDetails, EventPageDetails, APIImage, FullTournamentDetails } from "./types"
-import { CompositeNavigationProp, CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
 import { DrawerNavigationProp, DrawerScreenProps } from "@react-navigation/drawer"
-import { MaterialTopTabBarProps, MaterialTopTabNavigationProp, MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs"
+import { MaterialTopTabNavigationProp, MaterialTopTabScreenProps } from "@react-navigation/material-top-tabs"
+import { CompositeNavigationProp, CompositeScreenProps, NavigatorScreenParams } from "@react-navigation/native"
+import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
+import { EventDataQuery } from "./gql/gql"
+import { PropertyDetails } from "./helperTypes"
 
 // Navigator types
 export type HomeDrawerParamList = {
-    Tournaments: NavigatorScreenParams<RootStackParamList>
+    "Featured Tournaments": undefined
+    "Tournament Search": NavigatorScreenParams<RootStackParamList>
     Settings: undefined
     About: undefined
 }
 
+type IDProp = {id: string}
+
+type EventProp = IDProp &  {type: number}
+
+type Event = PropertyDetails<EventDataQuery, "event">
+
 export type RootStackParamList = {
     Home: undefined,
-    Tournament: {
-        tournamentDetails: Pick<FullTournamentDetails, "id" | "name" | "city" | "images"> & { date: number }
-    },
-    Event: Pick<FullEventDetails, "id" | "phases" | "type">
-    Profile: {
-        id: number
-    }
+    Tournament: IDProp,
+    Event: EventProp,
+    Profile: IDProp
 }
 
 export type EventTabParamList = {
-    Results: {
-        standings: Entrant[],
-        id: number,
-        singles: boolean
-    },
-    Bracket: EventPageDetails
+    Bracket: Pick<Event, "id"|"waves"|"phases"> & IDProp,
+    Results: EventProp
 }
 
 // Screen typing
@@ -39,15 +39,15 @@ export type UserProfileProps = NativeStackScreenProps<RootStackParamList, "Profi
 
 export type TournamentsTopBarNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<RootStackParamList, "Home">,
-    DrawerNavigationProp<HomeDrawerParamList, "Tournaments">
+    DrawerNavigationProp<HomeDrawerParamList, "Tournament Search">
 >
 
 export type TournamentListViewProps = CompositeScreenProps<
-    DrawerScreenProps<HomeDrawerParamList, "Tournaments">,
+    DrawerScreenProps<HomeDrawerParamList, "Tournament Search">,
     HomeScreenProps
 >;
 export type TournamentCardNavigationProp = CompositeNavigationProp<
-    DrawerNavigationProp<HomeDrawerParamList, "Tournaments">,
+    DrawerNavigationProp<HomeDrawerParamList, "Tournament Search">,
     NativeStackNavigationProp<RootStackParamList, "Home">
 >;
 
@@ -63,3 +63,14 @@ export type ResultsNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<RootStackParamList, "Event">,
     MaterialTopTabNavigationProp<EventTabParamList, "Results">
 >
+
+
+export type FeaturedTournamentsScreenProps = CompositeScreenProps<
+    DrawerScreenProps<HomeDrawerParamList, "Featured Tournaments">,
+    NativeStackScreenProps<RootStackParamList, "Home">
+>;
+
+export type FeaturedTournamentCardNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<HomeDrawerParamList, "Featured Tournaments">,
+    NativeStackNavigationProp<RootStackParamList, "Home">
+>;

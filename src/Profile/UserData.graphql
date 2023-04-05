@@ -1,0 +1,61 @@
+query UserDetails($ID: ID, $perPage: Int) {
+  user(id: $ID) {
+    id
+    genderPronoun
+    images {
+      id
+      type
+      url
+    }
+    location {
+      country
+      state
+    }
+    player {
+      gamerTag
+      prefix
+      user {
+        id
+        name
+      }
+    }
+    events(query: { perPage: $perPage }) {
+      nodes {
+        id
+        name
+        tournament {
+          id
+          name
+          images(type: "profile") {
+            url
+          }
+        }
+        userEntrant(userId: $ID) {
+          standing {
+            id
+            placement
+          }
+        }
+      }
+    }
+    tournaments(query: { perPage: $perPage }) {
+      nodes {
+        id
+        name
+        images(type: "profile") {
+          url
+        }
+      }
+    }
+    leagues(query: { perPage: $perPage }) {
+      nodes {
+        id
+        name
+        images(type: "profile") {
+          height
+          url
+        }
+      }
+    }
+  }
+}

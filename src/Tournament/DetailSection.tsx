@@ -1,13 +1,9 @@
 import { StyleSheet, View } from "react-native";
 import { convertDateToString } from "../helper";
 import { MainText } from "../Shared/ThemedText";
-import { FullTournamentDetails } from "../types";
+import { DetailsSectionProps } from "./types";
 
-function DetailSection(props: FullTournamentDetails) {
-    if (Object.keys(props).length === 0) {
-        return null;
-    }
-
+function DetailSection(props: DetailsSectionProps) {
     const startDate = convertDateToString(props.startAt);
     const lastDateRegister = convertDateToString(props.eventRegistrationClosesAt);
 

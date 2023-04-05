@@ -1,32 +1,18 @@
 import { useTheme } from "@react-navigation/native";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
-import { convertDateToString } from "../helper";
-import { TournamentCardNavigationProp } from "../navTypes";
-import { APIImage } from "../types";
+import { convertDateToString, truthyFilter } from "../helper";
 
+import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
+import { TournamentCardProps } from "./types";
 
+export const TournamentCard = ({ id, name, city, startAt, images, navigation, style, ...props }: TournamentCardProps) => {
+    const dateString = startAt ? convertDateToString(startAt) : "Date not provided";
 
-type TournamentCardProps = {
-    id: number,
-    name: string,
-    city: string,
-    startAt: number,
-    images: APIImage[],
-    navigation: TournamentCardNavigationProp,
-    style?: StyleProp<ViewStyle>
-}
-
-export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
-    const dateString = convertDateToString(startAt);
-    const profile_image = images.reduce((prev, cur) => {
-        if (cur.type === 'profile') {
-            return cur;
-        }
-        return prev;
-    }, {} as APIImage);
+    const usableImages = images?.filter(truthyFilter) ?? [];
+    const profile_image = getImageByType(usableImages, "profile")
 
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
@@ -43,24 +29,14 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
     });
 
     function navigateToTournament() {
-        console.log(id);
-
-        const tournamentDetails = {
-            id: id,
-            name: name,
-            city: city,
-            date: startAt,
-            images: images
-        }
-
-        navigation.navigate("Tournament", { tournamentDetails: tournamentDetails });
+        navigation.push("Tournament", { id: id });
     }
 
     return (
         <Pressable style={style} onPress={navigateToTournament}>
             <View style={[styles.container, colorCSS.container]}>
                 <View style={styles.imageContainer}>
-                    <PlaceholderImage style={styles.image} imageSrc={profile_image.url} />
+                    <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} />
                 </View>
                 <View style={styles.textBox}>
                     <MainText style={styles.title}>{name}</MainText>

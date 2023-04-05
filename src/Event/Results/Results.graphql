@@ -1,0 +1,38 @@
+query EventResults($ID: ID!, $singles: Boolean!, $page: Int!, $name: String) {
+  event(id: $ID) {
+    standings(
+      query: { page: $page, filter: { search: { searchString: $name } } }
+    ) {
+      pageInfo {
+        page
+      }
+      nodes {
+        id
+        placement
+        player @include(if: $singles) {
+          id
+          prefix
+          gamerTag
+          user {
+            id
+            images(type: "profile") {
+              url
+            }
+            genderPronoun
+          }
+        }
+        entrant @skip(if: $singles) {
+          id
+          name
+          participants {
+            user {
+              images(type: "profile") {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,60 +1,54 @@
 import { useTheme } from "@react-navigation/native";
-import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { useUserDetailsQuery } from "../gql/gql";
 
-import { queryAPI, userDetailsQuery } from "../api";
 import { UserProfileProps } from "../navTypes";
-import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "../Shared/APIConverters";
 import DetailsCarousel from "../Shared/DetailsCarousel/DetailsCarousel";
+import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "./api";
 import { MainText } from "../Shared/ThemedText";
-import { UserDetails, UserProfileData } from "../types";
 import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {
-    const [loading, setLoading] = useState(true);
-    const [profileDetails, setProfileDetails] = useState<UserProfileData>(null);
     const { colors } = useTheme();
+    const { data, isLoading, isError, isFetching } = useUserDetailsQuery({ ID: route.params.id.toString(), perPage: 10 });
 
-    useEffect(() => {
-        // Get user details from ID
-
-        const body = userDetailsQuery(route.params.id);
-        const query = queryAPI(body) as Promise<UserDetails>;
-
-        query.then(userDetails => {
-            setProfileDetails(userDetails.user);
-            setLoading(false);
-        })
-    }, [])
-
-    if (loading) return (
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    if (isLoading) return (
+        <View style={styles.centerView}>
             <MainText>Loading...</MainText>
+        </View>
+    )
+
+    if (isError || data.user === null) return (
+        <View style={styles.centerView}>
+            <MainText>Error loading profile details</MainText>
         </View>
     )
 
     return (
         <View style={styles.container}>
-            <ProfileHeader profileDetails={profileDetails} />
+            <ProfileHeader profileDetails={data.user} />
 
             <View style={styles.infoSection}>
                 <DetailsCarousel
                     style={{ marginTop: 10 }}
-                    data={convertUserEventToCarouselItem(profileDetails.events.nodes, colors.primary)}
+                    data={convertUserEventToCarouselItem(data.user.events?.nodes ?? [], colors.primary)}
                     title="Previous Events"
                     emptyText="No events found"
                 />
 
                 <DetailsCarousel
                     style={styles.carousel}
-                    data={convertTournamentToCarouselItem(profileDetails.tournaments.nodes)}
+                    data={convertTournamentToCarouselItem(data.user.tournaments?.nodes ?? [])}
                     title="Tournaments"
                     emptyText="No tournaments found"
+                    navigation={(id: string) => {
+                        navigation.push("Tournament", { id: id })
+                    }}
                 />
 
                 <DetailsCarousel
                     style={styles.carousel}
-                    data={convertLeagueToCarouselItem(profileDetails.leagues.nodes)}
+                    data={convertLeagueToCarouselItem(data.user.leagues?.nodes ?? [])}
                     title="Leagues"
                     emptyText="No leagues found"
                 />
@@ -75,6 +69,11 @@ const styles = StyleSheet.create({
     },
     carousel: {
         marginTop: 30
+    },
+    centerView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
     }
 })
 

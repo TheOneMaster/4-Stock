@@ -7,56 +7,6 @@ import { APIQuery, PhaseGroupSetInfo, PhaseGroupSets, StorageVariables } from ".
 
 // API Query functions
 
-export function tournamentDetailsQuery(Id: number): string {
-  const query = `
-    query getTournamentDetails($ID: ID!) {
-        tournament(id: $ID) {
-          id
-          name
-          city
-          countryCode
-          currency
-          eventRegistrationClosesAt
-          events {
-            id
-            type
-            name
-            phases {
-                id
-            }
-            videogame {
-              id
-              displayName
-              images {
-                id
-                type
-                url
-              }
-            }
-          }
-          isRegistrationOpen
-          mapsPlaceId
-          numAttendees
-          primaryContact
-          primaryContactType
-          startAt
-          venueName
-          venueAddress
-          images {
-            id
-            type
-            url
-          }
-        }
-      }`
-
-  const variables = {
-    "ID": Id,
-  }
-
-  return JSON.stringify({ query, variables });
-}
-
 export function EventDetailsQuery(Id: number, singles = true): string {
   const query = `
     query getEventData($id: ID, $singles: Boolean!) {

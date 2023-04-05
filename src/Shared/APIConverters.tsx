@@ -1,71 +1,34 @@
-import { Text } from "react-native";
-import { getNumberOrdinal } from "../helper";
-import { BasicTournamentDetails, APIImage, League, UserEvent, APIImageType } from "../types";
-import { CarouselDataItem } from "./DetailsCarousel/types";
-import { MainText } from "./ThemedText";
+import { Image } from "../gql/gql";
 
+/**
+ * Returns an image from an array of images based on the type of the image.
+ * @param images Array of images
+ * @param type The type of the image to be returned as a string. If any image is acceptable, pass "any" to the function
+ * @returns Image with url
+ */
+export function getImageByType<Type extends Pick<Image, "url">>(images: Type[], type: "any"): Type | Pick<Image, "url">;
+export function getImageByType<Type extends Pick<Image, "type" | "url">>(images: Type[], type: string | string[]): Type | Pick<Image, "url">;
+export function getImageByType<Type extends Pick<Image, "type" | "url">>(
+    images: Type[],
+    type: string | string[]
+): Type | Pick<Image, "url"> {
+    const finalImage = images.reduce<Type | null>((prev, cur) => {
+        let typeMatch: boolean
+        if (typeof type === "string") {
+            if (type === "any") {
+                typeMatch = true;
+            } else {
+                typeMatch = cur.type === type;
+            }
+        } else {
+            typeMatch = type.includes(cur.type ?? "");
+        }
 
-export function getImageByType(images: APIImage[], type: APIImageType): APIImage {
-    return images.reduce((prev, cur) => {
-        if (cur.type === type) return cur
+        if (typeMatch) return cur
         return prev
     }, null)
-}
 
-export function convertUserEventToCarouselItem(events: UserEvent[], activeColor?: string): CarouselDataItem[] {
-    return events.reduce((prev, cur) => {
-        const image = cur.tournament.images.reduce((prev, cur) => {
-            return cur
-        }, null);
+    if (finalImage) return finalImage
 
-        const subtitleNode = cur.userEntrant.standing
-            ? (
-                <Text style={{ flexWrap: "wrap", flexShrink: 1 }}>
-                    <MainText>{getNumberOrdinal(cur.userEntrant.standing.placement).toString()}</MainText>
-                    <MainText> at </MainText>
-                    <Text style={{ color: activeColor }}>{cur.name}</Text>
-                </Text>
-            )
-            : <Text style={{ color: activeColor, flexWrap: "wrap", flexShrink: 1 }}>{cur.name}</Text>
-
-        const dataItem: CarouselDataItem = {
-            title: cur.tournament.name,
-            image: image ?? { url: "" },
-            dataType: "tournament",
-            subtitleItem: subtitleNode
-        }
-
-        prev.push(dataItem);
-
-        return prev
-    }, [])
-
-
-
-}
-
-export function convertTournamentToCarouselItem(tournaments: Pick<BasicTournamentDetails, "id" | "images" | "name">[]): CarouselDataItem[] {
-    return tournaments.reduce((prev, cur) => {
-        const image = cur.images.reduce((prev, cur) => cur, null);
-        const dataItem: CarouselDataItem = {
-            dataType: "tournament",
-            image: image ?? { url: "" },
-            title: cur.name
-        }
-        prev.push(dataItem);
-        return prev
-    }, [])
-}
-
-export function convertLeagueToCarouselItem(leagues: League[]): CarouselDataItem[] {
-    return leagues.reduce((prev, cur) => {
-        const image = cur.images.reduce((prev, cur) => cur, null);
-        const item: CarouselDataItem = {
-            dataType: "tournament",
-            title: cur.name,
-            image: image ?? { url: "" }
-        }
-        prev.push(item);
-        return prev
-    }, [])
+    return { url: "" }
 }
