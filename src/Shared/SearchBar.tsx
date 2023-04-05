@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Keyboard, StyleProp, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle } from "react-native";
 import { BackIcon, MagnifyingGlassIcon } from "./SVG";
 
@@ -41,6 +41,12 @@ const SearchBar = ({ filter, setFilter, filterAction, searchTitle, style }: Sear
     const [filterText, setFilterText] = useState(filter ?? "");
 
     const { colors } = useTheme();
+
+    useEffect(() => {
+        if (typeof filter === "string" && filter !== filterText) {
+            setFilterText(filter);
+        }
+    }, [filter])
 
 
     function handleFocus() {
