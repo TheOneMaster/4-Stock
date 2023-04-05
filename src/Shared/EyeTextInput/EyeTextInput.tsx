@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
         // backgroundColor: "red"
     },
     eyeBox: {
+        marginLeft: "auto",
         padding: 5,
         zIndex: 1,
         // backgroundColor: "green"
