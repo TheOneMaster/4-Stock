@@ -1,6 +1,7 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { UseQueryResult } from "@tanstack/react-query";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { useTheme } from "@react-navigation/native";
 
 import { useEventDataQuery } from "../gql/gql";
 import { EventTabParamList, EventViewProps } from "../navTypes";
@@ -19,8 +20,9 @@ function EventView({ navigation, route }: EventViewProps) {
     }
 
     const { data, status } = useEventDataQuery(eventParams);
+    const { colors } = useTheme();
 
-    if (status !== "success") return <EmptyEventView status={status} />
+    if (status !== "success") return <EmptyEventView status={status} color={colors.primary} />
 
     return (
         <Tab.Navigator>
@@ -38,16 +40,15 @@ function EventView({ navigation, route }: EventViewProps) {
 
 interface EmptyEventViewProps {
     status: Exclude<UseQueryResult['status'], "success">
+    color: string
 }
 
-function EmptyEventView({ status }: EmptyEventViewProps) {
-    let statusString = "";
-    if (status === "error") statusString = "Error retreiving event details";
-    if (status === "loading") statusString = "Loading event details";
-
+function EmptyEventView({ status, color }: EmptyEventViewProps) {
     return (
         <View style={styles.centerView}>
-            <MainText>{statusString}</MainText>
+            {status === "loading"
+                ? <ActivityIndicator size="large" color={color} />
+                : <MainText>Error retrieving event details</MainText>}
         </View>
     )
 }
