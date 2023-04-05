@@ -12,7 +12,7 @@ import { customDarkTheme, customLightTheme } from "./Themes";
 
 import TournamentView from './Tournament';
 import UserProfilePage from './Profile';
-import HomeScreen from './HomeScreen';
+import MainScreen from './HomeScreen';
 import EventView from './Event';
 
 LogBox.ignoreAllLogs();
@@ -30,7 +30,7 @@ function App() {
       <NavigationContainer theme={colorTheme}>
         <StatusBar animated={true} backgroundColor={colorTheme.colors.primary} translucent={false} />
         <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Home" component={MainScreen} />
           <Stack.Screen name="Tournament" component={TournamentView} />
           <Stack.Screen name="Event" component={EventView} />
           <Stack.Screen name="Profile" component={UserProfilePage} />

@@ -12,7 +12,7 @@ import AboutPage from "../About";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
-const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
+const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
     const { colors } = useTheme();
 
@@ -39,4 +39,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default HomeScreen;
+export default MainScreen;
