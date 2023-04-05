@@ -1,10 +1,6 @@
-query EventData($id: ID, $singles: Boolean!) {
+query EventData($id: ID) {
   event(id: $id) {
     id
-    name
-    isOnline
-    state
-    startAt
     phases {
       id
       name
@@ -22,34 +18,6 @@ query EventData($id: ID, $singles: Boolean!) {
     waves {
       id
       identifier
-    }
-    standings(query: { page: 1, perPage: 24 }) {
-      nodes {
-        id
-        placement
-        player @include(if: $singles) {
-          prefix
-          gamerTag
-          user {
-            id
-            images(type: "profile") {
-              url
-            }
-            genderPronoun
-          }
-        }
-        entrant @skip(if: $singles) {
-          id
-          name
-          participants {
-            user {
-              images(type: "profile") {
-                url
-              }
-            }
-          }
-        }
-      }
     }
   }
 }

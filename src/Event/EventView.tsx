@@ -1,70 +1,64 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useTheme } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { UseQueryResult } from "@tanstack/react-query";
+import { StyleSheet, View } from "react-native";
 
-import { EventDetailsQuery, queryAPI } from "../api";
+import { useEventDataQuery } from "../gql/gql";
 import { EventTabParamList, EventViewProps } from "../navTypes";
-import { EventDetails, EventPageDetails } from "../types";
+import { MainText } from "../Shared/ThemedText";
 import BracketPage from "./Bracket/BracketPage";
 import ResultsPage from "./Results/ResultsPage";
 
-
 const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
-const EventPage = ({ navigation, route }: EventViewProps) => {
 
-    const [data, setData] = useState({} as EventPageDetails);
-    const [loading, setLoading] = useState(true);
+function EventView({ navigation, route }: EventViewProps) {
 
-    const singles = route.params.type === 1;
-    const firstPhase = route.params.phases[0];
-
-    const { colors } = useTheme();
-
-    useEffect(() => {
-        const eventId = route.params.id;
-        const queryBody = EventDetailsQuery(eventId, singles);
-        const queryData = queryAPI(queryBody) as Promise<EventDetails>;
-        queryData.then(details => {
-            setData(details.event)
-            setLoading(false);
-        });
-    }, []);
-
-
-    if (loading) {
-        // Default view before data is loaded
-        return (
-            <View style={styles.loading}>
-                <ActivityIndicator color={colors.primary} size='large' />
-            </View>
-        )
+    const eventParams = {
+        id: route.params.id,
+        singles: route.params.type === 1
     }
+
+    const { data, status } = useEventDataQuery(eventParams);
+
+    if (status !== "success") return <EmptyEventView status={status} />
 
     return (
         <Tab.Navigator>
-            {data.standings && data.standings.nodes.length > 0 &&
-                <Tab.Group>
-                    <Tab.Screen name="Results" component={ResultsPage} initialParams={{ id: data.id, singles: singles }} />
-                </Tab.Group>}
-            <Tab.Screen name="Bracket" component={BracketPage} initialParams={data} />
+
+            <Tab.Screen name="Results" component={ResultsPage} initialParams={eventParams} />
+            <Tab.Screen name="Bracket" component={BracketPage} initialParams={{
+                id: route.params.id,
+                phases: data.event?.phases,
+                waves: data.event?.waves
+            }} />
+
         </Tab.Navigator>
     )
-};
+}
 
+interface EmptyEventViewProps {
+    status: Exclude<UseQueryResult['status'], "success">
+}
+
+function EmptyEventView({ status }: EmptyEventViewProps) {
+    let statusString = "";
+    if (status === "error") statusString = "Error retreiving event details";
+    if (status === "loading") statusString = "Loading event details";
+
+    return (
+        <View style={styles.centerView}>
+            <MainText>{statusString}</MainText>
+        </View>
+    )
+}
 
 
 const styles = StyleSheet.create({
-    container: {
+    centerView: {
         flex: 1,
-        margin: 'auto'
-    },
-    loading: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: "center",
+        alignItems: "center"
     }
 });
 
-export default EventPage;
+export default EventView;
