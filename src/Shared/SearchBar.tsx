@@ -1,6 +1,6 @@
-import { Button, Image, Keyboard, NativeSyntheticEvent, StyleProp, StyleSheet, TextInput, TextInputFocusEventData, TouchableHighlight, TouchableOpacity, View, ViewStyle } from "react-native"
 import { useTheme } from "@react-navigation/native";
 import { useState } from "react";
+import { Button, Keyboard, StyleProp, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle } from "react-native";
 import { BackIcon, MagnifyingGlassIcon } from "./SVG";
 
 const SearchBarIcon = ({ selected, onBackPress }: { selected: boolean, onBackPress: () => void }) => {
