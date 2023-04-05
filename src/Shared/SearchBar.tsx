@@ -86,7 +86,7 @@ const SearchBar = ({ filter, setFilter, filterAction, searchTitle, style }: Sear
                     value={filterText}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    onSubmitEditing={Keyboard.dismiss}
+                    onSubmitEditing={buttonClick}
                     onChangeText={handleTextChange}
                 />
             </View>
