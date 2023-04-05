@@ -2280,11 +2280,10 @@ export type WaveUpsertInput = {
 
 export type EventDataQueryVariables = Exact<{
   id: InputMaybe<Scalars['ID']>;
-  singles: Scalars['Boolean'];
 }>;
 
 
-export type EventDataQuery = { __typename?: 'Query', event: { __typename?: 'Event', id: string | null, name: string | null, isOnline: boolean | null, state: ActivityState | null, startAt: any | null, phases: Array<{ __typename?: 'Phase', id: string | null, name: string | null, bracketType: BracketType | null, phaseGroups: { __typename?: 'PhaseGroupConnection', nodes: Array<{ __typename?: 'PhaseGroup', id: string | null, displayIdentifier: string | null, wave: { __typename?: 'Wave', id: string | null } | null } | null> | null } | null } | null> | null, waves: Array<{ __typename?: 'Wave', id: string | null, identifier: string | null } | null> | null, standings: { __typename?: 'StandingConnection', nodes: Array<{ __typename?: 'Standing', id: string | null, placement: number | null, player?: { __typename?: 'Player', prefix: string | null, gamerTag: string | null, user: { __typename?: 'User', id: string | null, genderPronoun: string | null, images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null, entrant?: { __typename?: 'Entrant', id: string | null, name: string | null, participants: Array<{ __typename?: 'Participant', user: { __typename?: 'User', images: Array<{ __typename?: 'Image', url: string | null } | null> | null } | null } | null> | null } | null } | null> | null } | null } | null };
+export type EventDataQuery = { __typename?: 'Query', event: { __typename?: 'Event', id: string | null, phases: Array<{ __typename?: 'Phase', id: string | null, name: string | null, bracketType: BracketType | null, phaseGroups: { __typename?: 'PhaseGroupConnection', nodes: Array<{ __typename?: 'PhaseGroup', id: string | null, displayIdentifier: string | null, wave: { __typename?: 'Wave', id: string | null } | null } | null> | null } | null } | null> | null, waves: Array<{ __typename?: 'Wave', id: string | null, identifier: string | null } | null> | null } | null };
 
 export type EventResultsQueryVariables = Exact<{
   ID: Scalars['ID'];
@@ -2328,13 +2327,9 @@ export type TournamentDetailsQuery = { __typename?: 'Query', tournament: { __typ
 
 
 export const EventDataDocument = `
-    query EventData($id: ID, $singles: Boolean!) {
+    query EventData($id: ID) {
   event(id: $id) {
     id
-    name
-    isOnline
-    state
-    startAt
     phases {
       id
       name
@@ -2353,34 +2348,6 @@ export const EventDataDocument = `
       id
       identifier
     }
-    standings(query: {page: 1, perPage: 24}) {
-      nodes {
-        id
-        placement
-        player @include(if: $singles) {
-          prefix
-          gamerTag
-          user {
-            id
-            images(type: "profile") {
-              url
-            }
-            genderPronoun
-          }
-        }
-        entrant @skip(if: $singles) {
-          id
-          name
-          participants {
-            user {
-              images(type: "profile") {
-                url
-              }
-            }
-          }
-        }
-      }
-    }
   }
 }
     `;
@@ -2388,16 +2355,16 @@ export const useEventDataQuery = <
       TData = EventDataQuery,
       TError = unknown
     >(
-      variables: EventDataQueryVariables,
+      variables?: EventDataQueryVariables,
       options?: UseQueryOptions<EventDataQuery, TError, TData>
     ) =>
     useQuery<EventDataQuery, TError, TData>(
-      ['EventData', variables],
+      variables === undefined ? ['EventData'] : ['EventData', variables],
       fetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument, variables),
       options
     );
 
-useEventDataQuery.getKey = (variables: EventDataQueryVariables) => ['EventData', variables];
+useEventDataQuery.getKey = (variables?: EventDataQueryVariables) => variables === undefined ? ['EventData'] : ['EventData', variables];
 ;
 
 export const useInfiniteEventDataQuery = <
@@ -2405,18 +2372,18 @@ export const useInfiniteEventDataQuery = <
       TError = unknown
     >(
       pageParamKey: keyof EventDataQueryVariables,
-      variables: EventDataQueryVariables,
+      variables?: EventDataQueryVariables,
       options?: UseInfiniteQueryOptions<EventDataQuery, TError, TData>
     ) =>{
     
     return useInfiniteQuery<EventDataQuery, TError, TData>(
-      ['EventData.infinite', variables],
+      variables === undefined ? ['EventData.infinite'] : ['EventData.infinite', variables],
       (metaData) => fetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument, {...variables, ...(metaData.pageParam ?? {})})(),
       options
     )};
 
 
-useInfiniteEventDataQuery.getKey = (variables: EventDataQueryVariables) => ['EventData.infinite', variables];
+useInfiniteEventDataQuery.getKey = (variables?: EventDataQueryVariables) => variables === undefined ? ['EventData.infinite'] : ['EventData.infinite', variables];
 ;
 
 export const EventResultsDocument = `
