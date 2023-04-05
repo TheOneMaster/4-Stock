@@ -11,8 +11,8 @@ interface SettingsGroupProps {
 
 function SettingsGroup(props: SettingsGroupProps) {
 
-    const {colors} = useTheme();
-    const {children, title} = props ;
+    const { colors } = useTheme();
+    const { children, title } = props;
 
     const colorCSS = StyleSheet.create({
         container: {
@@ -32,12 +32,25 @@ function SettingsGroup(props: SettingsGroupProps) {
             <MainText style={styles.title}>{title}</MainText>
             <View style={styles.innerContainer}>
                 {
-                    React.Children.map(children, (child, index) => (
-                            <View style={index === totalChildren - 1 ? [styles.setting, styles.finalSetting, colorCSS.children] : [styles.setting, colorCSS.children]}>
+                    // React.Children.map(children, (child, index) => (
+                    //     <View style={index === totalChildren - 1 ? [styles.setting, styles.finalSetting, colorCSS.children] : [styles.setting, colorCSS.children]}>
+                    //         {child}
+                    //     </View>
+                    // )
+                    // )
+                    React.Children.map(children, (child, index) => {
+                        const isFinalChild = index === totalChildren - 1;
+
+                        if (isFinalChild) return child;
+
+                        return (
+                            <>
                                 {child}
-                            </View>
+                                <View style={{ marginVertical: 2.5 }} />
+                            </>
                         )
-                    )
+
+                    })
                 }
             </View>
         </View>
