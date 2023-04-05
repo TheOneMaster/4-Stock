@@ -33,7 +33,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
     const { data, status, isFetching, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.tournaments?.pageInfo?.page ? lastPage.tournaments.pageInfo.page + 1 : filters.page + 1
-            return {page: nextPage}
+            return { page: nextPage }
         }
     });
 
@@ -67,21 +67,21 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
                 contentContainerStyle={{ flexGrow: 1 }}
                 keyExtractor={(tournament) => tournament.id}
-                
+
                 // Header
                 ListHeaderComponent={<SearchBar filter={filters.name} filterAction={updateFilterName} />}
-                ListHeaderComponentStyle={{paddingHorizontal: 10}}
-                
+                ListHeaderComponentStyle={{ padding: 10 }}
+
                 // Empty component
                 ListEmptyComponent={<EmptyTournamentList status={status} />}
-                
+
                 // Update/Refresh data 
                 refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
                 onEndReached={({ distanceFromEnd }) => {
                     if (distanceFromEnd >= 0.1) return;
                     fetchNextPage()
                 }}
-                
+
                 // Misc. properties
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
