@@ -9,10 +9,15 @@ import { getPGroupSetInfo } from "../../api";
 import { MainText } from "../../Shared/ThemedText";
 import BracketFilters from "./BracketFilters";
 import BracketSetsList from "./BracketSetsList";
-import { convertAPITimeToDate } from "../../helper";
+import { convertAPITimeToDate, truthyFilter } from "../../helper";
 
 const BracketPage = ({ navigation, route }: BracketViewProps) => {
 
+    const id = route.params.id;
+    const phases = route.params.phases?.filter(truthyFilter) ?? [];
+    const waves = route.params.waves?.filter(truthyFilter) ?? [];
+
+    const [loading, setLoading] = useState(true);
     const [pGroupInfo, setPGroupInfo] = useState<PhaseGroupSetInfo>({
         id: null,
         phaseID: null,
@@ -20,9 +25,8 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         startAt: null,
         state: null
     });
-    const [loading, setLoading] = useState(true);
 
-    if (route.params.phases.length === 0) {
+    if (phases.length === 0) {
         return (
             <View style={styles.default}>
                 <View style={styles.centerText}>
@@ -31,10 +35,6 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
             </View>
         )
     }
-
-    useEffect(() => {
-        console.log(pGroupInfo.startAt)
-    }, [pGroupInfo])
 
     function updatePGroupInfo(selectedPGroup: PhaseGroup, selectedPhase: Phase) {
         const controller = new AbortController();

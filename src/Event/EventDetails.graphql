@@ -1,0 +1,23 @@
+query EventData($id: ID) {
+  event(id: $id) {
+    id
+    phases {
+      id
+      name
+      bracketType
+      phaseGroups {
+        nodes {
+          id
+          displayIdentifier
+          wave {
+            id
+          }
+        }
+      }
+    }
+    waves {
+      id
+      identifier
+    }
+  }
+}

@@ -1,0 +1,21 @@
+query TournamentListData($name: String, $afterDate: Timestamp, $beforeDate: Timestamp, $page: Int!) {
+  tournaments(
+    query: {page: $page, perPage: 25, filter: {name: $name, afterDate: $afterDate, beforeDate: $beforeDate}}
+  ) {
+    pageInfo {
+      page
+    }
+    nodes {
+      id
+      name
+      city
+      startAt
+      numAttendees
+      images {
+        id
+        type
+        url
+      }
+    }
+  }
+}

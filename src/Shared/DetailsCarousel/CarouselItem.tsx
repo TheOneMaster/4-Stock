@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import PlaceholderImage from "../PlaceholderImage";
@@ -18,30 +18,40 @@ function CarouselItem(props: CarouselItemProps) {
         }
     })
 
+    function handleClick() {
+        console.log(`${props.item.dataType} - ${props.item.id}`);
+        if (props.navigation) {
+            props.navigation(props.item.id);
+        }
+    }
+
 
     return (
-        <View style={[styles.container, colorCSS.container]}>
 
-            <View style={[styles.tournamentImageContainer, colorCSS.imageContainer]}>
-                <PlaceholderImage imageSrc={props.item.image.url} placeholder={props.item.dataType} style={styles.tournamentImage} />
+        <Pressable onPress={handleClick} android_ripple={{ color: colors.primary, foreground: true, borderless: true }} style={styles.pressableContainer} disabled={props.navigation === undefined}>
+            <View style={[styles.container, colorCSS.container]}>
+
+                <View style={[styles.tournamentImageContainer, colorCSS.imageContainer]}>
+                    <PlaceholderImage imageSrc={props.item.image} placeholder="tournament" style={styles.tournamentImage} />
+                </View>
+
+                <View style={styles.textBox}>
+                    <MainText style={styles.title} numberOfLines={2}>{props.item.title}</MainText>
+
+                    {props.item.subtitle
+                        ? <View style={styles.subtitleContainer}>
+                            <MainText style={styles.subtitle} numberOfLines={2}>{props.item.subtitle}</MainText>
+                        </View>
+                        : null}
+
+                    {props.item.subtitleItem
+                        ? props.item.subtitleItem
+                        : null}
+
+                </View>
+
             </View>
-
-            <View style={styles.textBox}>
-                <MainText style={styles.title} numberOfLines={2}>{props.item.title}</MainText>
-
-                {props.item.subtitle
-                    ? <View style={styles.subtitleContainer}>
-                        <MainText style={styles.subtitle} numberOfLines={2}>{props.item.subtitle}</MainText>
-                    </View>
-                    : null}
-
-                {props.item.subtitleItem
-                    ? props.item.subtitleItem
-                    : null}
-
-            </View>
-
-        </View>
+        </Pressable>
     )
 
 
@@ -57,9 +67,11 @@ export function CarouselEmptyText(props: CarouselEmptyTextProps) {
     )
 }
 
-
-
 const styles = StyleSheet.create({
+    pressableContainer: {
+        borderRadius: 10,
+        overflow: 'hidden'
+    },
     container: {
         flexDirection: "row",
         padding: 10,

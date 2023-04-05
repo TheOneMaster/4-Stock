@@ -1,128 +1,113 @@
-import { useTheme } from "@react-navigation/native";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
-import { EventStandingsQuery, queryAPI } from "../../api";
+import { EventResultsQueryVariables, useInfiniteEventResultsQuery } from "../../gql/gql";
+
+import { checkID, truthyFilter } from "../../helper";
+import { ResultsViewProps } from "../../navTypes";
 import SearchBar from "../../Shared/SearchBar";
-import { Entrant, EventDetails, ResultsDetails } from "../../types";
+import { MainText } from "../../Shared/ThemedText";
 import ResultCard from "./ResultCard";
 
-const PER_PAGE = 24    // Show 24 players per page (instead of the default 25).
+function ResultsPage({ navigation, route }: ResultsViewProps) {
 
-const ResultsPage = ({ navigation, route }) => {
+    const [filters, setFilters] = useState<EventResultsQueryVariables>({
+        ID: route.params.id,
+        singles: route.params.singles,
+        name: "",
+        page: 1
+    });
 
-    // UI state 
-    const [refresh, setRefresh] = useState(false);
-    const [updating, setUpdating] = useState(false);
-    const [finished, setFinished] = useState(false);
-
-    // Data state
-    const [standings, setStandings] = useState(route.params.standings as Entrant[]);
-    const [page, setPage] = useState(1);
-    const [filter, setFilter] = useState('');
-
-    // Constants
-    const eventId = route.params.id;
-    const singles = route.params.singles;
-    const { colors } = useTheme();
-
-    async function addPlacements() {
-        setUpdating(true);
-
-        const queryBody = EventStandingsQuery(eventId, PER_PAGE, page, singles, filter);
-        const data = await queryAPI(queryBody) as ResultsDetails;
-
-        const event_standings = data.event.standings.nodes;
-
-        if (event_standings.length > 0) {
-            setStandings(prevData => [...prevData, ...event_standings])
-        } else {
-            console.log('No more players');
-            setFinished(true);
+    const { data, isLoading, status, fetchNextPage } = useInfiniteEventResultsQuery("page", filters, {
+        getNextPageParam: (lastPage, pages) => {
+            const currentPage = lastPage.event?.standings?.pageInfo?.page;
+            const nextPage = currentPage ? currentPage + 1 : filters.page + 1;
+            return {
+                page: nextPage
+            }
         }
+    });
+    const queryClient = useQueryClient();
 
-        setUpdating(false);
+    const allResults = data?.pages.map(page => page.event?.standings?.nodes)
+        .filter(truthyFilter)
+        .flat()
+        .filter(checkID)
+        ?? [];
+
+    function updateNameFilter(name: string) {
+        if (name === filters.name) return
+
+        const newFilter = Object.assign({}, filters);
+        newFilter.name = name;
+
+        setFilters(newFilter);
     }
 
-    async function filterEntrants() {
-        setUpdating(true);
-        setFinished(false);
-        setPage(1);
-
-        const queryBody = EventStandingsQuery(eventId, PER_PAGE, 1, singles, filter);
-        const data = await queryAPI(queryBody) as EventDetails;
-        const event_standings = data.event.standings;
-
-        const standings = event_standings ? event_standings.nodes : [] as Entrant[];
-
-        setStandings(standings)
-
-        if (standings.length < PER_PAGE) {
-            setFinished(true);
-        }
-
-        setUpdating(false);
+    function refresh() {
+        queryClient.invalidateQueries({
+            queryKey: useInfiniteEventResultsQuery.getKey(filters)
+        })
     }
-
-    useEffect(() => {
-        if (finished || page === 1) {
-            return
-        }
-
-        addPlacements()
-
-    }, [page])
-
-    useEffect(() => {
-        if (finished && page > 1) {
-            console.info("No more players");
-            ToastAndroid.show("No more players", ToastAndroid.SHORT);
-        }
-    }, [finished])
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <FlatList
-                style={styles.container}
-                ListHeaderComponent={<SearchBar filter={filter} setFilter={setFilter} filterAction={filterEntrants} searchTitle="Search" style={{ marginTop: 20 }} />}
-                data={standings}
-                renderItem={({ index, item }) => <ResultCard playerData={item} index={index} />}
+                // Main list items
+                data={allResults}
+                renderItem={({ item }) => <ResultCard playerData={item} />}
+                contentContainerStyle={styles.listContainer}
+                ItemSeparatorComponent={() => (
+                    <View style={{ marginVertical: 5 }} />
+                )}
 
-                contentContainerStyle={{ flexGrow: 1 }}
-                ListEmptyComponent={
-                    <View style={styles.centerText}>
-                        <Text style={{ color: colors.text }}>No entrants were found</Text>
-                    </View>}
+                // Header 
+                ListHeaderComponent={<SearchBar filterAction={updateNameFilter} filter={filters.name} />}
+                ListHeaderComponentStyle={{ padding: 10 }}
 
-                onEndReached={() => setPage(page + 1)}
-                onEndReachedThreshold={0.1}
+                // Empty text
+                ListEmptyComponent={<EmptyResults status={status} />}
+
+                // Update/Refresh data
+                refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
+                onEndReached={() => fetchNextPage()}
+
+                // Misc. properties
+                keyboardShouldPersistTaps="handled"
+                showsVerticalScrollIndicator={false}
+
             />
 
-            {updating &&
-                <View style={styles.loadingCircle}>
-                    <ActivityIndicator size='large' color={colors.primary} />
-                </View>}
+        </View>
+    )
+}
+
+interface EmptyResultsProps {
+    status: "success" | "error" | "loading"
+}
+
+function EmptyResults({ status }: EmptyResultsProps) {
+    let statusString = "";
+
+    if (status === "error") statusString = "Error retrieving data";
+    if (status === "loading") statusString = "Loading...";
+    if (status === "success") statusString = "No entrants found";
+
+    return (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <MainText>{statusString}</MainText>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 10,
+        flex: 1
     },
-    loadingCircle: {
-        position: 'absolute',
-        bottom: 10,
-        left: 0,
-        right: 0,
-        justifyContent: 'center',
-        alignContent: 'center'
-    },
-    centerText: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    listContainer: {
+        flexGrow: 1
     }
-})
+});
 
-export default ResultsPage;
+export default ResultsPage

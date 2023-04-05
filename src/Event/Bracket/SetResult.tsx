@@ -47,15 +47,15 @@ function SetResult(props: SetResultProps) {
 
     return (
         <View style={[styles.container, colorCSS.container, props.style]}>
-            <EntrantRow name={winner.current.entrant.name} score={winner.current.stats.score.value} winner style={{ borderTopWidth: 0 }} />
-            <EntrantRow name={losers.current[0].entrant.name} score={losers.current[0].stats.score.value} />
+            <EntrantRow name={winner.current.entrant.name} score={winner.current.stats?.score.value ?? null} winner style={{ borderTopWidth: 0 }} />
+            <EntrantRow name={losers.current[0].entrant.name} score={losers.current[0].stats?.score.value ?? null} />
         </View>
     )
 }
 
 interface EntrantRowProps {
     name: string
-    score: number
+    score: number | null
     winner?: boolean
     style?: StyleProp<ViewStyle>
 }
@@ -77,9 +77,9 @@ function EntrantRow(props: EntrantRowProps) {
         <View style={[styles.entrantRow, colorCSS.entrantRow, props.style]}>
             <MainText style={styles.entrantRowName}>{props.name}</MainText>
             <View style={[styles.entrantRowScoreBox, colorCSS.entrantRowScoreBox]}>
-                {props.score
-                    ? <Text style={styles.entrantRowScore}>{props.score === -1 ? "DQ" : props.score.toString()}</Text>
-                    : <Text style={styles.entrantRowScore}>{props.winner ? "W" : "L"}</Text>
+                {props.score === null
+                    ? <Text style={styles.entrantRowScore}>{props.winner ? "W" : "L"}</Text>
+                    : <Text style={styles.entrantRowScore}>{props.score === -1 ? "DQ" : props.score.toString()}</Text>
                 }
             </View>
         </View>

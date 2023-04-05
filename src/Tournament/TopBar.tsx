@@ -1,25 +1,19 @@
 import { useTheme } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
+import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText } from "../Shared/ThemedText";
+import { APIImage } from "../types";
+import { TopBarProps } from "./types";
 
-export const TopBar = (props) => {
+export const TopBar = (props: TopBarProps) => {
 
     const theme = useTheme();
     const colors = theme.colors;
+    const images = props.images?.flatMap(image => image ? [image] : []) ?? []
 
-    const banner_image = props.images.reduce((prev, cur) => {
-        if (cur.type === "banner") {
-            return cur;
-        }
-        return prev;
-    }, {});
-    const profile_image = props.images.reduce((prev, cur) => {
-        if (cur.type === "profile") {
-            return cur;
-        }
-        return prev;
-    }, {});
+    const bannerImage = getImageByType(images, "banner");
+    const profileImage = getImageByType(images, "profile")
 
     const imgBackgroundColor = theme.dark ? '#FFF' : "#000";
 
@@ -34,16 +28,16 @@ export const TopBar = (props) => {
     })
 
     // If banner image is provided
-    if (Object.keys(banner_image).length !== 0) {
+    if (bannerImage.url) {
         return (
             <View style={styles.container}>
                 <View style={[styles.banner_container, colorCSS.banner_container]}>
-                    <Image source={{ uri: banner_image.url }} style={styles.banner_image}></Image>
+                    <Image source={{ uri: bannerImage.url }} style={styles.banner_image}></Image>
                 </View>
 
                 <View style={{ ...styles.profile_container, marginTop: -20 }}>
                     <View style={[styles.profile_image_container, colorCSS.profile_image_container]}>
-                        <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image} />
+                        <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
                     </View>
                     <View style={{ ...styles.profile_text, marginTop: 20 }}>
                         <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
@@ -57,7 +51,7 @@ export const TopBar = (props) => {
         <View style={styles.profile_only_view}>
             <View style={styles.profile_container}>
                 <View style={styles.profile_image_container}>
-                    <PlaceholderImage imageSrc={profile_image.url} style={styles.profile_image} />
+                    <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
                 </View>
                 <View style={{ ...styles.profile_text, justifyContent: 'center' }}>
                     <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>

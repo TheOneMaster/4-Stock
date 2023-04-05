@@ -1,16 +1,21 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { version } from "../../package.json";
+import * as Application from "expo-application"
+
+// import { version } from "../../package.json";
 import { MainText, SubtitleText } from "../Shared/ThemedText";
 
 function AboutInfo() {
 
     const { colors } = useTheme();
+    const buildVersion = Application.nativeBuildVersion ?? "N/A";
+    const appVersion = Application.nativeApplicationVersion ?? "N/A";
 
     return (
         <View style={[styles.container, { borderColor: colors.border }]}>
             <View style={styles.innerContainer}>
-                <InfoRow title="Version" value={version} />
+                <InfoRow title="Application Version" value={appVersion} />
+                <InfoRow title="Build Version" value={buildVersion} />
                 <InfoRow title="Made By" value="TheOneMaster" />
             </View>
         </View>

@@ -1,44 +1,28 @@
-import { useEffect, useState } from "react";
-import { ActivityIndicator, Button, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { Button, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTournamentDetailsQuery } from "../gql/gql";
 
-import { queryAPI, tournamentDetailsQuery } from "../api";
-import { FullTournamentDetails, TournamentDetails } from "../types";
-
-import { useTheme } from "@react-navigation/native";
 import { TournamentViewProps } from "../navTypes";
 import ContactButton from "../Shared/ContactButton";
 import { MainText } from "../Shared/ThemedText";
 import DetailSection from "./DetailSection";
 import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
+import { RegisterButtonProps } from "./types";
 
-const RegisterButton = (props) => {
 
-    if (props == undefined) {
-        return null
-    }
-
-    const open = props.open;
-    if (!open) {
+const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
+    if (!show) {
         return null;
     }
-
-    const style = StyleSheet.create({
-        container: {
-            position: "absolute",
-            bottom: 20,
-            right: 30,
-            // backgroundColor: "blue"
-        }
-    });
 
     const register = () => {
         console.log("Register")
     }
 
     return (
-        <View style={style.container}>
-            <Button title="Register" onPress={register} disabled={true}></Button>
+        <View style={styles.registerButton}>
+            <Button title="Register" onPress={register} disabled={disabled}></Button>
         </View>
 
     )
@@ -54,72 +38,65 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
     // 
     // 
 
-    const [data, setData] = useState({} as FullTournamentDetails);
-    const [loading, setLoading] = useState(false);
-    const [dataReady, setdataReady] = useState(false);
-    const [failed, setFailedAPI] = useState(false);
-    const [refreshing, setRefreshing] = useState(false)
+    const tournamentID = route.params.id;
+    const queryClient = useQueryClient();
+    const { data, isLoading, isError, isFetching } = useTournamentDetailsQuery({ ID: tournamentID })
 
-    const tournament = route.params.tournamentDetails;
-
-    const { colors } = useTheme();
-
-
-    const getTournamentData = async () => {
-        try {
-            setLoading(true);
-            const tournamentQuery = tournamentDetailsQuery(tournament.id);
-            const api_data = await queryAPI(tournamentQuery) as TournamentDetails;
-            const tournament_data = api_data.tournament;
-            setData(tournament_data);
-            setdataReady(true);
-        } catch (err) {
-            setFailedAPI(true);
-        }
-
-        setLoading(false);
+    function refresh() {
+        queryClient.invalidateQueries(useTournamentDetailsQuery.getKey({ ID: tournamentID }));
     }
 
-    useEffect(() => {
-        getTournamentData();
-    }, [])
+    if (isLoading) {
+        return (
+            <View style={styles.centerView}>
+                <MainText>Loading...</MainText>
+            </View>
+        )
+    }
 
-    const refresh = () => {
-        setRefreshing(true);
-        getTournamentData();
-        setRefreshing(false);
+    if (isError || data.tournament === null) {
+        return (
+            <View>
+                <MainText>Unable to load Tournament details from API</MainText>
+            </View>
+        )
     }
 
     return (
         <View style={{ flex: 1 }}>
 
-            <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh}></RefreshControl>}>
-                <TopBar {...tournament}></TopBar>
-
-                {loading && <ActivityIndicator animating={loading} color={colors.primary} size={20} style={styles.activityIndicator}></ActivityIndicator>}
+            <ScrollView refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refresh} />}>
+                <TopBar images={data.tournament.images} name={data.tournament.name}></TopBar>
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Details</MainText>
-                    <DetailSection {...data}></DetailSection>
+                    <DetailSection {...data.tournament}></DetailSection>
                 </View>
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Events</MainText>
-                    {dataReady && data.events.map(event => (
-                        <View style={styles.eventCard} key={event.id}>
-                            <EventCard event={event}></EventCard>
-                        </View>
-                    ))}
+                    {data?.tournament?.events?.map(event => {
+                        if (event === null) {
+                            return null
+                        }
+                        return (
+                            <View style={styles.eventCard} key={event.id}>
+                                <EventCard event={event} />
+                            </View>
+                        )
+                    })
+
+                    }
                 </View>
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Contact</MainText>
-                    {dataReady && <ContactButton type={data.primaryContactType} url={data.primaryContact}></ContactButton>}
+                    <ContactButton type={data.tournament.primaryContactType} url={data.tournament.primaryContact} />
                 </View>
 
             </ScrollView>
 
-            {dataReady && <RegisterButton open={data.isRegistrationOpen}></RegisterButton>}
+            <RegisterButton show={data.tournament.isRegistrationOpen} />
         </View>
     )
 }
@@ -145,6 +122,16 @@ const styles = StyleSheet.create({
     },
     eventCard: {
         marginBottom: 5
+    },
+    centerView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    registerButton: {
+        position: "absolute",
+        bottom: 20,
+        right: 30
     }
 })
 

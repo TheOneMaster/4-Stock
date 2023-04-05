@@ -7,56 +7,6 @@ import { APIFiltersTemplate, APIQuery, PhaseGroupSetInfo, PhaseGroupSets, Storag
 
 // API Query functions
 
-export function tournamentDetailsQuery(Id: number): string {
-  const query = `
-    query getTournamentDetails($ID: ID!) {
-        tournament(id: $ID) {
-          id
-          name
-          city
-          countryCode
-          currency
-          eventRegistrationClosesAt
-          events {
-            id
-            type
-            name
-            phases {
-                id
-            }
-            videogame {
-              id
-              displayName
-              images {
-                id
-                type
-                url
-              }
-            }
-          }
-          isRegistrationOpen
-          mapsPlaceId
-          numAttendees
-          primaryContact
-          primaryContactType
-          startAt
-          venueName
-          venueAddress
-          images {
-            id
-            type
-            url
-          }
-        }
-      }`
-
-  const variables = {
-    "ID": Id,
-  }
-
-  return JSON.stringify({ query, variables });
-}
-
 export function EventDetailsQuery(Id: number, singles = true): string {
   const query = `
     query getEventData($id: ID, $singles: Boolean!) {
@@ -266,82 +216,6 @@ export async function getPGroupSetInfo(id: number, controller: AbortController):
   return pGroupInfo
 }
 
-
-export function userDetailsQuery(id: number) {
-  const query = `
-  query getUserInfo($id: ID, $perPage: Int) {
-    user(id: $id) {
-      id
-      genderPronoun
-      images {
-        id
-        type
-        url
-      }
-      location {
-        country
-        state
-      }
-      player {
-        gamerTag
-        prefix
-        user {
-          id
-          name
-        }
-      }
-      events(query: {perPage: $perPage}) {
-        nodes {
-          name
-          tournament {
-            id
-            name
-            images(type: "profile") {
-              url
-            }
-          }
-          userEntrant(userId: $id) {
-            standing {
-              id
-              placement
-            }
-          }
-        }
-      }
-      tournaments(query: {perPage: $perPage}) {
-        nodes {
-          id
-          name
-          images(type: "profile") {
-            url
-          }
-        }
-      }
-      leagues(query: {perPage: $perPage}) {
-        nodes {
-          id
-          name
-          images(type: "profile") {
-            height
-            url
-          }
-        }
-      }
-    }
-  }
-  
-  `
-
-  const variables = {
-    id: id,
-    perPage: 10
-  }
-
-  return JSON.stringify({ query, variables })
-}
-
-
-
 export function tournamentListQuery(storageParams: Partial<StorageVariables>): string {
   const params = convertStorageToAPI(storageParams);
   const paramsUsed = cleanObject(params);
@@ -449,7 +323,7 @@ function getFlatObject(obj: Object): Object {
   return Object.assign({}, ...flatArray);
 }
 
-function createVariableString(params): string {
+function createVariableString(params: any): string {
   const flatVariables = getFlatObject(params);
   // console.log(flatVariables);
 

@@ -1,0 +1,40 @@
+query TournamentDetails($ID: ID!) {
+  tournament(id: $ID) {
+    id
+    name
+    city
+    countryCode
+    currency
+    eventRegistrationClosesAt
+    events {
+      id
+      type
+      name
+      phases {
+        id
+      }
+      videogame {
+        id
+        displayName
+        images {
+          id
+          type
+          url
+        }
+      }
+    }
+    isRegistrationOpen
+    mapsPlaceId
+    numAttendees
+    primaryContact
+    primaryContactType
+    startAt
+    venueName
+    venueAddress
+    images {
+      id
+      type
+      url
+    }
+  }
+}
