@@ -116,7 +116,7 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
     const [selected, updateSelected] = useMMKVObject<DropdownOption>(settingsString);
     const [drawer, updateDrawer] = useState(false);
 
-    const {colors} = useTheme();
+    const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
         container: {
             backgroundColor: colors.card
@@ -135,25 +135,26 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
     return (
         <View>
             <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.container, colorCSS.container]}>
+                <View style={[styles.container, colorCSS.container, style]}>
                     <MainText style={styles.titleText}>{title}</MainText>
                     <View style={styles.componentView}>
-                        { selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null }
+                        {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
                         <AntDesign name={drawer ? "arrowup" : "arrowleft"} size={15} color={colors.text} />
                     </View>
                 </View>
             </TouchableHighlight>
 
-            { drawer && 
+            {drawer &&
                 <FlatList
                     data={data}
-                    renderItem={({item, index}) => {
-                    
-                        return <DropdownItem item={item} active={selected?.label === item.label} onPress={selectItem} />}
+                    renderItem={({ item, index }) => {
+
+                        return <DropdownItem item={item} active={selected?.label === item.label} onPress={selectItem} />
+                    }
                     }
                     initialNumToRender={20}
                 />
-                }
+            }
         </View>
     )
 
@@ -162,9 +163,9 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
 }
 
 
-function DropdownItem({item, active, onPress}: DropdownItemProps) {
-    const {label, value} = item;
-    const {colors} = useTheme();
+function DropdownItem({ item, active, onPress }: DropdownItemProps) {
+    const { label, value } = item;
+    const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
         item: {
             borderColor: colors.border,
@@ -174,12 +175,12 @@ function DropdownItem({item, active, onPress}: DropdownItemProps) {
     function handleClick() {
         onPress(item);
     }
-    
+
     return (
         <TouchableOpacity onPress={handleClick} style={[styles.ddItem, colorCSS.item]}>
-                { active
+            {active
                 ? <AntDesign name="checksquare" size={15} color={colors.primary} style={styles.ddItemIcon} />
-                : <View style={[{width: 15}, styles.ddItemIcon]}></View>
+                : <View style={[{ width: 15 }, styles.ddItemIcon]}></View>
             }
             <MainText style={styles.itemText}>{label}</MainText>
         </TouchableOpacity>
@@ -190,7 +191,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
         alignItems: "center",
-        paddingVertical: 10
+        paddingVertical: 8
     },
     titleText: {
         fontWeight: "500",
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
         // borderStyle: "solid",
         // backgroundColor: 'blue',
         borderBottomWidth: 0.8,
-        
+
         padding: 10,
     },
     ddItemIcon: {
