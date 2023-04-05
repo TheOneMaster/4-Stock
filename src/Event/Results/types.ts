@@ -13,5 +13,4 @@ type Standing = Exclude<Standings[0], null>
 
 export type ResultCardProps = {
     playerData: Pick<Standing, "placement"|"player"|"entrant"> & {id: string}
-    index: number
 }

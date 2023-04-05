@@ -56,12 +56,15 @@ function ResultsPage({ navigation, route }: ResultsViewProps) {
             <FlatList
                 // Main list items
                 data={allResults}
-                renderItem={({ item, index }) => <ResultCard playerData={item} index={index} />}
+                renderItem={({ item }) => <ResultCard playerData={item} />}
                 contentContainerStyle={styles.listContainer}
+                ItemSeparatorComponent={() => (
+                    <View style={{ marginVertical: 5 }} />
+                )}
 
                 // Header 
                 ListHeaderComponent={<SearchBar filterAction={updateNameFilter} filter={filters.name} />}
-                ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
+                ListHeaderComponentStyle={{ padding: 10 }}
 
                 // Empty text
                 ListEmptyComponent={<EmptyResults status={status} />}

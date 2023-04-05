@@ -27,7 +27,7 @@ function getImagesFromParticipants(participants: Participant[]): string[] {
 // }
 
 
-const ResultCard = ({ playerData, index }: ResultCardProps) => {
+const ResultCard = ({ playerData }: ResultCardProps) => {
 
     const { colors } = useTheme();
     const navigator = useNavigation<ResultsNavigationProp>();
@@ -38,7 +38,6 @@ const ResultCard = ({ playerData, index }: ResultCardProps) => {
         ...styles.container,
         borderColor: colors.border,
         backgroundColor: colors.card,
-        marginTop: index === 0 ? 10 : undefined
     }
 
     // If the event is singles
@@ -96,7 +95,7 @@ const ResultCard = ({ playerData, index }: ResultCardProps) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginBottom: 10,
+        // marginBottom: 10,
         borderWidth: 1,
         borderStyle: 'solid'
     },
