@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 
 import { SettingsViewProps } from "../navTypes";
 import SettingsGroup from "./SettingsGroup";
@@ -9,22 +9,15 @@ import GAME_LIST from "./games.json"
 const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
 
     return (
-        <View style={styles.container}>
-            {/* <SettingsSwitch title="Debug" setting="general.debug" /> */}
-            {/* <SettingsDropdown data={GameOptions} setting="general.mainGame" title="Main Game" /> */}
+        <ScrollView style={styles.container}>
 
             <SettingsGroup title="General">
-                <SettingsTextInput group="general" setting="apiKey" title="API Key" hidden style={{paddingVertical: 0}} />
-                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" />
-                <SettingsSwitch group="general" setting="debug" title="Debug" />
+                <SettingsTextInput group="general" setting="apiKey" title="API Key" style={{ paddingVertical: 0, paddingHorizontal: 10 }} hidden />
+                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" style={{ paddingHorizontal: 10 }} />
+                <SettingsSwitch group="general" setting="debug" title="Debug" style={{ paddingHorizontal: 10, paddingTop: 5, paddingBottom: 8 }} />
             </SettingsGroup>
 
-            {/* <SettingsGroup title="Theming">
-                
-            </SettingsGroup> */}
-
-
-        </View>
+        </ScrollView>
     )
 }
 
