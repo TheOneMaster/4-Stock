@@ -36,10 +36,6 @@ const BracketPage = ({ navigation, route }: BracketViewProps) => {
         )
     }
 
-    useEffect(() => {
-        console.log(pGroupInfo.startAt)
-    }, [pGroupInfo])
-
     function updatePGroupInfo(selectedPGroup: PhaseGroup, selectedPhase: Phase) {
         const controller = new AbortController();
         setLoading(true);
