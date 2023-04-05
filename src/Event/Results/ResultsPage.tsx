@@ -1,7 +1,9 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+
 import { EventResultsQueryVariables, useInfiniteEventResultsQuery } from "../../gql/gql";
+
 import { checkID, truthyFilter } from "../../helper";
 import { ResultsViewProps } from "../../navTypes";
 import SearchBar from "../../Shared/SearchBar";
@@ -26,8 +28,7 @@ function ResultsPage({ navigation, route }: ResultsViewProps) {
             }
         }
     });
-
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     const allResults = data?.pages.map(page => page.event?.standings?.nodes)
         .filter(truthyFilter)
@@ -53,18 +54,23 @@ function ResultsPage({ navigation, route }: ResultsViewProps) {
     return (
         <View style={styles.container}>
             <FlatList
+                // Main list items
                 data={allResults}
                 renderItem={({ item, index }) => <ResultCard playerData={item} index={index} />}
                 contentContainerStyle={styles.listContainer}
 
+                // Header 
                 ListHeaderComponent={<SearchBar filterAction={updateNameFilter} filter={filters.name} />}
                 ListHeaderComponentStyle={{ paddingHorizontal: 10 }}
 
+                // Empty text
                 ListEmptyComponent={<EmptyResults status={status} />}
 
+                // Update/Refresh data
                 refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} />}
                 onEndReached={() => fetchNextPage()}
 
+                // Misc. properties
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
 
@@ -72,7 +78,6 @@ function ResultsPage({ navigation, route }: ResultsViewProps) {
 
         </View>
     )
-
 }
 
 interface EmptyResultsProps {
@@ -100,6 +105,6 @@ const styles = StyleSheet.create({
     listContainer: {
         flexGrow: 1
     }
-})
+});
 
 export default ResultsPage
