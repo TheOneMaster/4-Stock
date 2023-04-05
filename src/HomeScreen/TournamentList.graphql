@@ -1,6 +1,21 @@
-query TournamentListData($name: String, $afterDate: Timestamp, $beforeDate: Timestamp, $page: Int!) {
+query TournamentListData(
+  $name: String
+  $afterDate: Timestamp
+  $beforeDate: Timestamp
+  $page: Int!
+  $videogameIds: [ID]
+) {
   tournaments(
-    query: {page: $page, perPage: 25, filter: {name: $name, afterDate: $afterDate, beforeDate: $beforeDate}}
+    query: {
+      page: $page
+      perPage: 25
+      filter: {
+        name: $name
+        afterDate: $afterDate
+        beforeDate: $beforeDate
+        videogameIds: $videogameIds
+      }
+    }
   ) {
     pageInfo {
       page

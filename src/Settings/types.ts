@@ -6,7 +6,7 @@ export interface DropdownOption {
 export interface AppSettings {
     general: {
         debug: boolean
-        mainGame: DropdownOption
+        mainGame: DropdownOption | null
         apiKey: string
     },
     theme: {

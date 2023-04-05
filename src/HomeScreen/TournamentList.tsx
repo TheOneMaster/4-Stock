@@ -1,33 +1,20 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { addMonths, subYears } from "date-fns";
-import { useState } from "react";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../gql/gql";
 
-import { checkID, convertDateToUnixSeconds, truthyFilter } from "../helper";
-import { TournamentListViewProps } from "../navTypes";
-import SearchBar from "../Shared/SearchBar";
-import { MainText } from "../Shared/ThemedText";
-import TournamentCard from "./TournamentCard";
 import { EmptyTournamentListProps } from "./types";
+import useFilter from "./filterHook";
+import TournamentCard from "./TournamentCard";
 
-interface InputVariables {
-    name: string
-    page: number
-    afterDate: number
-    beforeDate: number
-}
+import { checkID, truthyFilter } from "../helper";
+import { TournamentListViewProps } from "../navTypes";
+import { MainText, SearchBar } from "../Shared";
 
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {
 
-    const [filters, setFilters] = useState<InputVariables>({
-        name: "",
-        afterDate: convertDateToUnixSeconds(subYears(new Date, 1)),
-        beforeDate: convertDateToUnixSeconds(addMonths(new Date, 1)),
-        page: 1
-    });
+    const { filters, setName } = useFilter();
 
     const queryClient = useQueryClient();
     const { data, status, isFetching, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
@@ -49,15 +36,6 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
         })
     }
 
-    function updateFilterName(text: string) {
-        if (text === filters.name) return
-
-        const newFilter = Object.assign({}, filters);
-        newFilter.name = text;
-
-        setFilters(newFilter);
-    }
-
 
     return (
         <View style={styles.container}>
@@ -69,7 +47,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 keyExtractor={(tournament) => tournament.id}
 
                 // Header
-                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={updateFilterName} />}
+                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setName} />}
                 ListHeaderComponentStyle={{ padding: 10 }}
 
                 // Empty component
