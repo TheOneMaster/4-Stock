@@ -1,7 +1,8 @@
-import React, { useRef, useState } from "react";
-import { NativeSyntheticEvent, StyleSheet, Text, TextInput, TextInputFocusEventData, TextInputProps, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { MainText } from "../Shared/ThemedText";
+import React, { useRef, useState } from "react";
+import { NativeSyntheticEvent, StyleSheet, TextInput, TextInputFocusEventData, TextInputProps, View } from "react-native";
+
+import { MainText } from "../Shared";
 
 interface FilterTextProps extends TextInputProps {
     title: string

@@ -1,14 +1,14 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
+import { FlatGrid } from "react-native-super-grid";
+
 import { useFeaturedTournamentsQuery } from "../../gql/gql";
 
-import { FlatGrid } from "react-native-super-grid";
-import { FeaturedTournamentsScreenProps } from "../../navTypes";
-import { MainText } from "../../Shared/ThemedText";
 import LargeTournamentCard from "./LargeTournamentCard";
 
-
+import { MainText } from "../../Shared";
+import { FeaturedTournamentsScreenProps } from "../../navTypes";
 
 
 function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScreenProps) {

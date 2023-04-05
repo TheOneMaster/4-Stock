@@ -2,13 +2,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-import { MainText, SubtitleText } from "../Shared/ThemedText";
+import { MainText, SubtitleText } from "../Shared";
 import { UserInfoSectionProps } from "./types";
 
 function UserInfoSection(props: UserInfoSectionProps) {
-    const {player, location, genderPronoun} = props;
-    const {colors} = useTheme();
-    
+    const { player, location, genderPronoun } = props;
+    const { colors } = useTheme();
+
     const gamerTag = player?.gamerTag;
     const realName = player?.user?.name;
     const locationString = (location?.state) ? `${location.state}, ${location.country}` : location?.country ?? ""

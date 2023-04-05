@@ -1,9 +1,8 @@
 import { useTheme } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
 
-import { getImageByType } from "../Shared/APIConverters";
-import PlaceholderImage from "../Shared/PlaceholderImage";
 import { ProfileHeaderProps } from "./types";
+import { getImageByType, PlaceholderImage } from "../Shared";
 import UserInfoSection from "./UserInfoSection";
 
 
@@ -13,7 +12,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
     const images = props.profileDetails.images?.flatMap(image => image ? [image] : []) ?? [];
     const profileImageUrl = getImageByType(images, "profile");
     const bannerImageUrl = getImageByType(images, "banner");
-    
+
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
         profileImageBox: {
@@ -23,7 +22,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
 
     if (bannerImageUrl.url) return (
         <View>
-            
+
             <View style={bannerStyles.bannerImageBox}>
                 <Image source={{ uri: bannerImageUrl.url }} style={bannerStyles.bannerImage} />
             </View>
@@ -34,12 +33,12 @@ function ProfileHeader(props: ProfileHeaderProps) {
                     <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
                 </View>
 
-                <UserInfoSection 
+                <UserInfoSection
                     player={props.profileDetails.player}
                     genderPronoun={props.profileDetails.genderPronoun}
                     location={props.profileDetails.location}
                     style={bannerStyles.profileInfo}
-                    />
+                />
 
             </View>
         </View>
@@ -56,7 +55,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
                 player={props.profileDetails.player}
                 genderPronoun={props.profileDetails.genderPronoun}
                 location={props.profileDetails.location}
-                />
+            />
 
         </View>
     )

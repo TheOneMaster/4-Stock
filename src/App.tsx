@@ -1,22 +1,19 @@
 import 'react-native-gesture-handler';
 
-import { LogBox, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { registerRootComponent } from "expo";
 import { StatusBar } from 'expo-status-bar';
-import { MMKV } from "react-native-mmkv"
+import { LogBox, useColorScheme } from "react-native";
 
 import { RootStackParamList } from './navTypes';
 import { customDarkTheme, customLightTheme } from "./Themes";
 
-
-import EventView from './Event/EventView';
-import HomeScreen from './HomeScreen/HomeScreen';
-import UserProfilePage from './Profile/ProfilePage';
-import TournamentView from "./Tournament/TournamentView";
-import { AppSettings } from './Settings/types';
+import TournamentView from './Tournament';
+import UserProfilePage from './Profile';
+import HomeScreen from './HomeScreen';
+import EventView from './Event';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();

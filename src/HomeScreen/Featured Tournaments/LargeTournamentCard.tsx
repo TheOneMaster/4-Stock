@@ -1,13 +1,10 @@
-import { Pressable, StyleSheet, View } from "react-native";
 import { useNavigation, useTheme } from "@react-navigation/native";
-import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Pressable, StyleSheet, View } from "react-native";
 
 import { truthyFilter } from "../../helper";
-import { getImageByType } from "../../Shared/APIConverters";
-import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { LargeTournamentCardProps } from "./types";
-import { MainText } from "../../Shared/ThemedText";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
+import { getImageByType, MainText, PlaceholderImage } from "../../Shared";
+import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {
 
@@ -31,8 +28,6 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
 
         </View>
     )
-
-
 }
 
 const styles = StyleSheet.create({
