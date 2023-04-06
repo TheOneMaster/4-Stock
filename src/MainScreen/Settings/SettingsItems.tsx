@@ -1,12 +1,11 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { useRef, useState } from "react";
-import { StyleProp, StyleSheet, Switch, TouchableHighlight, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Switch, View, ViewStyle } from "react-native";
 import { FlatList, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 
-import EyeTextInput from "../../Shared/EyeTextInput/EyeTextInput";
-import { MainText } from "../../Shared/ThemedText";
+import { EyeTextInput, MainText, PrimaryCard } from "../../Shared";
 import { AppSettings, DropdownOption } from "./types";
 
 
@@ -117,11 +116,6 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
     const [drawer, updateDrawer] = useState(false);
 
     const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        container: {
-            backgroundColor: colors.card
-        }
-    })
 
     function toggleDrawer() {
         updateDrawer(!drawer);
@@ -134,15 +128,13 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
 
     return (
         <View>
-            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.container, colorCSS.container, style]}>
-                    <MainText style={styles.titleText}>{title}</MainText>
-                    <View style={styles.componentView}>
-                        {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
-                        <AntDesign name={drawer ? "arrowup" : "arrowleft"} size={15} color={colors.text} />
-                    </View>
+            <PrimaryCard touchable onPress={toggleDrawer} style={[styles.container, style]}>
+                <MainText style={styles.titleText}>{title}</MainText>
+                <View style={styles.componentView}>
+                    {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
+                    <AntDesign name={drawer ? "arrowleft" : "arrowdown"} size={15} color={colors.text} />
                 </View>
-            </TouchableHighlight>
+            </PrimaryCard>
 
             {drawer &&
                 <FlatList
