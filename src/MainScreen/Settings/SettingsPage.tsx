@@ -1,6 +1,6 @@
 import { StyleSheet, View, ScrollView } from "react-native";
 
-import { SettingsViewProps } from "../navTypes";
+import { SettingsViewProps } from "../../navTypes";
 import SettingsGroup from "./SettingsGroup";
 import { SettingsDropdown, SettingsSwitch, SettingsTextInput } from "./SettingsItems";
 import GAME_LIST from "./games.json"

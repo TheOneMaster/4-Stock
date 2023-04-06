@@ -2,7 +2,7 @@ import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import * as Application from "expo-application"
 
-import { MainText, SubtitleText } from "../Shared";
+import { MainText, SubtitleText } from "../../Shared";
 
 function AboutInfo() {
 

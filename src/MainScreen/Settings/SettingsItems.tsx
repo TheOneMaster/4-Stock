@@ -5,8 +5,8 @@ import { StyleProp, StyleSheet, Switch, TouchableHighlight, View, ViewStyle } fr
 import { FlatList, TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 
-import EyeTextInput from "../Shared/EyeTextInput/EyeTextInput";
-import { MainText } from "../Shared/ThemedText";
+import EyeTextInput from "../../Shared/EyeTextInput/EyeTextInput";
+import { MainText } from "../../Shared/ThemedText";
 import { AppSettings, DropdownOption } from "./types";
 
 

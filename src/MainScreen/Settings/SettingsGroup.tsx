@@ -2,7 +2,7 @@ import React from "react"
 import { useTheme } from "@react-navigation/native"
 import { StyleSheet, View } from "react-native"
 
-import { MainText } from "../Shared/ThemedText"
+import { MainText } from "../../Shared/ThemedText"
 
 interface SettingsGroupProps {
     title: string

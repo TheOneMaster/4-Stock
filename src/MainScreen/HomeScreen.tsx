@@ -7,8 +7,8 @@ import CustomDrawerContent from "./CustomDrawerContent";
 
 import FeaturedTournamentsPage from "./Featured Tournaments";
 import TournamentList from "./TournamentList";
-import SettingsPage from "../Settings";
-import AboutPage from "../About";
+import SettingsPage from "./Settings";
+import AboutPage from "./About";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
