@@ -1,8 +1,5 @@
-import useSettings from "./settingsHook";
+export * from "./settingsHook";
 import SettingsPage from "./SettingsPage";
 
-export {
-    useSettings
-}
 
 export default SettingsPage

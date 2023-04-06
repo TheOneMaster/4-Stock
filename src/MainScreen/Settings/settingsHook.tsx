@@ -1,7 +1,7 @@
 import { useMMKV, useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 import { AppSettings, DropdownOption } from "./types";
 
-export default function useSettings() {
+export function useSettings() {
 
     // General settings
     const [debug, _debug] = useMMKVBoolean("general.debug");
