@@ -1,7 +1,7 @@
 import { Linking, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
-import GitHubIcon from "../../assets/github.svg"
+import GitHubIcon from "../../../assets/github.svg"
 
 
 function AboutLinks() {

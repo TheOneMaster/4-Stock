@@ -9,7 +9,7 @@ import GAME_LIST from "./games.json"
 const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
 
             <SettingsGroup title="General">
                 <SettingsTextInput group="general" setting="apiKey" title="API Key" style={{ paddingVertical: 0, paddingHorizontal: 10 }} hidden />
@@ -17,7 +17,7 @@ const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
                 <SettingsSwitch group="general" setting="debug" title="Debug" style={{ paddingHorizontal: 10, paddingTop: 5, paddingBottom: 8 }} />
             </SettingsGroup>
 
-        </ScrollView>
+        </View>
     )
 }
 

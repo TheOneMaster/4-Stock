@@ -28,7 +28,7 @@ export type RootStackParamList = {
 
 export type EventTabParamList = {
     Bracket: Pick<Event, "id"|"waves"|"phases"> & IDProp,
-    Results: EventProp
+    Results: IDProp & {singles: boolean}
 }
 
 // Screen typing
