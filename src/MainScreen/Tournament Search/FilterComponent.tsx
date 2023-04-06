@@ -6,7 +6,7 @@ import { Animated, BackHandler, Button, Keyboard, Pressable, StyleProp, StyleShe
 import { addMonthsToDate } from "../helper";
 import { MainText } from "../Shared";
 
-import { StorageVariables } from "../types";
+import { StorageVariables } from "./types";
 import { FilterText } from "./FilterItem";
 
 const DEFAULT_HEIGHT = 350;

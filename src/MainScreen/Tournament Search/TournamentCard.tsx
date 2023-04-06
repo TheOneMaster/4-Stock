@@ -1,14 +1,13 @@
 import { useTheme } from "@react-navigation/native";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import { convertDateToString, truthyFilter } from "../helper";
-
-import { getImageByType } from "../Shared/APIConverters";
-import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText, SubtitleText } from "../Shared/ThemedText";
 import { TournamentCardProps } from "./types";
 
-export const TournamentCard = ({ id, name, city, startAt, images, navigation, style, ...props }: TournamentCardProps) => {
+import { convertDateToString, truthyFilter } from "../../helper";
+import { getImageByType, MainText, PlaceholderImage, SubtitleText } from "../../Shared";
+
+
+export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
     const dateString = startAt ? convertDateToString(startAt) : "Date not provided";
 
     const usableImages = images?.filter(truthyFilter) ?? [];

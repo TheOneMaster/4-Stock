@@ -1,8 +1,8 @@
 import { addMonths, subYears } from "date-fns";
 import { useEffect, useState } from "react";
 
-import { convertDateToUnixSeconds } from "../helper";
-import { useSettings } from "./Settings";
+import { convertDateToUnixSeconds } from "../../helper";
+import { useSettings } from "../Settings";
 
 function useFilter() {
 
