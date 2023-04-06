@@ -5,7 +5,7 @@ import { useTheme } from "@react-navigation/native";
 
 import { useEventDataQuery } from "../gql/gql";
 import { EventTabParamList, EventViewProps } from "../navTypes";
-import { MainText } from "../Shared/ThemedText";
+import { MainText } from "../Shared";
 import BracketPage from "./Bracket/BracketPage";
 import ResultsPage from "./Results/ResultsPage";
 
@@ -14,15 +14,15 @@ const Tab = createMaterialTopTabNavigator<EventTabParamList>();
 
 function EventView({ navigation, route }: EventViewProps) {
 
+    const { data, status } = useEventDataQuery({ id: route.params.id });
+    const { colors } = useTheme();
+
+    if (status !== "success") return <EmptyEventView status={status} color={colors.primary} />
+
     const eventParams = {
         id: route.params.id,
         singles: route.params.type === 1
     }
-
-    const { data, status } = useEventDataQuery(eventParams);
-    const { colors } = useTheme();
-
-    if (status !== "success") return <EmptyEventView status={status} color={colors.primary} />
 
     return (
         <Tab.Navigator>
