@@ -1,5 +1,5 @@
+import { Image, ImageStyle, ImageURISource, StyleProp, StyleSheet } from "react-native"
 import { PlaceholderGame, PlaceHolderPlayer, PlaceholderTournament } from "../Shared/Logos"
-import { ImageSourcePropType, Image, StyleSheet, StyleProp, ViewStyle, RegisteredStyle, ImageStyle, ImageURISource } from "react-native"
 
 
 interface PlaceholderImageProps {
@@ -8,33 +8,24 @@ interface PlaceholderImageProps {
     style?: StyleProp<ImageStyle>
 }
 
-const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: PlaceholderImageProps) => {
-    let placeholderFinal: ImageSourcePropType;
-
+function getPlaceholderImage(placeholder: Required<PlaceholderImageProps['placeholder']>) {
     switch (placeholder) {
-        case 'tournament':
-            placeholderFinal = PlaceholderTournament;
-            break;
-        case 'game':
-            placeholderFinal = PlaceholderGame;
-            break;
-        case 'player':
-            placeholderFinal = PlaceHolderPlayer;
-            break;
-        default:
-            placeholderFinal = PlaceholderTournament;
-            break
+        case "tournament": return PlaceholderTournament;
+        case "game": return PlaceholderGame;
+        case "player": return PlaceHolderPlayer;
+        default: return PlaceholderTournament
     }
+}
 
 
-    if (imageSrc) return <Image
-        style={[styles.image, style]}
-        source={{ uri: imageSrc }}
-        defaultSource={placeholderFinal as ImageURISource | number} />
 
-    return <Image
-        style={[styles.image, style]}
-        source={placeholderFinal} />;
+const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: PlaceholderImageProps) => {
+
+    const placeholderImage = getPlaceholderImage(placeholder);
+
+    if (imageSrc) return <Image style={[styles.image, style]} source={{ uri: imageSrc }} defaultSource={placeholder as ImageURISource} />
+
+    return <Image style={[styles.image, style]} source={placeholderImage} />;
 }
 
 const styles = StyleSheet.create({
