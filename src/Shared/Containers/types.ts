@@ -12,8 +12,11 @@ export interface StaticCardProps extends BaseCardProps {
 
 export interface TouchableCardProps extends BaseCardProps {
     touchable: true
+    highlight?: boolean
     onPress?: (event?: GestureResponderEvent) => void
-    hitslop?: number | Insets | null
+    hitslop?: number | Insets | null,
+    activeColor?: string
+    activeOpacity?: number
 }
 
 

@@ -1,30 +1,11 @@
 import { useTheme } from "@react-navigation/native";
 import { Pressable, StyleProp, View, ViewStyle } from "react-native";
-import { CardProps, StaticCardProps } from "./types";
+import { CardProps, StaticCardProps, TouchableCardProps } from "./types";
 
 export function PrimaryCard(props: CardProps) {
 
-    const { style, touchable, children } = props;
+    const { style } = props;
     const { colors } = useTheme();
-
-
-    if (touchable) {
-        const { onPress, hitslop } = props;
-
-        return (
-            <Pressable onPress={onPress} hitSlop={hitslop}
-                style={({ pressed }) => [
-                    style,
-                    {
-                        backgroundColor: pressed ? colors.primary : colors.card,
-                        opacity: pressed ? 0.3 : 1,
-                        borderColor: colors.border
-                    }
-                ]}>
-                {children}
-            </Pressable>
-        )
-    }
 
     const colorStyle: StyleProp<ViewStyle> = {
         backgroundColor: colors.card,
@@ -34,32 +15,15 @@ export function PrimaryCard(props: CardProps) {
     const cardProperties = Object.assign({}, props);
     cardProperties.style = [colorStyle, style];
 
+    if (cardProperties.touchable) return <TouchableCard {...cardProperties} />
+
     return <StaticCard {...cardProperties} />
 }
 
 export function SecondaryCard(props: CardProps) {
 
-    const { style, touchable, children } = props;
+    const { style } = props;
     const { colors } = useTheme();
-
-
-    if (touchable) {
-        const { onPress, hitslop } = props;
-
-        return (
-            <Pressable onPress={onPress} hitSlop={hitslop}
-                style={({ pressed }) => [
-                    style,
-                    {
-                        backgroundColor: pressed ? colors.primary : colors.card2,
-                        opacity: pressed ? 0.3 : 1,
-                        borderColor: colors.border
-                    }
-                ]}>
-                {children}
-            </Pressable>
-        )
-    }
 
     const colorStyle: StyleProp<ViewStyle> = {
         backgroundColor: colors.card2,
@@ -68,6 +32,26 @@ export function SecondaryCard(props: CardProps) {
 
     const cardProperties = Object.assign({}, props);
     cardProperties.style = [colorStyle, style];
+
+    if (cardProperties.touchable) return <TouchableCard {...cardProperties} />
+
+    return <StaticCard {...cardProperties} />
+}
+
+export function TransparentCard(props: CardProps) {
+    const { style } = props;
+    const { colors } = useTheme();
+
+    const colorStyle: StyleProp<ViewStyle> = {
+        borderColor: colors.border
+    }
+
+    const cardProperties = Object.assign({}, props);
+    cardProperties.style = [style, colorStyle]
+
+    if (cardProperties.touchable) {
+        return <TouchableCard {...cardProperties} />
+    }
 
     return <StaticCard {...cardProperties} />
 }
@@ -80,5 +64,29 @@ function StaticCard(props: StaticCardProps) {
         <View style={style}>
             {children}
         </View>
+    )
+}
+
+function TouchableCard(props: TouchableCardProps) {
+    const { colors } = useTheme();
+    const {
+        style, children,
+        onPress, hitslop,
+        activeColor = colors.primary, activeOpacity = 0.85, highlight = false
+    } = props
+
+    if (highlight) return (
+        <Pressable onPress={onPress} hitSlop={hitslop} style={({ pressed }) => [style, {
+            backgroundColor: pressed ? activeColor : undefined,
+            opacity: pressed ? activeOpacity : undefined
+        }]}>
+            {children}
+        </Pressable>
+    )
+
+    return (
+        <Pressable onPress={onPress} hitSlop={hitslop} style={style}>
+            {children}
+        </Pressable>
     )
 }
