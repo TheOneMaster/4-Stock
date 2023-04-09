@@ -188,6 +188,12 @@
             "deprecationReason": null
           },
           {
+            "name": "EPIC",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "MIXER",
             "description": "",
             "isDeprecated": false,
