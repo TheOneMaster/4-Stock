@@ -49,9 +49,7 @@ export function TransparentCard(props: CardProps) {
     const cardProperties = Object.assign({}, props);
     cardProperties.style = [style, colorStyle]
 
-    if (cardProperties.touchable) {
-        return <TouchableCard {...cardProperties} />
-    }
+    if (cardProperties.touchable) return <TouchableCard {...cardProperties} />
 
     return <StaticCard {...cardProperties} />
 }
