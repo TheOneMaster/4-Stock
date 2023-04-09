@@ -6,26 +6,21 @@ import { ResultsNavigationProp } from "../../navTypes";
 import { getImageByType } from "../../Shared/APIConverters";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
 import { MainText, SubtitleText } from "../../Shared/ThemedText";
-import { Participant } from "../../types";
-import { ResultCardProps } from "./types";
+// import { Participant } from "../../types";
+import { Participants, ResultCardProps } from "./types";
 
 
 
-function getImagesFromParticipants(participants: Participant[]): string[] {
+function getImagesFromParticipants(participants: Participants): string[] {
     const images = participants.map((participant) => {
-        const user = participant.user;
-        const image = user.images[0];
-        return image ? image.url : '';
+        const user = participant?.user;
+        const userImages = user?.images;
+        const image = userImages ? userImages[0] : null;
+        return (image && image.url) ? image.url : '';
     });
 
     return images;
 }
-
-// interface ResultCardProps {
-//     playerData: Omit<Standing, "stats">
-//     index: number
-// }
-
 
 const ResultCard = ({ playerData }: ResultCardProps) => {
 
