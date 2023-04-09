@@ -1,20 +1,22 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
-import { StyleSheet, View } from "react-native";
+import { RefreshControl, StyleSheet, View } from "react-native";
 import { FlatGrid } from "react-native-super-grid";
 
 import { useFeaturedTournamentsQuery } from "../../gql/gql";
 
 import LargeTournamentCard from "./LargeTournamentCard";
 
-import { MainText } from "../../Shared";
+import { useQueryClient } from "@tanstack/react-query";
 import { FeaturedTournamentsScreenProps } from "../../navTypes";
+import { MainText } from "../../Shared";
 
 
 function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScreenProps) {
 
     const { data, isLoading, isError } = useFeaturedTournamentsQuery();
     const { colors } = useTheme();
+    const client = useQueryClient();
 
     if (isLoading) {
         return (
@@ -33,8 +35,14 @@ function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScree
         )
     }
 
+    function refetchFeatured() {
+        client.invalidateQueries({
+            queryKey: useFeaturedTournamentsQuery.getKey()
+        })
+    }
+
     return (
-        <View style={styles.container}>
+        <>
             <FlatGrid
                 itemDimension={150}
                 data={data.tournaments.nodes ?? []}
@@ -44,17 +52,21 @@ function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScree
                     }
                     return <LargeTournamentCard id={item.id} name={item.name} images={item.images} />
                 }}
+                contentContainerStyle={styles.container}
+
+                refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetchFeatured} />}
+                onRefresh={refetchFeatured}
+
                 showsVerticalScrollIndicator={false}
             />
-        </View>
+        </>
     )
 
 
 }
-
 const styles = StyleSheet.create({
     container: {
-
+        flexGrow: 1
     },
     centerView: {
         flex: 1,
