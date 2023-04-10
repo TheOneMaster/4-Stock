@@ -11,7 +11,7 @@ function AboutInfo() {
     return (
         <TransparentCard style={styles.container}>
             <View style={styles.innerContainer}>
-                <InfoRow title="Application Version" value={appVersion} />
+                <InfoRow title="App Version" value={appVersion} />
                 <InfoRow title="Build Version" value={buildVersion} />
                 <InfoRow title="Made By" value="TheOneMaster" />
             </View>
