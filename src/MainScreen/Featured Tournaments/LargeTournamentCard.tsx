@@ -1,5 +1,5 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
-import { Pressable, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, View } from "react-native";
 
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
@@ -10,7 +10,6 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
 
     const images = props.images?.filter(truthyFilter) ?? [];
     const profileImage = getImageByType(images, 'profile');
-    const { colors } = useTheme()
     const navigation = useNavigation<FeaturedTournamentCardNavigationProp>();
 
     function handlePress() {
@@ -20,12 +19,11 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
     return (
         <View style={styles.container}>
 
-            <TransparentCard touchable style={styles.imageContainer} onPress={handlePress}>
-                <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={[styles.image, { borderColor: colors.border }]} />
+            <TransparentCard touchable={true} style={styles.imageContainer} onPress={handlePress}>
+                <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={styles.image} />
             </TransparentCard>
 
-            <MainText style={styles.title}>{props.name}</MainText>
-
+            <MainText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</MainText>
         </View>
     )
 }
@@ -44,14 +42,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         overflow: "hidden",
-        flex: 1
     },
     image: {
         width: "100%",
         height: "100%",
     },
     title: {
-        // backgroundColor: "red",
         textAlign: "center",
         fontWeight: 'bold',
         fontSize: 18

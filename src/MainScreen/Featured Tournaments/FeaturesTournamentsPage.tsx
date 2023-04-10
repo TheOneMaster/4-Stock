@@ -1,13 +1,12 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
-import { RefreshControl, StyleSheet, View } from "react-native";
-import { FlatGrid } from "react-native-super-grid";
+import { useQueryClient } from "@tanstack/react-query";
+import { FlatList, StyleSheet, View } from "react-native";
 
 import { useFeaturedTournamentsQuery } from "../../gql/gql";
 
 import LargeTournamentCard from "./LargeTournamentCard";
 
-import { useQueryClient } from "@tanstack/react-query";
 import { FeaturedTournamentsScreenProps } from "../../navTypes";
 import { MainText } from "../../Shared";
 
@@ -42,36 +41,34 @@ function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScree
     }
 
     return (
-        <>
-            <FlatGrid
-                itemDimension={150}
+        <View style={styles.page}>
+            <FlatList
+                numColumns={2}
                 data={data.tournaments.nodes ?? []}
-                renderItem={({ item }) => {
-                    if (!item || item.id === null) {
-                        return null
-                    }
-                    return <LargeTournamentCard id={item.id} name={item.name} images={item.images} />
-                }}
+                renderItem={({ item }) => !item || item.id === null ? null : <LargeTournamentCard id={item.id} name={item.name} images={item.images} />}
                 contentContainerStyle={styles.container}
-
-                refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetchFeatured} />}
+                ItemSeparatorComponent={() => <View style={styles.rowSeperator} />}
+                refreshing={isLoading}
                 onRefresh={refetchFeatured}
-
-                showsVerticalScrollIndicator={false}
             />
-        </>
+        </View>
     )
-
-
 }
 const styles = StyleSheet.create({
+    page: {
+        padding: 10,
+    },
     container: {
-        flexGrow: 1
+        flexGrow: 1,
+        // backgroundColor: 'blue'
     },
     centerView: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center"
+    },
+    rowSeperator: {
+        height: 10
     }
 })
 
