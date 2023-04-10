@@ -20,4 +20,4 @@ export interface TouchableCardProps extends BaseCardProps {
 }
 
 
-export type CardProps = (TouchableCardProps | StaticCardProps) & {style: StyleProp<ViewStyle>};
+export type CardProps = (TouchableCardProps | StaticCardProps);
