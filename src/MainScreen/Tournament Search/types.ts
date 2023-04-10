@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import { StyleProp, ViewStyle } from "react-native";
 import { TournamentListDataQuery } from "../../gql/gql";
 import { TournamentCardNavigationProp } from "../../navTypes";
@@ -21,3 +22,8 @@ export type TournamentCardProps = Ensure<TournamentDetails, "id"> & {
     navigation: TournamentCardNavigationProp
     style?: StyleProp<ViewStyle>
 };
+
+export interface SubtitleProps {
+    text: string | null
+    iconName: keyof typeof Ionicons.glyphMap
+}
