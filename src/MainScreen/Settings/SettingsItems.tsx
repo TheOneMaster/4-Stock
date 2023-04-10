@@ -1,30 +1,14 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { useRef, useState } from "react";
-import { StyleProp, StyleSheet, Switch, TouchableHighlight, View, ViewStyle } from "react-native";
-import { FlatList, TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Switch, TouchableHighlight, View } from "react-native";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 
 import EyeTextInput from "../../Shared/EyeTextInput/EyeTextInput";
 import { MainText } from "../../Shared/ThemedText";
-import { AppSettings, DropdownOption } from "./types";
+import { AppSettings, DropdownItemListProps, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItem, SettingsTextInputProps } from "./types";
 
-
-
-interface SettingsItem<Group extends keyof AppSettings> {
-    title: string
-    group: Group
-    setting: keyof AppSettings[Group]
-    style?: StyleProp<ViewStyle>
-}
-
-
-
-interface SettingsTextInputProps<Group extends keyof AppSettings> extends SettingsItem<Group> {
-    group: Group
-    setting: keyof AppSettings[Group]
-    hidden?: boolean
-}
 
 export function SettingsTextInput<Group extends keyof AppSettings>(props: SettingsTextInputProps<Group>) {
 
@@ -68,8 +52,6 @@ export function SettingsTextInput<Group extends keyof AppSettings>(props: Settin
 
 }
 
-
-
 export function SettingsSwitch<Group extends keyof AppSettings>(props: SettingsItem<Group>) {
     const {
         title,
@@ -89,18 +71,6 @@ export function SettingsSwitch<Group extends keyof AppSettings>(props: SettingsI
             </View>
         </View>
     )
-}
-
-
-
-interface SettingsDropdownProps<Group extends keyof AppSettings> extends SettingsItem<Group> {
-    data: DropdownOption[]
-}
-
-interface DropdownItemProps {
-    item: DropdownOption
-    onPress: (item: DropdownOption) => void
-    active?: boolean
 }
 
 export function SettingsDropdown<Group extends keyof AppSettings>(props: SettingsDropdownProps<Group>) {
@@ -152,13 +122,6 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
 
 }
 
-interface DropdownItemListProps {
-    data: DropdownOption[]
-    activeValue: number
-    onPress: (item: DropdownOption) => void
-    style?: StyleProp<ViewStyle>
-}
-
 function DropdownItemList({ data, activeValue, onPress, style }: DropdownItemListProps) {
 
     return (
@@ -167,7 +130,6 @@ function DropdownItemList({ data, activeValue, onPress, style }: DropdownItemLis
         </View>
     )
 }
-
 
 function DropdownItem({ item, active, onPress }: DropdownItemProps) {
     const { label } = item;
@@ -238,7 +200,3 @@ const styles = StyleSheet.create({
 
 
 });
-
-const ddStyles = StyleSheet.create({
-
-})
