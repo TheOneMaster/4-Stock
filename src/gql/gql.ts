@@ -1,6 +1,6 @@
 //  THIS IS A GENERATED FILE. DO NOT EDIT.
 import { useQuery, useInfiniteQuery, UseQueryOptions, UseInfiniteQueryOptions } from '@tanstack/react-query';
-import { fetchData } from '../fetchAPI';
+import { useFetchData } from '../fetchAPI';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -54,6 +54,7 @@ export type Address = {
 /** Represents the name of the third-party service (e.g Twitter) for OAuth */
 export enum AuthorizationType {
   Discord = 'DISCORD',
+  Epic = 'EPIC',
   Mixer = 'MIXER',
   Steam = 'STEAM',
   Twitch = 'TWITCH',
@@ -2361,7 +2362,7 @@ export const useEventDataQuery = <
     ) =>
     useQuery<EventDataQuery, TError, TData>(
       variables === undefined ? ['EventData'] : ['EventData', variables],
-      fetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument, variables),
+      useFetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument).bind(null, variables),
       options
     );
 
@@ -2376,10 +2377,10 @@ export const useInfiniteEventDataQuery = <
       variables?: EventDataQueryVariables,
       options?: UseInfiniteQueryOptions<EventDataQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument)
     return useInfiniteQuery<EventDataQuery, TError, TData>(
       variables === undefined ? ['EventData.infinite'] : ['EventData.infinite', variables],
-      (metaData) => fetchData<EventDataQuery, EventDataQueryVariables>(EventDataDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
@@ -2434,7 +2435,7 @@ export const useEventResultsQuery = <
     ) =>
     useQuery<EventResultsQuery, TError, TData>(
       ['EventResults', variables],
-      fetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument, variables),
+      useFetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument).bind(null, variables),
       options
     );
 
@@ -2449,10 +2450,10 @@ export const useInfiniteEventResultsQuery = <
       variables: EventResultsQueryVariables,
       options?: UseInfiniteQueryOptions<EventResultsQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument)
     return useInfiniteQuery<EventResultsQuery, TError, TData>(
       ['EventResults.infinite', variables],
-      (metaData) => fetchData<EventResultsQuery, EventResultsQueryVariables>(EventResultsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
@@ -2484,7 +2485,7 @@ export const useFeaturedTournamentsQuery = <
     ) =>
     useQuery<FeaturedTournamentsQuery, TError, TData>(
       variables === undefined ? ['FeaturedTournaments'] : ['FeaturedTournaments', variables],
-      fetchData<FeaturedTournamentsQuery, FeaturedTournamentsQueryVariables>(FeaturedTournamentsDocument, variables),
+      useFetchData<FeaturedTournamentsQuery, FeaturedTournamentsQueryVariables>(FeaturedTournamentsDocument).bind(null, variables),
       options
     );
 
@@ -2499,10 +2500,10 @@ export const useInfiniteFeaturedTournamentsQuery = <
       variables?: FeaturedTournamentsQueryVariables,
       options?: UseInfiniteQueryOptions<FeaturedTournamentsQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<FeaturedTournamentsQuery, FeaturedTournamentsQueryVariables>(FeaturedTournamentsDocument)
     return useInfiniteQuery<FeaturedTournamentsQuery, TError, TData>(
       variables === undefined ? ['FeaturedTournaments.infinite'] : ['FeaturedTournaments.infinite', variables],
-      (metaData) => fetchData<FeaturedTournamentsQuery, FeaturedTournamentsQueryVariables>(FeaturedTournamentsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
@@ -2542,7 +2543,7 @@ export const useTournamentListDataQuery = <
     ) =>
     useQuery<TournamentListDataQuery, TError, TData>(
       ['TournamentListData', variables],
-      fetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument, variables),
+      useFetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument).bind(null, variables),
       options
     );
 
@@ -2557,10 +2558,10 @@ export const useInfiniteTournamentListDataQuery = <
       variables: TournamentListDataQueryVariables,
       options?: UseInfiniteQueryOptions<TournamentListDataQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument)
     return useInfiniteQuery<TournamentListDataQuery, TError, TData>(
       ['TournamentListData.infinite', variables],
-      (metaData) => fetchData<TournamentListDataQuery, TournamentListDataQueryVariables>(TournamentListDataDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
@@ -2640,7 +2641,7 @@ export const useUserDetailsQuery = <
     ) =>
     useQuery<UserDetailsQuery, TError, TData>(
       variables === undefined ? ['UserDetails'] : ['UserDetails', variables],
-      fetchData<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument, variables),
+      useFetchData<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument).bind(null, variables),
       options
     );
 
@@ -2655,10 +2656,10 @@ export const useInfiniteUserDetailsQuery = <
       variables?: UserDetailsQueryVariables,
       options?: UseInfiniteQueryOptions<UserDetailsQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument)
     return useInfiniteQuery<UserDetailsQuery, TError, TData>(
       variables === undefined ? ['UserDetails.infinite'] : ['UserDetails.infinite', variables],
-      (metaData) => fetchData<UserDetailsQuery, UserDetailsQueryVariables>(UserDetailsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 
@@ -2717,7 +2718,7 @@ export const useTournamentDetailsQuery = <
     ) =>
     useQuery<TournamentDetailsQuery, TError, TData>(
       ['TournamentDetails', variables],
-      fetchData<TournamentDetailsQuery, TournamentDetailsQueryVariables>(TournamentDetailsDocument, variables),
+      useFetchData<TournamentDetailsQuery, TournamentDetailsQueryVariables>(TournamentDetailsDocument).bind(null, variables),
       options
     );
 
@@ -2732,10 +2733,10 @@ export const useInfiniteTournamentDetailsQuery = <
       variables: TournamentDetailsQueryVariables,
       options?: UseInfiniteQueryOptions<TournamentDetailsQuery, TError, TData>
     ) =>{
-    
+    const query = useFetchData<TournamentDetailsQuery, TournamentDetailsQueryVariables>(TournamentDetailsDocument)
     return useInfiniteQuery<TournamentDetailsQuery, TError, TData>(
       ['TournamentDetails.infinite', variables],
-      (metaData) => fetchData<TournamentDetailsQuery, TournamentDetailsQueryVariables>(TournamentDetailsDocument, {...variables, ...(metaData.pageParam ?? {})})(),
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
       options
     )};
 

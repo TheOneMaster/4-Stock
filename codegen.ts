@@ -26,7 +26,10 @@ const config: CodegenConfig = {
         }
       }],
       config: {
-        fetcher: "../fetchAPI#fetchData",
+        fetcher: {
+          func: "../fetchAPI#useFetchData",
+          isReactHook: true
+        },
         avoidOptionals: true,
         exposeQueryKeys: true,
         strict: true,

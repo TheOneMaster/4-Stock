@@ -1,15 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
-import { useInfiniteTournamentListDataQuery } from "../gql/gql";
+import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
 import { EmptyTournamentListProps } from "./types";
 import useFilter from "./filterHook";
 import TournamentCard from "./TournamentCard";
 
-import { checkID, truthyFilter } from "../helper";
-import { TournamentListViewProps } from "../navTypes";
-import { MainText, SearchBar } from "../Shared";
+import { checkID, truthyFilter } from "../../helper";
+import { TournamentListViewProps } from "../../navTypes";
+import { MainText, SearchBar } from "../../Shared";
 
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {

@@ -6,7 +6,7 @@ import { HomeDrawerParamList, HomeScreenProps } from "../navTypes";
 import CustomDrawerContent from "./CustomDrawerContent";
 
 import FeaturedTournamentsPage from "./Featured Tournaments";
-import TournamentList from "./TournamentList";
+import TournamentList from "./Tournament Search";
 import SettingsPage from "./Settings";
 import AboutPage from "./About";
 
