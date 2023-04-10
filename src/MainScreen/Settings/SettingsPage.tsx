@@ -1,29 +1,39 @@
-import { StyleSheet, View, ScrollView } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 
 import { SettingsViewProps } from "../../navTypes";
+import GAME_LIST from "./games.json";
 import SettingsGroup from "./SettingsGroup";
 import { SettingsDropdown, SettingsSwitch, SettingsTextInput } from "./SettingsItems";
-import GAME_LIST from "./games.json"
 
 
 const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
             <SettingsGroup title="General">
-                <SettingsTextInput group="general" setting="apiKey" title="API Key" style={{ paddingVertical: 0, paddingHorizontal: 10 }} hidden />
-                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" style={{ paddingHorizontal: 10 }} />
-                <SettingsSwitch group="general" setting="debug" title="Debug" style={{ paddingHorizontal: 10, paddingTop: 5, paddingBottom: 8 }} />
+                <SettingsTextInput group="general" setting="apiKey" title="API Key" style={[styles.settingsItem, styles.textInput]} hidden />
+                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" style={styles.settingsItem} />
+                <SettingsSwitch group="general" setting="debug" title="Debug" style={[styles.settingsItem, styles.switch]} />
             </SettingsGroup>
 
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    settingsItem: {
+        paddingHorizontal: 10,
+    },
+    textInput: {
+        paddingVertical: 0
+    },
+    switch: {
+        paddingTop: 5,
+        paddingBottom: 8
     }
 });
 

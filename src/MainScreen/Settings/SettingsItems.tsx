@@ -144,17 +144,7 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
                 </View>
             </TouchableHighlight>
 
-            {drawer &&
-                <FlatList
-                    data={data}
-                    renderItem={({ item, index }) => {
-
-                        return <DropdownItem item={item} active={selected?.label === item.label} onPress={selectItem} />
-                    }
-                    }
-                    initialNumToRender={20}
-                />
-            }
+            {drawer && <DropdownItemList data={data} activeValue={selected?.value ?? Infinity} onPress={selectItem} />}
         </View>
     )
 
@@ -162,9 +152,25 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
 
 }
 
+interface DropdownItemListProps {
+    data: DropdownOption[]
+    activeValue: number
+    onPress: (item: DropdownOption) => void
+    style?: StyleProp<ViewStyle>
+}
+
+function DropdownItemList({ data, activeValue, onPress, style }: DropdownItemListProps) {
+
+    return (
+        <View style={style}>
+            {data.map(item => <DropdownItem item={item} active={item.value === activeValue} onPress={onPress} key={item.value} />)}
+        </View>
+    )
+}
+
 
 function DropdownItem({ item, active, onPress }: DropdownItemProps) {
-    const { label, value } = item;
+    const { label } = item;
     const { colors } = useTheme();
     const colorCSS = StyleSheet.create({
         item: {
