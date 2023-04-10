@@ -2,10 +2,11 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import { useFocusEffect, useTheme } from "@react-navigation/native";
 import React, { SetStateAction, useCallback, useEffect, useRef, useState } from "react";
 import { Animated, BackHandler, Button, Keyboard, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { addMonthsToDate } from "../helper";
-import { MainText } from "../Shared/ThemedText";
 
-import { StorageVariables } from "../types";
+import { addMonthsToDate } from "../helper";
+import { MainText } from "../Shared";
+
+import { StorageVariables } from "./types";
 import { FilterText } from "./FilterItem";
 
 const DEFAULT_HEIGHT = 350;

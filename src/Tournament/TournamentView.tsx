@@ -2,14 +2,14 @@ import { Button, RefreshControl, ScrollView, StyleSheet, View } from "react-nati
 import { useQueryClient } from "@tanstack/react-query";
 import { useTournamentDetailsQuery } from "../gql/gql";
 
-import { TournamentViewProps } from "../navTypes";
-import ContactButton from "../Shared/ContactButton";
-import { MainText } from "../Shared/ThemedText";
+import { RegisterButtonProps } from "./types";
 import DetailSection from "./DetailSection";
 import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
-import { RegisterButtonProps } from "./types";
 
+import { TournamentViewProps } from "../navTypes";
+import { MainText } from "../Shared";
+import ContactButton from "../Shared/ContactButton";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
     if (!show) {
@@ -26,8 +26,6 @@ const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
         </View>
 
     )
-
-
 }
 
 const TournamentView = ({ navigation, route }: TournamentViewProps) => {

@@ -1,6 +1,6 @@
-import { useTheme } from "@react-navigation/native"
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native"
-import { MainText, SubtitleText } from "../Shared/ThemedText"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+
+import { MainText, SubtitleText } from "../Shared"
 
 interface UserLoginProps {
     loggedIn: boolean
@@ -9,15 +9,11 @@ interface UserLoginProps {
 
 const UserLogin = ({ loggedIn, style }: UserLoginProps) => {
 
-    const { colors } = useTheme();
-
-    if (loggedIn) {
-        return (
-            <View style={[styles.container, style]}>
-                <MainText>Logged In</MainText>
-            </View>
-        )
-    }
+    if (loggedIn) return (
+        <View style={[styles.container, style]}>
+            <MainText>Logged In</MainText>
+        </View>
+    )
 
     return (
         <View style={[styles.container, style]}>

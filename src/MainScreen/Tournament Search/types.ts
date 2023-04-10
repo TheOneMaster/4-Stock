@@ -1,6 +1,6 @@
 import { StyleProp, ViewStyle } from "react-native";
-import { TournamentListDataQuery } from "../gql/gql";
-import { TournamentCardNavigationProp } from "../navTypes";
+import { TournamentListDataQuery } from "../../gql/gql";
+import { TournamentCardNavigationProp } from "../../navTypes";
 
 export interface EmptyTournamentListProps {
     status: "success" | "loading" | "error"
@@ -21,4 +21,3 @@ export type TournamentCardProps = Ensure<TournamentDetails, "id"> & {
     navigation: TournamentCardNavigationProp
     style?: StyleProp<ViewStyle>
 };
-

@@ -2,16 +2,17 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { useTheme } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
-import AboutPage from "../About/AboutPage";
 import { HomeDrawerParamList, HomeScreenProps } from "../navTypes";
-import SettingsPage from "../Settings/SettingsPage";
 import CustomDrawerContent from "./CustomDrawerContent";
-import FeaturedTournamentsPage from "./Featured Tournaments/FeaturesTournamentsPage";
-import TournamentList from "./TournamentList";
+
+import FeaturedTournamentsPage from "./Featured Tournaments";
+import TournamentList from "./Tournament Search";
+import SettingsPage from "./Settings";
+import AboutPage from "./About";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
-const HomeScreen = ({ navigation, route }: HomeScreenProps) => {
+const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
     const { colors } = useTheme();
 
@@ -38,4 +39,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default HomeScreen;
+export default MainScreen;
