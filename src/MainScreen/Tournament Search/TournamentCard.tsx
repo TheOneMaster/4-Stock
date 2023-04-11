@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { SubtitleProps, TournamentCardProps } from "./types";
 
 import { convertDateToString, truthyFilter } from "../../helper";
-import { getImageByType, MainText, PlaceholderImage, PrimaryCard, SubtitleText } from "../../Shared";
+import { getImageByType, MainText, PlaceholderImage, PrimaryCard, SubtitleText, TransparentCard } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
 
 
@@ -19,9 +19,9 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
 
     return (
         <PrimaryCard touchable onPress={navigateToTournament} style={styles.container}>
-            <View style={styles.imageContainer}>
+            <TransparentCard style={styles.imageContainer}>
                 <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} />
-            </View>
+            </TransparentCard>
             <View style={styles.textBox}>
                 <MainText style={styles.title}>{name}</MainText>
                 <View style={styles.detailsText}>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
         width: 100,
         height: 100,
         alignSelf: "center",
+        borderRightWidth: 1
     },
     image: {
         overflow: "hidden",
