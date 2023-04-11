@@ -1,41 +1,30 @@
 import { useTheme } from "@react-navigation/native";
 import { useEffect, useState } from "react";
-import { Button, Keyboard, StyleProp, StyleSheet, TextInput, TouchableOpacity, View, ViewStyle } from "react-native";
-import { BackIcon, MagnifyingGlassIcon } from "./SVG";
+import { Button, Keyboard, StyleSheet, TextInput, View } from "react-native";
+
+import { TransparentCard } from "../Containers/Containers";
+import { IoniconsThemed } from "../IconTheme";
+import { SearchBarProps } from "./types";
 
 const SearchBarIcon = ({ selected, onBackPress }: { selected: boolean, onBackPress: () => void }) => {
-
-    const { colors } = useTheme();
 
     function backEvent() {
         onBackPress();
         Keyboard.dismiss();
     }
 
-    if (!selected) {
-        return (
-            <View style={styles.imageContainer}>
-                <MagnifyingGlassIcon width={25} height={30} color={colors.text} fill={colors.text} />
-            </View>
-        )
-    }
-
     return (
-        <TouchableOpacity onPress={backEvent} style={styles.imageContainer}>
-            <BackIcon width={20} height={30} color={colors.text} fill={colors.text} />
-        </TouchableOpacity>
+        <TransparentCard touchable={selected} onPress={backEvent} style={styles.imageContainer}>
+            <IoniconsThemed name={selected ? "arrow-back-outline" : "search-outline"} text="primary" size={25} />
+        </TransparentCard>
     )
 }
 
-type SearchBarProps = {
-    filter: string | null,
-    filterAction: (filter: string) => void,
-    setFilter?: (filter: string) => void,
-    searchTitle?: string,
-    style?: StyleProp<ViewStyle>
-}
 
-const SearchBar = ({ filter, setFilter, filterAction, searchTitle, style }: SearchBarProps) => {
+
+export const SearchBar = (props: SearchBarProps) => {
+
+    const { filter, filterAction, setFilter, searchTitle, placeholder, style } = props;
 
     const [selected, setSelected] = useState(false);
     const [filterText, setFilterText] = useState(filter ?? "");
@@ -87,7 +76,7 @@ const SearchBar = ({ filter, setFilter, filterAction, searchTitle, style }: Sear
             <View style={styles.filterInput}>
                 <TextInput
                     style={{ backgroundColor: colors.card2, padding: 5, color: colors.text }}
-                    placeholder="Entrant"
+                    placeholder={placeholder}
                     placeholderTextColor={colors.secondaryText}
                     value={filterText}
                     onFocus={handleFocus}
@@ -129,5 +118,3 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
     }
 });
-
-export default SearchBar;
