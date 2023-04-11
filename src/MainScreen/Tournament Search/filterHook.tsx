@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { convertDateToUnixSeconds } from "../../helper";
 import { useSettings } from "../Settings";
 
-function useFilter() {
+export function useFilter() {
 
     const settings = useSettings();
     const { debug, mainGame } = settings.general
@@ -35,5 +35,3 @@ function useFilter() {
     }
 
 }
-
-export default useFilter;
