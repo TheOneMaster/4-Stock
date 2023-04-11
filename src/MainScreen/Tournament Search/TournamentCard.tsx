@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        borderWidth: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
         borderStyle: "solid"
     },
     imageContainer: {
@@ -60,8 +61,6 @@ const styles = StyleSheet.create({
         borderRightWidth: 1
     },
     image: {
-        overflow: "hidden",
-        resizeMode: "contain",
         width: '100%',
         height: '100%'
     },
