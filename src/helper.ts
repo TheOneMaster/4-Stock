@@ -38,12 +38,6 @@ export function convertStorageToAPI(params: StorageVariables): APIVariables {
     return final
 };
 
-export function addMonthsToDate(date: Date, months = 1): Date {
-    const dateTemp = new Date();
-    dateTemp.setMonth(date.getMonth() + months);
-    return dateTemp;
-}
-
 export function cleanObject<T extends Object>(obj: T): Partial<T> {
     return Object.keys(obj).reduce((prev, cur) => {
         const valueUndefined = obj[cur] === undefined;
