@@ -2,6 +2,7 @@ import * as Application from "expo-application";
 import { StyleSheet, View } from "react-native";
 
 import { MainText, SubtitleText, TransparentCard } from "../../Shared";
+import { InfoRowProps } from "./types";
 
 function AboutInfo() {
 
@@ -19,10 +20,6 @@ function AboutInfo() {
     )
 }
 
-interface InfoRowProps {
-    title: string
-    value: string
-}
 
 function InfoRow({ title, value }: InfoRowProps) {
     return (
