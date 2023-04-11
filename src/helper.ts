@@ -9,10 +9,10 @@ export function convertDateToString(date: number): string {
 
     // Unnecessary for now. Might need this later if localeDateString stops working. Previously stopped working because
     // React-Native uses a very old version of JavascriptCore. Fixed by changing to the Hermes engine.
-    // 
+    //
     // Issue: https://github.com/facebook/react-native/issues/15717
     // Fix: https://docs.expo.dev/guides/using-hermes/
-    // 
+    //
     // const locale: string = (Platform.OS === 'ios') ?
     //     NativeModules.SettingsManager.settings.AppleLanguages[0] || NativeModules.SettingsManager.settings.AppleLocale :
     //     NativeModules.I18nManager.localeIdentifier;
@@ -24,17 +24,15 @@ export function convertDateToUnixSeconds(date: Date): number {
     return Math.floor(date.getTime() / 1000)
 }
 
-export function convertStorageToAPI(params: Partial<StorageVariables>): Partial<APIVariables> {
+export function convertStorageToAPI(params: StorageVariables): APIVariables {
 
-    const final: APIVariables = {};
-
-    for (const variable in params) {
-        const value = params[variable];
-        if (value instanceof Date) {
-            final[variable] = convertDateToUnixSeconds(value);
-            continue;
-        }
-        final[variable] = value;
+    const final: APIVariables = {
+        name: params.name,
+        afterDate: params.afterDate ? convertDateToUnixSeconds(params.afterDate) : undefined,
+        beforeDate: params.beforeDate ? convertDateToUnixSeconds(params.beforeDate) : undefined,
+        location: params.location,
+        page: params.page,
+        perPage: params.perPage
     }
 
     return final
@@ -63,15 +61,16 @@ export function getNumberOrdinal(num: number | null): string {
 
     if (num === null) return ""
 
-    var j = num % 10,
-        k = num % 100;
-    if (j == 1 && k != 11) {
+    let tens = num % 10;
+    let hundreds = num % 100;
+
+    if (tens == 1 && hundreds != 11) {
         return num + "st";
     }
-    if (j == 2 && k != 12) {
+    if (tens == 2 && hundreds != 12) {
         return num + "nd";
     }
-    if (j == 3 && k != 13) {
+    if (tens == 3 && hundreds != 13) {
         return num + "rd";
     }
     return num + "th";
