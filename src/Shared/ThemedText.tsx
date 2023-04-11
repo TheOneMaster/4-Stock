@@ -24,3 +24,12 @@ export function SubtitleText(props: TextProps) {
 
     return <Text {...newProps} />
 }
+
+export function LinkText(props: TextProps) {
+    const { colors } = useTheme();
+
+    const newProps = Object.assign({}, props);
+    newProps.style = [props.style, { color: colors.link }];
+
+    return <Text {...newProps} />
+}
