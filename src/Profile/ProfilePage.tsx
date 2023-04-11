@@ -10,17 +10,11 @@ import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {
     const { colors } = useTheme();
-    const { data, isLoading, isError, isFetching } = useUserDetailsQuery({ ID: route.params.id.toString(), perPage: 10 });
+    const { data, status } = useUserDetailsQuery({ ID: route.params.id.toString(), perPage: 10 });
 
-    if (isLoading) return (
+    if (status !== "success" || data.user === null) return (
         <View style={styles.centerView}>
-            <MainText>Loading...</MainText>
-        </View>
-    )
-
-    if (isError || data.user === null) return (
-        <View style={styles.centerView}>
-            <MainText>Error loading profile details</MainText>
+            <MainText>{status === "loading" ? "Loading..." : "Error loading profile details"}</MainText>
         </View>
     )
 

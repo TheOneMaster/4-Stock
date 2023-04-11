@@ -2,23 +2,14 @@ import { useTheme } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
 
 import { ProfileHeaderProps } from "./types";
-import { getImageByType, PlaceholderImage } from "../Shared";
+import { getImageByType, PlaceholderImage, TransparentCard } from "../Shared";
 import UserInfoSection from "./UserInfoSection";
-
-
 
 
 function ProfileHeader(props: ProfileHeaderProps) {
     const images = props.profileDetails.images?.flatMap(image => image ? [image] : []) ?? [];
     const profileImageUrl = getImageByType(images, "profile");
     const bannerImageUrl = getImageByType(images, "banner");
-
-    const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        profileImageBox: {
-            borderColor: colors.border
-        }
-    })
 
     if (bannerImageUrl.url) return (
         <View>
@@ -29,9 +20,9 @@ function ProfileHeader(props: ProfileHeaderProps) {
 
             <View style={[styles.container, bannerStyles.container]}>
 
-                <View style={[styles.profileImageBox, colorCSS.profileImageBox]}>
+                <TransparentCard style={styles.profileImageBox}>
                     <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
-                </View>
+                </TransparentCard>
 
                 <UserInfoSection
                     player={props.profileDetails.player}
@@ -47,9 +38,9 @@ function ProfileHeader(props: ProfileHeaderProps) {
     return (
         <View style={[styles.container]}>
 
-            <View style={[styles.profileImageBox, colorCSS.profileImageBox]}>
+            <TransparentCard style={styles.profileImageBox}>
                 <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
-            </View>
+            </TransparentCard>
 
             <UserInfoSection
                 player={props.profileDetails.player}
@@ -59,8 +50,6 @@ function ProfileHeader(props: ProfileHeaderProps) {
 
         </View>
     )
-
-
 }
 
 const styles = StyleSheet.create({
