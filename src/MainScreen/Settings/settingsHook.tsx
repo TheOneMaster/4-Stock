@@ -1,4 +1,4 @@
-import { useMMKV, useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
+import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 import { AppSettings, DropdownOption } from "./types";
 
 export function useSettings() {
