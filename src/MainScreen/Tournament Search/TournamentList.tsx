@@ -4,7 +4,7 @@ import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
 import { EmptyTournamentListProps } from "./types";
-import useFilter from "./filterHook";
+import { useFilter } from "./filterHook";
 import TournamentCard from "./TournamentCard";
 
 import { checkID, truthyFilter } from "../../helper";
@@ -17,7 +17,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
     const { filters, setName } = useFilter();
 
     const queryClient = useQueryClient();
-    const { data, status, isFetching, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
+    const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.tournaments?.pageInfo?.page ? lastPage.tournaments.pageInfo.page + 1 : filters.page + 1
             return { page: nextPage }
@@ -47,18 +47,15 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 keyExtractor={(tournament) => tournament.id}
 
                 // Header
-                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setName} />}
+                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setName} placeholder="Tournament" />}
                 ListHeaderComponentStyle={{ padding: 10 }}
 
                 // Empty component
                 ListEmptyComponent={<EmptyTournamentList status={status} />}
 
-                // Update/Refresh data 
+                // Update/Refresh data
                 refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
-                onEndReached={({ distanceFromEnd }) => {
-                    if (distanceFromEnd >= 0.1) return;
-                    fetchNextPage()
-                }}
+                onEndReached={() => fetchNextPage()}
 
                 // Misc. properties
                 showsVerticalScrollIndicator={false}

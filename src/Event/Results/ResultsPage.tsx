@@ -6,8 +6,7 @@ import { EventResultsQueryVariables, useInfiniteEventResultsQuery } from "../../
 
 import { checkID, truthyFilter } from "../../helper";
 import { ResultsViewProps } from "../../navTypes";
-import SearchBar from "../../Shared/SearchBar";
-import { MainText } from "../../Shared/ThemedText";
+import { SearchBar, MainText } from "../../Shared";
 import ResultCard from "./ResultCard";
 
 function ResultsPage({ navigation, route }: ResultsViewProps) {
@@ -62,8 +61,8 @@ function ResultsPage({ navigation, route }: ResultsViewProps) {
                     <View style={{ marginVertical: 5 }} />
                 )}
 
-                // Header 
-                ListHeaderComponent={<SearchBar filterAction={updateNameFilter} filter={filters.name} />}
+                // Header
+                ListHeaderComponent={<SearchBar filterAction={updateNameFilter} filter={filters.name} placeholder="Entrant" />}
                 ListHeaderComponentStyle={{ padding: 10 }}
 
                 // Empty text
