@@ -1,10 +1,9 @@
-import { Ionicons } from "@expo/vector-icons"
 import { useTheme } from "@react-navigation/native";
-import { ComponentProps } from "react";
+import { Ionicons } from "@expo/vector-icons"
 
-type IoniconsThemedProps = ComponentProps<typeof Ionicons> & { text: "primary" | "secondary" }
+import { IoniconsThemedProps } from "./types"
 
 export function IoniconsThemed(props: IoniconsThemedProps) {
     const { colors } = useTheme();
-    return <Ionicons {...props} color={props.text === "primary" ? colors.text : colors.secondaryText} />
+    return <Ionicons {...props} color={props.text === "secondary" ? colors.secondaryText : colors.text} />
 }
