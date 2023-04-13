@@ -1,55 +1,46 @@
-import { useTheme } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
+import { truthyFilter } from "../helper";
 
-import { ProfileHeaderProps } from "./types";
 import { getImageByType, PlaceholderImage, TransparentCard } from "../Shared";
+import { ProfileHeaderProps } from "./types";
 import UserInfoSection from "./UserInfoSection";
 
 
 function ProfileHeader(props: ProfileHeaderProps) {
-    const images = props.profileDetails.images?.flatMap(image => image ? [image] : []) ?? [];
-    const profileImageUrl = getImageByType(images, "profile");
-    const bannerImageUrl = getImageByType(images, "banner");
+    const images = props.profileDetails.images?.filter(truthyFilter) ?? [];
+    const profileImage = getImageByType(images, "profile");
+    const bannerImage = getImageByType(images, "banner");
 
-    if (bannerImageUrl.url) return (
+    return (
         <View>
 
-            <View style={bannerStyles.bannerImageBox}>
-                <Image source={{ uri: bannerImageUrl.url }} style={bannerStyles.bannerImage} />
-            </View>
+            {bannerImage.url
+                ? <TransparentCard style={bannerStyles.bannerImageBox}>
+                    <Image source={{ uri: bannerImage.url }} style={bannerStyles.bannerImage} />
+                </TransparentCard>
+                : null}
 
-            <View style={[styles.container, bannerStyles.container]}>
+
+            <View style={bannerImage.url ? [styles.container, bannerStyles.container] : styles.container}>
 
                 <TransparentCard style={styles.profileImageBox}>
-                    <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
+                    <PlaceholderImage placeholder="player" imageSrc={profileImage.url} style={styles.profileImage} />
                 </TransparentCard>
 
                 <UserInfoSection
                     player={props.profileDetails.player}
                     genderPronoun={props.profileDetails.genderPronoun}
                     location={props.profileDetails.location}
-                    style={bannerStyles.profileInfo}
+                    style={bannerImage.url ? bannerStyles.profileInfo : undefined}
                 />
 
             </View>
-        </View>
-    )
-
-    return (
-        <View style={[styles.container]}>
-
-            <TransparentCard style={styles.profileImageBox}>
-                <PlaceholderImage placeholder="player" imageSrc={profileImageUrl.url} style={styles.profileImage} />
-            </TransparentCard>
-
-            <UserInfoSection
-                player={props.profileDetails.player}
-                genderPronoun={props.profileDetails.genderPronoun}
-                location={props.profileDetails.location}
-            />
 
         </View>
     )
+
+
+
 }
 
 const styles = StyleSheet.create({
@@ -84,7 +75,8 @@ const bannerStyles = StyleSheet.create({
     bannerImageBox: {
         flexGrow: 1,
         height: 120,
-        backgroundColor: "grey"
+        backgroundColor: "grey",
+        borderBottomWidth: 2
     },
     profileInfo: {
         marginTop: 20,
