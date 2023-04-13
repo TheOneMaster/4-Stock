@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         width: 140,
         height: 140,
         borderRadius: 10,
-        borderWidth: 1,
+        borderWidth: 2,
         overflow: "hidden",
     },
     image: {

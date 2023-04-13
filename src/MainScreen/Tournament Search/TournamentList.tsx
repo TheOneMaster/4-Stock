@@ -56,6 +56,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 // Update/Refresh data
                 refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
                 onEndReached={() => fetchNextPage()}
+                onEndReachedThreshold={0.1}
 
                 // Misc. properties
                 showsVerticalScrollIndicator={false}
