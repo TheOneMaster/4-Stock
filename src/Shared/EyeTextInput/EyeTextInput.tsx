@@ -1,7 +1,9 @@
 import { useState } from "react"
-import { Ionicons } from "@expo/vector-icons"
-import { NativeSyntheticEvent, Pressable, StyleSheet, TextInput, TextInputSubmitEditingEventData, View } from "react-native"
-import { useTheme } from "@react-navigation/native"
+import { NativeSyntheticEvent, Pressable, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
+
+import { PrimaryCard } from "../Containers/Containers"
+import { IoniconsThemed } from "../IconTheme"
+import { ThemedTextInput } from "../ThemedNativeElements"
 
 interface EyeTextInputProps {
     defaultValue?: string
@@ -20,17 +22,6 @@ function EyeTextInput(props: EyeTextInputProps) {
     const [visible, setVisible] = useState(false);
     const [text, updateText] = useState(defaultValue ?? "");
 
-    const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        container: {
-            backgroundColor: colors.card,
-            borderColor: colors.border
-        },
-        textInput: {
-            color: colors.text
-        }
-    })
-
     function handleUpdate(text: string) {
         updateText(text);
         if (onChangeText) onChangeText(text)
@@ -48,21 +39,21 @@ function EyeTextInput(props: EyeTextInputProps) {
 
 
     return (
-        <View style={[styles.container, colorCSS.container]}>
-            <TextInput
+        <PrimaryCard style={styles.container}>
+            <ThemedTextInput
                 secureTextEntry={!visible}
                 editable={visible}
                 value={text}
                 onChangeText={handleUpdate}
                 onSubmitEditing={handleSubmit}
-                style={[styles.textInput, colorCSS.textInput]}
+                style={styles.textInput}
             />
 
             <Pressable onPress={toggleVisible} style={styles.eyeBox}>
-                <Ionicons name={visible ? "eye-off" : "eye"} color={colors.text} />
+                <IoniconsThemed name={visible ? "eye-off" : "eye"} />
             </Pressable>
 
-        </View>
+        </PrimaryCard>
     )
 
 
@@ -72,20 +63,17 @@ function EyeTextInput(props: EyeTextInputProps) {
 const styles = StyleSheet.create({
     container: {
         flexDirection: "row",
-        backgroundColor: "blue",
         alignItems: "center",
         borderWidth: 1
     },
     textInput: {
         width: 150,
         padding: 5
-        // backgroundColor: "red"
     },
     eyeBox: {
         marginLeft: "auto",
         padding: 5,
         zIndex: 1,
-        // backgroundColor: "green"
     }
 });
 
