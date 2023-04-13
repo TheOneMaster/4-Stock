@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "StartGGApp",
-    "slug": "StartGGApp",
+    "name": "4 Stock",
+    "slug": "4-stock",
     "version": "0.6.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/final/icon.png",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/final/icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2C8F60"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -19,14 +19,14 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.theonemaster.StartGGApp"
+      "bundleIdentifier": "com.theonemaster.4stock"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/final/adaptive-icon.png",
+        "backgroundColor": "#2C8F60"
       },
-      "package": "com.theonemaster.StartGGApp"
+      "package": "com.theonemaster.four_stock"
     },
     "web": {
       "favicon": "./assets/favicon.png"
