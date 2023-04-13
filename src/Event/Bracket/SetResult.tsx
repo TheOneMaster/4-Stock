@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { GameSet, Standing } from "../../types";
 import { useTheme } from "@react-navigation/native";
-import { MainText } from "../../Shared/ThemedText";
+import { MainText } from "../../Shared/ThemedNativeElements";
 
 interface SetResultProps {
     set: GameSet

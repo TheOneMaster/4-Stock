@@ -1,6 +1,6 @@
 import { useTheme } from "@react-navigation/native";
 import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
-import { MainText } from "../../Shared/ThemedText";
+import { MainText } from "../../Shared/ThemedNativeElements";
 import { Phase } from "../../types";
 
 interface PhaseButtonProps {

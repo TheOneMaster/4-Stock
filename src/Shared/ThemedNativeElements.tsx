@@ -1,5 +1,5 @@
 import { useTheme } from "@react-navigation/native";
-import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+import { StyleProp, Text, TextInput, TextInputProps, TextProps, TextStyle } from "react-native";
 
 export function MainText(props: TextProps) {
     const { colors } = useTheme();
@@ -32,4 +32,13 @@ export function LinkText(props: TextProps) {
     newProps.style = [props.style, { color: colors.link }];
 
     return <Text {...newProps} />
+}
+
+export function ThemedTextInput(props: TextInputProps) {
+    const { colors } = useTheme();
+
+    const newProps = Object.assign({}, props);
+    newProps.style = [props.style, { color: colors.text }]
+
+    return <TextInput {...newProps} />
 }

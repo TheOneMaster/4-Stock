@@ -5,7 +5,7 @@ import { getNumberOrdinal, truthyFilter } from "../../helper";
 import { ResultsNavigationProp } from "../../navTypes";
 import { getImageByType } from "../../Shared/APIConverters";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { MainText, SubtitleText } from "../../Shared/ThemedText";
+import { MainText, SubtitleText } from "../../Shared/ThemedNativeElements";
 // import { Participant } from "../../types";
 import { Participants, ResultCardProps } from "./types";
 

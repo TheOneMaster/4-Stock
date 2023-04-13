@@ -1,6 +1,6 @@
 export * from "./Containers/Containers";
 export * from "./APIConverters"
-export * from "./ThemedText"
+export * from "./ThemedNativeElements"
 export * from "./SearchBar/SearchBar"
 
 export { default as DetailsCarousel } from "./DetailsCarousel/DetailsCarousel"

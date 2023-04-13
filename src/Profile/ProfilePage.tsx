@@ -5,7 +5,7 @@ import { useUserDetailsQuery } from "../gql/gql";
 import { UserProfileProps } from "../navTypes";
 import DetailsCarousel from "../Shared/DetailsCarousel/DetailsCarousel";
 import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "./api";
-import { MainText } from "../Shared/ThemedText";
+import { MainText } from "../Shared/ThemedNativeElements";
 import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {

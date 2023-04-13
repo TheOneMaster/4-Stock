@@ -6,7 +6,7 @@ import { useTheme } from "@react-navigation/native";
 import { BracketViewProps } from "../../navTypes";
 import { GameSet, Phase, PhaseGroup, PhaseGroupSetInfo, SetSlot } from "../../types";
 import { getPGroupSetInfo } from "../../api";
-import { MainText } from "../../Shared/ThemedText";
+import { MainText } from "../../Shared/ThemedNativeElements";
 import BracketFilters from "./BracketFilters";
 import BracketSetsList from "./BracketSetsList";
 import { convertAPITimeToDate, truthyFilter } from "../../helper";

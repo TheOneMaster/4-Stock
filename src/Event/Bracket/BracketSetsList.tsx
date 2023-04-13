@@ -1,5 +1,5 @@
 import { FlatList, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
-import { MainText } from "../../Shared/ThemedText";
+import { MainText } from "../../Shared/ThemedNativeElements";
 import { GameSet } from "../../types";
 import SetResult from "./SetResult";
 
