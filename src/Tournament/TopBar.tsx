@@ -1,47 +1,35 @@
-import { useTheme } from "@react-navigation/native";
 import { Image, StyleSheet, View } from "react-native";
+import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/ThemedText";
-import { APIImage } from "../types";
+import { MainText } from "../Shared/ThemedNativeElements";
 import { TopBarProps } from "./types";
 
 export const TopBar = (props: TopBarProps) => {
 
-    const theme = useTheme();
-    const colors = theme.colors;
     const images = props.images?.flatMap(image => image ? [image] : []) ?? []
-
     const bannerImage = getImageByType(images, "banner");
-    const profileImage = getImageByType(images, "profile")
-
-    const imgBackgroundColor = theme.dark ? '#FFF' : "#000";
-
-    const colorCSS = StyleSheet.create({
-        banner_container: {
-            borderColor: colors.border
-        },
-        profile_image_container: {
-            borderColor: colors.border,
-            backgroundColor: imgBackgroundColor
-        }
-    })
+    const profileImage = getImageByType(images, "profile");
 
     // If banner image is provided
     if (bannerImage.url) {
         return (
             <View style={styles.container}>
-                <View style={[styles.banner_container, colorCSS.banner_container]}>
-                    <Image source={{ uri: bannerImage.url }} style={styles.banner_image}></Image>
-                </View>
 
-                <View style={{ ...styles.profile_container, marginTop: -20 }}>
-                    <View style={[styles.profile_image_container, colorCSS.profile_image_container]}>
+                <TransparentCard style={styles.banner_container}>
+                    <Image source={{ uri: bannerImage.url }} style={styles.banner_image}></Image>
+                </TransparentCard>
+
+                <View style={[styles.profile_container, { marginTop: -20 }]}>
+
+                    <TransparentCard style={styles.profile_image_container}>
                         <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
-                    </View>
-                    <View style={{ ...styles.profile_text, marginTop: 20 }}>
+                    </TransparentCard>
+
+                    <View style={[styles.profile_text, { marginTop: 20 }]}>
                         <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
                     </View>
+
                 </View>
             </View>
         );
@@ -53,14 +41,12 @@ export const TopBar = (props: TopBarProps) => {
                 <View style={styles.profile_image_container}>
                     <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
                 </View>
-                <View style={{ ...styles.profile_text, justifyContent: 'center' }}>
+                <View style={[styles.profile_text, { justifyContent: "center" }]}>
                     <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
                 </View>
             </View>
         </View>
     );
-
-
 };
 
 const styles = StyleSheet.create({

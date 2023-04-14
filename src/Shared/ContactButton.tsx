@@ -1,9 +1,10 @@
-import { useTheme } from "@react-navigation/native";
 import * as React from "react";
-import { Linking, StyleSheet, Text, TouchableHighlight } from "react-native";
-import { DiscordDark, DiscordLight } from "./SVG";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Linking, StyleSheet, TouchableHighlight } from "react-native";
 
-function openLink(url: string, type: string|null) {
+import { LinkText } from "./ThemedNativeElements";
+
+function openLink(url: string, type: string | null) {
     switch (type) {
         case "discord":
             Linking.openURL(url);
@@ -24,34 +25,22 @@ interface ContactButtonProps {
     size?: number
 }
 
-const ContactButton = ({type, url, size}: ContactButtonProps) => {
-    const theme = useTheme();
-    const colors = theme.colors;
+const ContactButton = ({ type, url, size }: ContactButtonProps) => {
 
-    const stylesheetColors = StyleSheet.create({
-        link: {
-            color: colors.link,
-            fontWeight: theme.dark ? 'normal' : 'bold'
-        }
-    });
+    if (url === null) return null;
 
-    if (url === null) return null
-
-    if (type === 'discord') {
-        const DIMENSION = size ?? DEFAULT_SIZE;
-        const discordLogo = theme.dark ? <DiscordDark width={DIMENSION} height={DIMENSION}/> : <DiscordLight width={DIMENSION} height={DIMENSION}/>;
-        return (
-            <TouchableHighlight onPress={() => openLink(url, type)} style={styles.touchable}>
-                { discordLogo }
-            </TouchableHighlight>
-        )
-    }
+    const DIMENSION = size ?? DEFAULT_SIZE;
 
     return (
         <TouchableHighlight onPress={() => openLink(url, type)} style={styles.touchable}>
-            <Text style={stylesheetColors.link}>{url}</Text>
+            {type === "discord"
+                ? <MaterialCommunityIcons name="discord" size={DIMENSION} color="#7289DA" />
+                : <LinkText>{url}</LinkText>
+            }
         </TouchableHighlight>
     )
+
+
 }
 
 const styles = StyleSheet.create({

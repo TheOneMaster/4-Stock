@@ -1,13 +1,13 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useTheme } from "@react-navigation/native";
 import { useRef, useState } from "react";
-import { StyleSheet, Switch, TouchableHighlight, View } from "react-native";
-import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Switch, View } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
 import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 
-import EyeTextInput from "../../Shared/EyeTextInput/EyeTextInput";
-import { MainText } from "../../Shared/ThemedText";
-import { AppSettings, DropdownItemListProps, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItem, SettingsTextInputProps } from "./types";
+import { EyeTextInput, MainText, PrimaryCard, TransparentCard } from "../../Shared";
+import { IoniconsThemed } from "../../Shared/IconTheme";
+import { AppSettings, DropdownItemListProps, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItem, SettingsTextInputProps, TitleBarProps } from "./types";
 
 
 export function SettingsTextInput<Group extends keyof AppSettings>(props: SettingsTextInputProps<Group>) {
@@ -17,6 +17,7 @@ export function SettingsTextInput<Group extends keyof AppSettings>(props: Settin
         group,
         setting,
         hidden,
+        iconName,
         style
     } = props;
 
@@ -28,28 +29,18 @@ export function SettingsTextInput<Group extends keyof AppSettings>(props: Settin
         updateSetting(text);
     }
 
-
-    if (hidden) return (
-        <View style={[styles.container, style]}>
-            <MainText style={styles.titleText}>{title}</MainText>
-            <View style={styles.textInput}>
-                <EyeTextInput defaultValue={settingStore} onSubmit={handleSubmit} />
-            </View>
-        </View>
-    )
-
     return (
-        <View>
-            <MainText>{title}</MainText>
-            <View style={styles.textInput}>
-                <TextInput
-                    value={settingStore}
-                // onSubmitEditing={handleSubmit}
-                />
-            </View>
-        </View>
-    )
+        <TransparentCard style={[styles.container, style]}>
 
+            <TitleBar title={title} iconName={iconName} />
+
+            <View style={styles.textInput}>
+                {hidden
+                    ? <EyeTextInput defaultValue={settingStore} onSubmit={handleSubmit} />
+                    : <TextInput value={settingStore} />}
+            </View>
+        </TransparentCard>
+    )
 }
 
 export function SettingsSwitch<Group extends keyof AppSettings>(props: SettingsItem<Group>) {
@@ -57,6 +48,7 @@ export function SettingsSwitch<Group extends keyof AppSettings>(props: SettingsI
         title,
         group,
         setting,
+        iconName,
         style
     } = props
 
@@ -64,12 +56,14 @@ export function SettingsSwitch<Group extends keyof AppSettings>(props: SettingsI
     const [active, setActive] = useMMKVBoolean(settingString.current);
 
     return (
-        <View style={[styles.container, style]}>
-            <MainText style={styles.titleText}>{title}</MainText>
+        <TransparentCard style={[styles.container, style]}>
+
+            <TitleBar title={title} iconName={iconName} />
+
             <View style={styles.componentView}>
                 <Switch value={active} onValueChange={setActive}></Switch>
             </View>
-        </View>
+        </TransparentCard>
     )
 }
 
@@ -79,6 +73,7 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
         group,
         setting,
         title,
+        iconName,
         style
     } = props
 
@@ -87,11 +82,6 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
     const [drawer, updateDrawer] = useState(false);
 
     const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        container: {
-            backgroundColor: colors.card
-        }
-    })
 
     function toggleDrawer() {
         updateDrawer(!drawer);
@@ -104,26 +94,22 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
 
     return (
         <View>
-            <TouchableHighlight onPress={toggleDrawer} underlayColor={colors.primary} activeOpacity={0.93}>
-                <View style={[styles.container, colorCSS.container, style]}>
-                    <MainText style={styles.titleText}>{title}</MainText>
-                    <View style={styles.componentView}>
-                        {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
-                        <AntDesign name={drawer ? "arrowup" : "arrowleft"} size={15} color={colors.text} />
-                    </View>
+            <PrimaryCard touchable onPress={toggleDrawer} style={[styles.container, style]}>
+
+                <TitleBar title={title} iconName={iconName} />
+
+                <View style={styles.componentView}>
+                    {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
+                    <AntDesign name={drawer ? "arrowleft" : "arrowdown"} size={15} color={colors.text} />
                 </View>
-            </TouchableHighlight>
+            </PrimaryCard>
 
             {drawer && <DropdownItemList data={data} activeValue={selected?.value ?? Infinity} onPress={selectItem} />}
         </View>
     )
-
-
-
 }
 
 function DropdownItemList({ data, activeValue, onPress, style }: DropdownItemListProps) {
-
     return (
         <View style={style}>
             {data.map(item => <DropdownItem item={item} active={item.value === activeValue} onPress={onPress} key={item.value} />)}
@@ -134,24 +120,28 @@ function DropdownItemList({ data, activeValue, onPress, style }: DropdownItemLis
 function DropdownItem({ item, active, onPress }: DropdownItemProps) {
     const { label } = item;
     const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        item: {
-            borderColor: colors.border,
-        }
-    })
 
     function handleClick() {
         onPress(item);
     }
 
     return (
-        <TouchableOpacity onPress={handleClick} style={[styles.ddItem, colorCSS.item]}>
+        <TransparentCard touchable highlight onPress={handleClick} style={styles.ddItem}>
             {active
                 ? <AntDesign name="checksquare" size={15} color={colors.primary} style={styles.ddItemIcon} />
                 : <View style={[{ width: 15 }, styles.ddItemIcon]}></View>
             }
             <MainText style={styles.itemText}>{label}</MainText>
-        </TouchableOpacity>
+        </TransparentCard>
+    )
+}
+
+function TitleBar({ title, iconName, style }: TitleBarProps) {
+    return (
+        <View style={[styles.titleBar, style]}>
+            {iconName ? <IoniconsThemed name={iconName} text="primary" style={[styles.titleText, styles.titleIcon]} /> : null}
+            <MainText style={styles.titleText}>{title}</MainText>
+        </View>
     )
 }
 
@@ -161,10 +151,18 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingVertical: 8
     },
+
+    titleBar: {
+        flexDirection: "row",
+        flex: 1,
+        alignItems: "center"
+    },
     titleText: {
         fontWeight: "500",
         fontSize: 16,
-        flex: 1
+    },
+    titleIcon: {
+        marginRight: 10
     },
     componentView: {
         // flex: 1,
@@ -197,6 +195,4 @@ const styles = StyleSheet.create({
         // backgroundColor: 'red',
         // textAlign: "center"
     }
-
-
 });

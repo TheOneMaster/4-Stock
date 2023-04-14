@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 
 import PlaceholderImage from "../PlaceholderImage";
-import { MainText } from "../ThemedText";
+import { MainText } from "../ThemedNativeElements";
 import { CarouselEmptyTextProps, CarouselItemProps } from "./types";
 
 function CarouselItem(props: CarouselItemProps) {

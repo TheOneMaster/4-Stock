@@ -12,9 +12,9 @@ const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
         <ScrollView style={styles.container}>
 
             <SettingsGroup title="General">
-                <SettingsTextInput group="general" setting="apiKey" title="API Key" style={[styles.settingsItem, styles.textInput]} hidden />
-                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" style={styles.settingsItem} />
-                <SettingsSwitch group="general" setting="debug" title="Debug" style={[styles.settingsItem, styles.switch]} />
+                <SettingsTextInput group="general" setting="apiKey" title="API Key" iconName="key-outline" style={[styles.settingsItem, styles.textInput]} hidden />
+                <SettingsDropdown data={GAME_LIST} group="general" setting="mainGame" title="Main Game" iconName="game-controller-outline" style={styles.settingsItem} />
+                <SettingsSwitch group="general" setting="debug" title="Debug" iconName="bug-outline" style={[styles.settingsItem, styles.switch]} />
             </SettingsGroup>
 
         </ScrollView>

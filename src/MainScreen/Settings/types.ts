@@ -1,4 +1,5 @@
 import { StyleProp, ViewStyle } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 
 export interface DropdownOption {
     label: string,
@@ -20,6 +21,7 @@ export interface SettingsItem<Group extends keyof AppSettings> {
     title: string
     group: Group
     setting: keyof AppSettings[Group]
+    iconName?: keyof typeof Ionicons.glyphMap
     style?: StyleProp<ViewStyle>
 }
 
@@ -43,5 +45,11 @@ export interface DropdownItemListProps {
     data: DropdownOption[]
     activeValue: number
     onPress: (item: DropdownOption) => void
+    style?: StyleProp<ViewStyle>
+}
+
+export interface TitleBarProps {
+    title: string
+    iconName?: keyof typeof Ionicons.glyphMap
     style?: StyleProp<ViewStyle>
 }

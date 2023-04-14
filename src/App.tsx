@@ -10,10 +10,10 @@ import { LogBox, useColorScheme } from "react-native";
 import { RootStackParamList } from './navTypes';
 import { customDarkTheme, customLightTheme } from "./Themes";
 
-import TournamentView from './Tournament';
-import UserProfilePage from './Profile';
-import MainScreen from './MainScreen';
 import EventView from './Event';
+import MainScreen from './MainScreen';
+import UserProfilePage from './Profile';
+import TournamentView from './Tournament';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();

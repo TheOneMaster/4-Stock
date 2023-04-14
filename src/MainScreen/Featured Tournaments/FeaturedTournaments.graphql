@@ -1,6 +1,6 @@
 query FeaturedTournaments {
   tournaments(
-    query: { perPage: 8, filter: { staffPicks: true, past: false } }
+    query: { filter: { staffPicks: true, past: false } }
   ) {
     nodes {
       id

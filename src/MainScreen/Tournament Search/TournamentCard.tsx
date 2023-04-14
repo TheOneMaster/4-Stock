@@ -1,10 +1,10 @@
-import { useTheme } from "@react-navigation/native";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { TournamentCardProps } from "./types";
+import { SubtitleProps, TournamentCardProps } from "./types";
 
 import { convertDateToString, truthyFilter } from "../../helper";
-import { getImageByType, MainText, PlaceholderImage, SubtitleText } from "../../Shared";
+import { getImageByType, MainText, PlaceholderImage, PrimaryCard, SubtitleText, TransparentCard } from "../../Shared";
+import { IoniconsThemed } from "../../Shared/IconTheme";
 
 
 export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
@@ -13,60 +13,54 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
     const usableImages = images?.filter(truthyFilter) ?? [];
     const profile_image = getImageByType(usableImages, "profile")
 
-    const { colors } = useTheme();
-    const colorCSS = StyleSheet.create({
-        container: {
-            borderColor: colors.border,
-            backgroundColor: colors.card
-        },
-        text: {
-            color: colors.secondaryText
-        },
-        title: {
-            color: colors.text,
-        }
-    });
-
     function navigateToTournament() {
         navigation.push("Tournament", { id: id });
     }
 
     return (
-        <Pressable style={style} onPress={navigateToTournament}>
-            <View style={[styles.container, colorCSS.container]}>
-                <View style={styles.imageContainer}>
-                    <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} />
-                </View>
-                <View style={styles.textBox}>
-                    <MainText style={styles.title}>{name}</MainText>
-                    <View style={styles.detailsText}>
-                        <SubtitleText style={colorCSS.text}>{city}</SubtitleText>
-                        <SubtitleText style={colorCSS.text}>{dateString}</SubtitleText>
-                    </View>
+        <PrimaryCard touchable onPress={navigateToTournament} style={styles.container}>
+            <TransparentCard style={styles.imageContainer}>
+                <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} />
+            </TransparentCard>
+            <View style={styles.textBox}>
+                <MainText style={styles.title}>{name}</MainText>
+                <View style={styles.detailsText}>
+                    <SubtitleRow text={city} iconName="location-outline" />
+                    <SubtitleRow text={dateString} iconName="calendar-outline" />
                 </View>
             </View>
-        </Pressable>
-
+        </PrimaryCard>
     )
+}
 
 
+function SubtitleRow({ text, iconName }: SubtitleProps) {
+
+    if (!text) return null;
+
+    return (
+        <View style={styles.subtitle}>
+            <IoniconsThemed name={iconName} text="secondary" style={styles.subtitleIcon} />
+            <SubtitleText>{text}</SubtitleText>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         flexDirection: 'row',
-        borderWidth: 1,
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
         borderStyle: "solid"
     },
     imageContainer: {
         width: 100,
         height: 100,
         alignSelf: "center",
+        borderRightWidth: 1
     },
     image: {
-        overflow: "hidden",
-        resizeMode: "contain",
         width: '100%',
         height: '100%'
     },
@@ -83,6 +77,14 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         flexWrap: 'wrap',
         flexShrink: 1
+    },
+
+    subtitle: {
+        alignItems: "center",
+        flexDirection: "row",
+    },
+    subtitleIcon: {
+        marginRight: 5
     }
 
 });

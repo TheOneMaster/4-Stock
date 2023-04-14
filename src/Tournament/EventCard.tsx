@@ -5,7 +5,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { EventCardNavigationProp } from "../navTypes";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/ThemedText";
+import { MainText } from "../Shared/ThemedNativeElements";
 import { EventCardProps } from "./types";
 
 const EventCard = ({ event }: EventCardProps) => {

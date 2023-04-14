@@ -2463,7 +2463,7 @@ useInfiniteEventResultsQuery.getKey = (variables: EventResultsQueryVariables) =>
 
 export const FeaturedTournamentsDocument = `
     query FeaturedTournaments {
-  tournaments(query: {perPage: 8, filter: {staffPicks: true, past: false}}) {
+  tournaments(query: {filter: {staffPicks: true, past: false}}) {
     nodes {
       id
       name

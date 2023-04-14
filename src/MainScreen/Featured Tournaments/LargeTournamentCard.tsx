@@ -1,16 +1,15 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
-import { Pressable, StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, View } from "react-native";
 
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
-import { getImageByType, MainText, PlaceholderImage } from "../../Shared";
+import { getImageByType, MainText, PlaceholderImage, TransparentCard } from "../../Shared";
 import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {
 
     const images = props.images?.filter(truthyFilter) ?? [];
     const profileImage = getImageByType(images, 'profile');
-    const { colors } = useTheme()
     const navigation = useNavigation<FeaturedTournamentCardNavigationProp>();
 
     function handlePress() {
@@ -18,14 +17,13 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
 
-            <Pressable style={styles.container} onPress={handlePress}>
-                <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={[styles.image, { borderColor: colors.border }]} />
-            </Pressable>
+            <TransparentCard touchable={true} style={styles.imageContainer} onPress={handlePress}>
+                <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={styles.image} />
+            </TransparentCard>
 
-            <MainText style={styles.title}>{props.name}</MainText>
-
+            <MainText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</MainText>
         </View>
     )
 }
@@ -33,16 +31,23 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
 const styles = StyleSheet.create({
     container: {
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        flex: 1
     },
-    image: {
+
+
+    imageContainer: {
         width: 140,
         height: 140,
         borderRadius: 10,
-        borderWidth: 1
+        borderWidth: 2,
+        overflow: "hidden",
+    },
+    image: {
+        width: "100%",
+        height: "100%",
     },
     title: {
-        // backgroundColor: "red",
         textAlign: "center",
         fontWeight: 'bold',
         fontSize: 18

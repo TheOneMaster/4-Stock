@@ -1,8 +1,7 @@
 import React from "react"
-import { useTheme } from "@react-navigation/native"
 import { StyleSheet, View } from "react-native"
 
-import { MainText } from "../../Shared/ThemedText"
+import { MainText, PrimaryCard } from "../../Shared"
 
 interface SettingsGroupProps {
     title: string
@@ -11,33 +10,15 @@ interface SettingsGroupProps {
 
 function SettingsGroup(props: SettingsGroupProps) {
 
-    const { colors } = useTheme();
     const { children, title } = props;
-
-    const colorCSS = StyleSheet.create({
-        container: {
-            backgroundColor: colors.card,
-            borderColor: colors.border
-        },
-        children: {
-            borderColor: colors.border
-        }
-    });
 
     const totalChildren = React.Children.count(children);
 
-
     return (
-        <View style={[styles.container, colorCSS.container]}>
+        <PrimaryCard style={styles.container}>
             <MainText style={styles.title}>{title}</MainText>
             <View style={styles.innerContainer}>
                 {
-                    // React.Children.map(children, (child, index) => (
-                    //     <View style={index === totalChildren - 1 ? [styles.setting, styles.finalSetting, colorCSS.children] : [styles.setting, colorCSS.children]}>
-                    //         {child}
-                    //     </View>
-                    // )
-                    // )
                     React.Children.map(children, (child, index) => {
                         const isFinalChild = index === totalChildren - 1;
 
@@ -53,7 +34,7 @@ function SettingsGroup(props: SettingsGroupProps) {
                     })
                 }
             </View>
-        </View>
+        </PrimaryCard>
     )
 }
 
