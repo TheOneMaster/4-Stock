@@ -10,21 +10,16 @@
 
 Obtains data from the start.gg public GraphQL API. However, user-login is still not supported by this API, so login is disabled on the app until it is finalized.
 
-## Features implemented
-
-- Tournament Search
-- Basic Filtering for tournaments (name)
-- Tournament Details
-- Pages for event Details (results, brackets, etc)
-
-## Features to be implemented
-
-- Add welcome screen on first time setup prompting for API key
-- Get better sorting for tournament search (check API for something I missed or message maintaners)
-- Additional filtering options for tournaments (start/end dates, online/offline)
-- Add proper location support (use Google dev API for maps)
-- Brackets page currently only lists the sets present in the bracket. Change to display tree formatting when possible
-- Additional debug options & logging
+## Features
+- [x] Tournament Search
+- [x] Tournament Details
+- [x] Event details
+- [x] User Details
+- [x] Featured Tournaments
+- [ ] Welcome Screen
+- [ ] Better tournament filtering
+- [ ] Location Support
+- [ ] Bracket in tree format
 
 ---
 
