@@ -26,12 +26,18 @@
         "foregroundImage": "./assets/final/adaptive-icon.png",
         "backgroundColor": "#2C8F60"
       },
-      "package": "com.theonemaster.four_stock"
+      "package": "com.theonemaster.four_stock",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "entryPoint": "./src/App.tsx",
-    "jsEngine": "hermes"
+    "jsEngine": "hermes",
+    "extra": {
+      "eas": {
+        "projectId": "6d316582-6f1f-4542-8040-5be355f164db"
+      }
+    }
   }
 }
