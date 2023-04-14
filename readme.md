@@ -27,6 +27,8 @@ Obtains data from the start.gg public GraphQL API. However, user-login is still 
 - Brackets page currently only lists the sets present in the bracket. Change to display tree formatting when possible
 - Additional debug options & logging
 
+---
+
 ## License
 
     Copyright 2023 TheOneMaster
