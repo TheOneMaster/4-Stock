@@ -9,8 +9,6 @@
 
 Obtains data from the start.gg public GraphQL API. However, user-login is still not supported by this API, so login is disabled on the app until it is finalized.
 
-<!-- Little project to improve my typescript and learn React. Also helps me understand mobile app development and GraphQL. -->
-
 ## Features implemented
 
 - Tournament Search
