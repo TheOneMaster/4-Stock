@@ -3,8 +3,8 @@
 [![download](https://img.shields.io/github/downloads/TheOneMaster/startggapp/total?color=blue&style=for-the-badge)](https://github.com/TheOneMaster/StartGGApp/releases/latest)
 
 
-[![license](https://img.shields.io/github/license/TheOneMaster/StartGGApp)](./LICENSE)
-![version](https://img.shields.io/github/v/release/TheOneMaster/startggapp)
+[![license](https://img.shields.io/github/license/TheOneMaster/StartGGApp?style=flat-square)](./LICENSE)
+![version](https://img.shields.io/github/v/release/TheOneMaster/startggapp?style=flat-square)
 
 4 Stock is mobile UI for the website [start.gg](https://www.start.gg/). It's built using React native and expo which allows for cross compilation to both IOS and Android.
 
