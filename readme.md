@@ -2,26 +2,34 @@
 
 [![download](https://img.shields.io/github/downloads/TheOneMaster/startggapp/total?color=blue&style=for-the-badge)](https://github.com/TheOneMaster/StartGGApp/releases/latest)
 
-
 [![license](https://img.shields.io/github/license/TheOneMaster/StartGGApp?style=flat-square)](./LICENSE)
 ![version](https://img.shields.io/github/v/release/TheOneMaster/startggapp?style=flat-square)
 
-4 Stock is mobile UI for the website [start.gg](https://www.start.gg/). It's built using React native and expo which allows for cross compilation to both IOS and Android.
+4 Stock is mobile UI for the website [start.gg](https://www.start.gg/). It's built using React native and expo which allows for cross compilation to both IOS and Android. Currently, only the android app is available publicly since I dont have an iphone to test the app on. Additionally, sideloading on ios seems like an immense pain.
 
-Obtains data from the start.gg public GraphQL API. However, user-login is still not supported by this API, so login is disabled on the app until it is finalized.
+All data is obtained from the start.gg public GraphQL API. This sometimes leads to incomplete details for tournaments/events if the TO's have not filled out the information on start.gg.
 
-## Features
-- [x] Tournament Search
-- [x] Tournament Details
-- [x] Event details
-- [x] User Details
-- [x] Featured Tournaments
-- [ ] Welcome Screen
-- [ ] Better tournament filtering
-- [ ] Location Support
-- [ ] Bracket in tree format
+User login is currently unsupported on this app until [start.gg OAuth is available](https://developer.start.gg/docs/oauth/oauth-overview).
 
----
+<details><summary>Features</summary>
+
+- Tournament Search
+- Tournament Details
+- Event Details
+- User Details
+- Featured tournaments
+
+</details>
+
+<details><summary>Features to be implemented</summary>
+
+- Better tournament filtering
+- Location support
+- Draw bracket as a tree
+- OTA update support
+- Welcome screen
+
+</details>
 
 ## License
 
