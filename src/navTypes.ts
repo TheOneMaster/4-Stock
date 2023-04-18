@@ -8,7 +8,13 @@ import { PropertyDetails } from "./helperTypes"
 
 type IDProp = { id: string }
 type EventProp = IDProp & { type: number }
-type Event = PropertyDetails<EventDataQuery, "event">
+
+type RawEvent = EventDataQuery["event"];
+type Event = PropertyDetails<EventDataQuery, "event">;
+
+type Phases = Exclude<PropertyDetails<Event, "phases">[0], null>[];
+type Waves = Exclude<PropertyDetails<Event, "waves">[0], null>[]
+
 
 // Navigator types
 export type HomeDrawerParamList = {
@@ -26,7 +32,7 @@ export type RootStackParamList = {
 }
 
 export type EventTabParamList = {
-    Bracket: Pick<Event, "id" | "waves" | "phases"> & IDProp,
+    Bracket: { phases: Phases, waves: Waves }
     Results: IDProp & { singles: boolean }
 }
 

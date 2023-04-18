@@ -1,50 +1,64 @@
 import { useQueries, useQuery } from "@tanstack/react-query";
-import { localStorage, useFetchData } from "../../fetchAPI"
+import { localStorage, useFetchData } from "../../fetchAPI";
 import { PhaseGroupDetails, SetQuery } from "./types";
 
-function useSets(pGroupID: string) {
+export function useSets(pGroupID: string | null) {
 
-    const phaseGroupDetailsQuery = await useFetchData<PhaseGroupDetails, { pgID: string }>(phaseGroupInfo)({ pgID: pGroupID });
-    const totalPages = phaseGroupDetailsQuery.data.phaseGroup.sets?.pageInfo?.totalPage;
+  const { data: PhaseGroupDetails } = useQuery({
+    queryKey: ['pGroupInfo', pGroupID],
+    queryFn: () => useFetchData<PhaseGroupDetails, { pgID: string }>(phaseGroupInfo)({ pgID: pGroupID! }),
+    enabled: !!pGroupID
+  });
 
-    const setQueries = useQueries({
-        queries: 
+  const totalPages = PhaseGroupDetails?.phaseGroup.sets?.pageInfo?.totalPages;
+  const pageArray = Array.from(Array(totalPages), (x, i) => i + 1);
+
+  const pGroupInfo = PhaseGroupDetails?.phaseGroup;
+
+  const setQueries = useQueries({
+    queries: pageArray.map(page => {
+      return {
+        queryKey: ['sets', pGroupID, page],
+        queryFn: () => fetchSets(pGroupID, page),
+        enabled: !!pGroupID && !!page,
+        retry: false
+      }
     })
+  });
 
-
-
-}
-
-async function fetchPhaseGroupDetails(PhaseGroupID: string) {
-
+  return { setPages: setQueries, pGroupInfo: pGroupInfo }
 }
 
 
-async function fetchSets(pGroupID: string, page: number) {
+async function fetchSets(pGroupID: string | null, page: number) {
 
-    const apiKey = localStorage.getString("general.apiKey") ?? "";
-    const variables = { pgID: pGroupID, page: page }
+  if (pGroupID === null) throw new Error("No PhaseGroup ID provided");
 
-    const res = await fetch("https://api.start.gg/gql/alpha", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${apiKey}`,
-            "Content-Type": "application/json",
-            "X-Exclude-Invalid": "true"
-        },
-        body: JSON.stringify({ body, variables })
-    });
+  const apiKey = localStorage.getString("general.apiKey") ?? "";
+  const variables = { pgID: pGroupID, page: page };
 
-    const json: SetQuery = await res.json();
+  const res = await fetch("https://api.start.gg/gql/alpha", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "X-Exclude-Invalid": "true"
+    },
+    body: JSON.stringify({ query: phaseGroupSets, variables })
+  });
 
-    json.data
+  const json = await res.json();
 
+  if (json.success === false) {
+    const message = json.message;
+    throw new Error(message);
+  }
 
-    return
+  return json.data as SetQuery
 }
 
 const phaseGroupInfo =
-    `query PhaseGroupDetails($pgID: ID!) {
+  `query PhaseGroupDetails($pgID: ID!) {
     phaseGroup(id: $pgID) {
         displayIdentifier
         bracketType
@@ -53,7 +67,6 @@ const phaseGroupInfo =
         sets(perPage: 30) {
             pageInfo {
                 perPage
-                page
                 totalPages
                 total
             }
@@ -62,11 +75,15 @@ const phaseGroupInfo =
 }`
 
 
-const body =
-    `query getPhaseGroupSets($pgID: ID!, page: Int) {
+const phaseGroupSets =
+  `query getPhaseGroupSets($pgID: ID!, $page: Int) {
     phaseGroup(id: $pgID) {
-      sets(sortType: ROUND, perPage: 30) {
+      sets(perPage: 30, page: $page) {
+        pageInfo {
+          page
+        }
         nodes {
+          id
           round
           setGamesType
           winnerId
@@ -86,7 +103,5 @@ const body =
         }
       }
     }
-  }`
-
-const useFetch = useFetchData<SetQuery, { pgID: string, page: number }>(phaseGroupInfo);
-useFetch({ pgID: })
+  }
+  `

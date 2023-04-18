@@ -1,52 +1,43 @@
+import { StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { useTheme } from "@react-navigation/native";
-import { StyleProp, StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
-import { MainText } from "../../Shared/ThemedNativeElements";
-import { Phase } from "../../types";
 
-interface PhaseButtonProps {
-    phase: Phase
-    selected?: boolean
-    selectPhase: React.Dispatch<React.SetStateAction<Phase>>
-    style?: StyleProp<ViewStyle>
-}
+import { MainText, PrimaryCard, SecondaryCard } from "../../Shared"
+import { testPhaseButtonProps } from "./types"
 
-
-const PhaseButton = (props: PhaseButtonProps) => {
+export function TestPhaseButton({ phase, selectPhase, active }: testPhaseButtonProps) {
 
     const { colors } = useTheme();
 
-    const colorsCSS = StyleSheet.create({
+    function handlePress() {
+        if (phase?.id) selectPhase(phase.id);
+    }
+
+    const activeColors = StyleSheet.create({
+        text: {
+            ...styles.text,
+            color: colors.primary,
+            fontWeight: "bold"
+        },
         container: {
-            borderColor: props.selected ? colors.primary : colors.border,
-            backgroundColor: colors.card2
+            ...styles.container,
+            borderColor: colors.primary,
+            borderWidth: 1
         }
     });
 
-    const handleClick = () => {
-        requestAnimationFrame(() => {
-            props.selectPhase(props.phase)
-        })
-    }
-
-
     return (
-        <TouchableOpacity onPress={handleClick} style={[styles.container, colorsCSS.container, props.style]}>
-            <MainText style={styles.text}>{props.phase.name}</MainText>
-        </TouchableOpacity>
+        <SecondaryCard touchable onPress={handlePress} style={active ? activeColors.container : styles.container}>
+            <MainText style={active ? activeColors.text : styles.text}>{phase?.name}</MainText>
+        </SecondaryCard>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderStyle: 'solid',
         padding: 10,
-        elevation: 2
+        elevation: 1
     },
     text: {
-        fontSize: 16,
-        fontWeight: '500',
+        fontSize: 16
     }
-})
-
-export default PhaseButton;
+});

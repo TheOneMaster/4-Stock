@@ -1,214 +1,161 @@
-import { StyleSheet, Text, View } from "react-native";
-import { EventPageDetails, GameSet, Phase, PhaseGroup, PhaseGroupSetInfo, Wave } from "../../types";
-import { useTheme } from "@react-navigation/native";
-import React, { useEffect, useRef, useState } from "react";
-import { getPGroupSetInfo } from "../../api";
-import { DropdownOption } from "../../Shared/types";
-import BracketPhases from "./BracketPhases";
-import { Dropdown } from "react-native-element-dropdown";
-import { convertAPITimeToDate } from "../../helper";
+import { useRef } from "react";
+import { StyleSheet, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 
-interface BracketFiltersProps {
-    eventDetails: EventPageDetails
-    pGroupInfo: PhaseGroupSetInfo
-    updatePGroupInfo: (pGroup: PhaseGroup, phase: Phase) => () => void
+import { truthyFilter } from "../../helper";
+import { ThemedDropdown } from "../../Shared/ThemedDropdown";
+import { TestPhaseButton } from "./PhaseButton";
+import { PhaseGroup, Phases, TestFiltersProps, Wave, Waves } from "./types";
+
+function getItemByID<T extends { id: string | null }>(itemList: T[], itemID: string) {
+    const item = itemList.find(item => item.id === itemID);
+    if (item === undefined) throw new Error("No matching item found with ID " + itemID);
+    return item
+}
+
+function getDDPhaseGroups(phases: Phases, phaseID: string | null, waveID?: string) {
+    if (phaseID === null) return []
+
+    const dropdownPGroups = getItemByID(phases, phaseID)
+        .phaseGroups?.nodes
+        ?.filter(pGroup => waveID ? pGroup?.wave?.id === waveID : true)
+        .filter(truthyFilter)
+        ?? []
+
+    return dropdownPGroups
+}
+
+function getDDWaves(phases: Phases, waves: Waves, phaseID: string | null) {
+    if (phaseID === null) return []
+
+    const uniqueWaves = new Set(getItemByID(phases, phaseID).phaseGroups?.nodes
+        ?.map(pGroup => pGroup?.wave?.id)
+        .filter(truthyFilter));
+
+    const ddWaves = [...uniqueWaves]
+        .map(waveID => waves.find(wave => wave.id === waveID))
+        .filter(truthyFilter);
+
+    return ddWaves
 }
 
 
-function convertWavesToDropdown(waves: Wave[]): DropdownOption[] {
-    return waves.reduce((prev, cur) => {
-        const ddOption: DropdownOption = {
-            value: cur.id,
-            label: cur.identifier
-        };
-        prev.push(ddOption);
-        return prev
-    }, []);
-}
+export function TestFilters({ eventDetails, filters, setFilters, style }: TestFiltersProps) {
 
-function convertPGroupsToDropdown(pGroups: PhaseGroup[]): DropdownOption[] {
-    return pGroups.reduce((prev, cur) => {
-        const ddOption: DropdownOption = {
-            value: cur.id,
-            label: cur.displayIdentifier
-        };
-        prev.push(ddOption);
-        return prev
-    }, [])
+    if (eventDetails.phases === null || eventDetails.phases.length === 0) return null;
+    if (eventDetails.waves === null || eventDetails.waves.length === 0) return null
 
-}
+    const phases = useRef(eventDetails.phases.filter(truthyFilter));
+    const waves = useRef(eventDetails.waves.filter(truthyFilter));
 
-function BracketFilters(props: BracketFiltersProps) {
-    const phases = useRef(props.eventDetails.phases);
-    const waves = useRef(props.eventDetails.waves);
-    const phaseGroups = useRef(
-        props.eventDetails.phases.reduce<PhaseGroup[]>((prev, cur) => {
-            if (!cur.phaseGroups) {
-                return prev
-            }
-            prev.push.apply(prev, cur.phaseGroups.nodes);
-            return prev
-        }, []));
-    const { colors } = useTheme();
+    function selectPhase(phaseID: string) {
+        const selectedPhase = getItemByID(phases.current, phaseID);
+        const selectedPhaseID = selectedPhase?.id ?? null;
+        const potentialPGroups = selectedPhase?.phaseGroups?.nodes;
+        const selectedPGroupID = potentialPGroups ? potentialPGroups[0]?.id ?? null : null;
+        const selectedWave = potentialPGroups ? potentialPGroups[0]?.wave?.id ?? null : null;
 
-    const colorCSS = StyleSheet.create({
-        dropdown: {
-            backgroundColor: colors.card,
-            borderColor: colors.border
-        },
-        text: {
-            // backgroundColor: colors.card,
-            color: colors.text
-        },
-        dropdownContainer: {
-            backgroundColor: colors.card
-        }
-    });
-
-    const [selectedPhase, setSelectedPhase] = useState(phases.current[0]);
-    const [selectedPGroup, setSelectedPGroup] = useState<PhaseGroup>(phases.current[0].phaseGroups.nodes[0]);
-    const [selectedWave, setSelectedWave] = useState<Wave>(null);
-
-    const [dropdownWaves, setDropdownWaves] = useState<Wave[]>([]);
-    const [dropdownPGroups, setDropdownPGroups] = useState<PhaseGroup[]>([]);
-
-    useEffect(() => {
-
-        const phaseWavesId = selectedPhase.phaseGroups.nodes.reduce((prev, cur) => {
-            if (cur.wave === null) {
-                return prev
-            }
-            prev.add(cur.wave.id);
-            return prev
-        }, new Set<number>());
-
-        if (waves.current === null || waves.current.length === 0 || phaseWavesId.size === 0) {
-            const curPGroups = selectedPhase.phaseGroups.nodes;
-            setDropdownPGroups(curPGroups);
-            setSelectedPGroup(curPGroups[0]);
-
-            setDropdownWaves([]);
-            setSelectedWave(null);
-            return
-        }
-
-
-        const phaseWaves = waves.current
-            .filter(wave => phaseWavesId.has(wave.id))
-            .sort((a, b) => a.identifier.localeCompare(b.identifier));
-
-        setDropdownWaves(phaseWaves);
-        setSelectedWave(phaseWaves[0]);
-    }, [selectedPhase]);
-
-    useEffect(() => {
-
-        const curPGroups = selectedPhase.phaseGroups.nodes
-            .filter(pGroup => pGroup.wave && selectedWave ? pGroup.wave.id === selectedWave.id : true);
-
-        setDropdownPGroups(curPGroups);
-        setSelectedPGroup(curPGroups[0]);
-    }, [selectedWave]);
-
-    useEffect(() => {
-        return props.updatePGroupInfo(selectedPGroup, selectedPhase);
-    }, [selectedPGroup]);
-
-    useEffect(() => {
-        console.log(`Group ${selectedPGroup.displayIdentifier} sets: ${props.pGroupInfo.sets.length}`);
-    }, [props.pGroupInfo.sets])
-
-
-    function updateWave(ddOption: DropdownOption) {
-        const curWave = waves.current.reduce((prev, cur) => {
-            if (cur.id === ddOption.value) {
-                return cur
-            }
-            return prev
-        }, selectedWave);
-        setSelectedWave(curWave);
+        setFilters({
+            selectedPhase: selectedPhaseID,
+            selectedWave: selectedWave,
+            selectedPGroup: selectedPGroupID
+        });
     }
 
-    function updatePGroups(ddOption: DropdownOption) {
-        const curPGroup = phaseGroups.current.reduce((prev, cur) => {
-            if (cur.id === ddOption.value) {
-                return cur
-            }
-            return prev
-        }, selectedPGroup);
-        setSelectedPGroup(curPGroup);
+    function selectPGroup(phaseGroup: PhaseGroup) {
+        const pGroupID = phaseGroup?.id;
+        if (!pGroupID) return
+
+        setFilters({
+            selectedPGroup: pGroupID,
+            selectedPhase: filters.selectedPhase,
+            selectedWave: filters.selectedWave
+        })
     }
 
+    function selectWave(wave: Wave) {
+        const waveID = wave?.id;
+        if (!waveID) return
+
+        const possiblePhaseGroups = getDDPhaseGroups(phases.current, filters.selectedPhase, waveID);
+
+        setFilters({
+            selectedPGroup: possiblePhaseGroups[0].id,
+            selectedPhase: filters.selectedPhase,
+            selectedWave: waveID
+        })
+
+    }
+
+    const ddPhaseGroups = getDDPhaseGroups(phases.current, filters.selectedPhase, filters.selectedWave ?? undefined);
+    const ddWaves = getDDWaves(phases.current, waves.current, filters.selectedPhase);
 
     return (
-        <View style={styles.filters}>
-            <BracketPhases phases={phases.current} selectPhase={setSelectedPhase} value={selectedPhase} />
+        <View style={[styles.container, style]}>
 
-            <View style={styles.dropdowns}>
+            <FlatList
+                data={phases.current}
+                renderItem={({ item }) => <TestPhaseButton phase={item} selectPhase={selectPhase} active={filters.selectedPhase === item.id} />}
+                contentContainerStyle={styles.phaseButtonContainer}
 
-                {dropdownWaves.length > 1
-                    ? <Dropdown
-                        style={[styles.wavesDropdown, colorCSS.dropdown]}
-                        selectedTextStyle={colorCSS.text}
-                        itemTextStyle={colorCSS.text}
-                        containerStyle={colorCSS.dropdownContainer}
-                        activeColor={colors.primary}
-                        itemContainerStyle={colorCSS.dropdownContainer}
-                        data={convertWavesToDropdown(dropdownWaves)}
-                        labelField="label"
-                        valueField="value"
-                        onChange={updateWave}
-                        value={convertWavesToDropdown([selectedWave])[0]}
+                ItemSeparatorComponent={() => <View style={styles.seperator} />}
+
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+            />
+
+
+            <View style={styles.ddContainer}>
+
+                {ddPhaseGroups.length > 1
+                    ? <ThemedDropdown
+                        data={ddPhaseGroups}
+                        labelField="displayIdentifier"
+                        valueField="id"
+                        value={filters.selectedPGroup}
+                        onChange={selectPGroup}
+                        style={[styles.dropdown, { marginRight: 10 }]}
                     />
                     : null}
 
-                {dropdownPGroups.length > 1
-                    ? <Dropdown
-                        style={[styles.pGroupsDropdown, colorCSS.dropdown]}
-                        selectedTextStyle={[colorCSS.text]}
-                        itemTextStyle={colorCSS.text}
-                        containerStyle={colorCSS.dropdownContainer}
-                        itemContainerStyle={colorCSS.dropdownContainer}
-                        activeColor={colors.primary}
-                        data={convertPGroupsToDropdown(dropdownPGroups)}
-                        labelField="label"
-                        valueField="value"
-                        onChange={updatePGroups}
-                        value={convertPGroupsToDropdown([selectedPGroup])[0]}
+                {ddWaves.length > 1
+                    ? <ThemedDropdown
+                        data={ddWaves}
+                        labelField="identifier"
+                        valueField="id"
+                        value={filters.selectedWave}
+                        onChange={selectWave}
+                        style={styles.dropdown}
                     />
-                    : null
-                }
-            </View>
+                    : null}
 
+            </View>
 
         </View>
     )
+
 }
 
 const styles = StyleSheet.create({
-    default: {
-        flexGrow: 1,
+    container: {
+
     },
-    filters: {
-        marginHorizontal: 10
+    phaseButtonContainer: {
+        marginVertical: 10
     },
-    dropdowns: {
+    seperator: {
+        paddingHorizontal: 5
+    },
+    ddContainer: {
         flexDirection: "row",
         width: "100%",
+        // paddingHorizontal: 5,
+        gap: 10,
+        // marginTop: 5
+        // backgroundColor: 'red'
     },
-    wavesDropdown: {
+    dropdown: {
         flexGrow: 1,
-        borderWidth: 1,
-        borderStyle: 'solid',
-        marginRight: 10,
-        paddingLeft: 10
-    },
-    pGroupsDropdown: {
-        flexGrow: 1,
-        borderWidth: 1,
-        borderStyle: "solid",
-        paddingLeft: 10
+        borderWidth: 1
     }
-})
-
-export default BracketFilters;
+});
