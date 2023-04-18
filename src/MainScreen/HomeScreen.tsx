@@ -7,7 +7,7 @@ import CustomDrawerContent from "./CustomDrawerContent";
 
 import FeaturedTournamentsPage from "./Featured Tournaments";
 import TournamentList from "./Tournament Search";
-import SettingsPage from "./Settings";
+import SettingsPage, { useSettings } from "./Settings";
 import AboutPage from "./About";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
@@ -15,6 +15,7 @@ const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
     const { colors } = useTheme();
+    const { general } = useSettings();
 
     return (
         <Drawer.Navigator
@@ -30,6 +31,13 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
             <Drawer.Screen name="Tournament Search" component={TournamentList} />
             <Drawer.Screen name="Settings" component={SettingsPage} />
             <Drawer.Screen name="About" component={AboutPage} />
+
+            {general.debug
+                ? <Drawer.Group>
+                </Drawer.Group>
+                : null}
+
+
 
         </Drawer.Navigator>
     )

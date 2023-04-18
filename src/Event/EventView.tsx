@@ -1,12 +1,13 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useTheme } from "@react-navigation/native";
 import { UseQueryResult } from "@tanstack/react-query";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { useTheme } from "@react-navigation/native";
 
 import { useEventDataQuery } from "../gql/gql";
+import { truthyFilter } from "../helper";
 import { EventTabParamList, EventViewProps } from "../navTypes";
 import { MainText } from "../Shared";
-import BracketPage from "./Bracket/BracketPage";
+import { BracketPage } from "./Bracket/BracketPage";
 import ResultsPage from "./Results/ResultsPage";
 
 const Tab = createMaterialTopTabNavigator<EventTabParamList>();
@@ -24,14 +25,17 @@ function EventView({ navigation, route }: EventViewProps) {
         singles: route.params.type === 1
     }
 
+    const phases = data.event?.phases?.filter(truthyFilter);
+    const waves = data.event?.waves?.filter(truthyFilter)
+
+
     return (
         <Tab.Navigator>
 
             <Tab.Screen name="Results" component={ResultsPage} initialParams={eventParams} />
             <Tab.Screen name="Bracket" component={BracketPage} initialParams={{
-                id: route.params.id,
-                phases: data.event?.phases,
-                waves: data.event?.waves
+                phases: phases,
+                waves: waves
             }} />
 
         </Tab.Navigator>
