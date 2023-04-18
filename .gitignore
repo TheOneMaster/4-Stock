@@ -17,3 +17,4 @@ ios/
 .env
 
 .vscode
+build/
