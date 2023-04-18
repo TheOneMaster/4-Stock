@@ -34,6 +34,15 @@ export function LinkText(props: TextProps) {
     return <Text {...newProps} />
 }
 
+export function AccentText(props: TextProps) {
+    const { colors } = useTheme();
+
+    const newProps = Object.assign({}, props);
+    newProps.style = [props.style, { color: colors.primary }];
+
+    return <Text {...newProps} />
+}
+
 export function ThemedTextInput(props: TextInputProps) {
     const { colors } = useTheme();
 
