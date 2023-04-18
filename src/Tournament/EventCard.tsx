@@ -31,7 +31,17 @@ const EventCard = ({ event }: EventCardProps) => {
 
     const eventTouch = () => {
         console.log(event);
-        navigation.push("Event", event);
+
+        const eventID = event.id
+
+        if (eventID) {
+
+            navigation.push("Event", {
+                id: eventID,
+                type: event.type ?? 2
+            });
+        }
+
     }
 
     return (
