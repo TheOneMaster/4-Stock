@@ -3,18 +3,26 @@ import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
-import { EmptyTournamentListProps } from "./types";
 import { useFilter } from "./filterHook";
 import TournamentCard from "./TournamentCard";
+import { EmptyTournamentListProps } from "./types";
 
-import { checkID, truthyFilter } from "../../helper";
+import { useRef } from "react";
+import { checkID, convertAPITimeToDate, truthyFilter } from "../../helper";
 import { TournamentListViewProps } from "../../navTypes";
-import { MainText, SearchBar } from "../../Shared";
+import { MainText, PrimaryCard, SearchBar } from "../../Shared";
+import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
+import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
+import { FilterButton } from "../Debug/FilterButton";
+import { FilterButtonRefProps } from "../Debug/types";
+import { FilterDate, StaticFilterItem } from "./FilterItem";
 
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {
 
-    const { filters, setName } = useFilter();
+    const { filters, setFilters } = useFilter();
+    const filterButtonRef = useRef<FilterButtonRefProps>(null);
+    const filterSheetRef = useRef<BottomSheetRefProps>(null);
 
     const queryClient = useQueryClient();
     const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
@@ -36,6 +44,13 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
         })
     }
 
+    const onPress = () => {
+        if (filterSheetRef.current?.isActive()) {
+            filterSheetRef.current.scrollTo(0)
+        } else {
+            filterSheetRef.current?.scrollTo(MIN_TRANSLATE_Y)
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -47,7 +62,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 keyExtractor={(tournament) => tournament.id}
 
                 // Header
-                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setName} placeholder="Tournament" />}
+                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setFilters.setName} placeholder="Tournament" />}
                 ListHeaderComponentStyle={{ padding: 10 }}
 
                 // Empty component
@@ -57,11 +72,30 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
                 onEndReached={() => fetchNextPage()}
                 onEndReachedThreshold={0.1}
+                onScroll={(event) => {
+                    const { y: offsetY } = event.nativeEvent.contentOffset;
+
+                    if (offsetY > 100) {
+                        filterButtonRef.current?.toggleFilter(false);
+                    } else {
+                        filterButtonRef.current?.toggleFilter(true);
+                    }
+                }}
 
                 // Misc. properties
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
             />
+
+            <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
+            <BottomSheet ref={filterSheetRef}>
+                <PrimaryCard style={styles.filterSheetInner}>
+                    <MainText style={styles.titleText}>Filters</MainText>
+                    <FilterDate title="Starting Date" date={filters.afterDate} setDate={setFilters.setAfterDate} />
+                    <FilterDate title="Before Date" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
+                </PrimaryCard>
+            </BottomSheet>
+
         </View>
     )
 }
@@ -92,6 +126,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center"
+    },
+    filterButton: {
+        position: "absolute",
+        bottom: 30,
+        right: 30
+    },
+    filterSheetInner: {
+        flex: 1,
+        flexGrow: 1
+    },
+    titleText: {
+        fontSize: 17,
+        padding: 10
     }
 });
 

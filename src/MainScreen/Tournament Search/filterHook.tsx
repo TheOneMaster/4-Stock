@@ -30,8 +30,9 @@ export function useFilter() {
             beforeDate: convertDateToUnixSeconds(beforeDate),
             page: page
         },
-
-        setName: setName
+        setFilters: {
+            setName, setAfterDate, setBeforeDate
+        }
     }
 
 }
