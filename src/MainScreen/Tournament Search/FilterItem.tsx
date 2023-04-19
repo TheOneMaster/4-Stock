@@ -59,8 +59,7 @@ export const FilterDate = (props: FilterDateProps) => {
 const styles = StyleSheet.create({
     container: {
         borderBottomWidth: 1,
-        paddingVertical: 5,
-        paddingHorizontal: 10
+        padding: 10
     },
     filterText: {
         fontSize: 16
