@@ -1,78 +1,68 @@
-import { useTheme } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
-import { NativeSyntheticEvent, StyleSheet, TextInput, TextInputFocusEventData, TextInputProps, View } from "react-native";
+import { useCallback } from "react"
+import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
+import { convertAPITimeToDate } from "../../helper"
+import { MainText, SubtitleText, TransparentCard } from "../../Shared"
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 
-import { MainText } from "../Shared";
-
-interface FilterTextProps extends TextInputProps {
+interface FilterItemProps {
     title: string
-    onUpdate: React.Dispatch<React.SetStateAction<string>>
+    style?: StyleProp<ViewStyle>
 }
 
-export function FilterText(props: FilterTextProps) {
+interface StaticFilterItemProps extends FilterItemProps {
+    value: string
+}
 
-    const { title, onUpdate } = props;
-
-    const [selected, setSelected] = useState(false);
-    const { colors } = useTheme();
-    const LIGHT_GREY = useRef("#d3d3d3");
-
-    const colorCSS = StyleSheet.create({
-        input: {
-            borderColor: colors.border,
-            color: colors.text
-        }
-    })
-
-    function handleFocus(event: NativeSyntheticEvent<TextInputFocusEventData>) {
-        setSelected(true);
-
-        if (props.onFocus) {
-            props.onFocus(event);
-        }
-    }
-
-    function handleBlur() {
-        setSelected(false);
-    }
-
-    function handleTextChange(newText: string) {
-        const trimmed = newText.trim();
-        onUpdate(trimmed);
-    }
-
+export const StaticFilterItem = (props: StaticFilterItemProps) => {
     return (
-        <View style={styles.container}>
-            <MainText style={styles.title}>{title}</MainText>
-            <TextInput
-
-                style={[styles.input, colorCSS.input]}
-                placeholder={'Genesis'}
-                placeholderTextColor={colors.secondaryText}
-                onFocus={handleFocus}
-                onChangeText={handleTextChange}
-                onBlur={handleBlur}
-                selectionColor={colors.primary}
-                underlineColorAndroid={selected ? colors.primary : LIGHT_GREY.current}
-
-                {...props}
-            />
-        </View>
+        <TransparentCard style={styles.container}>
+            <Text>
+                <MainText style={styles.filterText}>{props.title}</MainText>
+                <SubtitleText style={styles.filterText}>{props.value}</SubtitleText>
+            </Text>
+        </TransparentCard>
     )
 }
 
+interface FilterDateProps extends FilterItemProps {
+    date: number
+    setDate: React.Dispatch<React.SetStateAction<Date>>
+}
+
+export const FilterDate = (props: FilterDateProps) => {
+
+    const currentDate = convertAPITimeToDate(props.date);
+
+    const onPress = useCallback(() => {
+        DateTimePickerAndroid.open({
+            value: convertAPITimeToDate(props.date),
+            onChange: (event) => {
+                const newDate = new Date(event.nativeEvent.timestamp ?? currentDate);
+                props.setDate(newDate);
+            }
+        })
+    }, [props.setDate])
+
+
+    return (
+        <TransparentCard touchable onPress={onPress} style={styles.container}>
+            <Text>
+                <MainText style={styles.filterText}>{props.title}: </MainText>
+                <SubtitleText style={styles.filterText}>{currentDate.toLocaleDateString()}</SubtitleText>
+            </Text>
+        </TransparentCard>
+    )
+}
+
+
+
 const styles = StyleSheet.create({
-    input: {
-        padding: 7,
-        borderWidth: 1,
-        borderStyle: "solid",
-        fontSize: 15
-    },
-    title: {
-        marginBottom: 5,
-        fontSize: 17,
-    },
     container: {
-        padding: 10
+        borderBottomWidth: 1,
+        paddingVertical: 5,
+        paddingHorizontal: 10
+    },
+    filterText: {
+        fontSize: 16
     }
 })
