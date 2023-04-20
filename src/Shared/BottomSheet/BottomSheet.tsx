@@ -56,7 +56,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
 
     return (
         <GestureDetector gesture={gesture}>
-            <Animated.View style={[styles.container, reanimatedStyle]}>
+            <Animated.View style={[styles.container, props.style, reanimatedStyle]}>
                 {props.children}
             </Animated.View>
         </GestureDetector>

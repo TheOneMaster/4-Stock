@@ -3,19 +3,22 @@ import React, { useCallback, useImperativeHandle } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
-import { MainText, TransparentCard } from "../../Shared"
+import { TransparentCard } from "../../Shared"
 import { IoniconsThemed } from "../../Shared/IconTheme"
+import { MainText } from "../../Shared/Text"
 import { FilterButtonProps, FilterButtonRefProps } from "./types"
+
+const MAX_WIDTH = 200;
 
 export const FilterButton = React.forwardRef<FilterButtonRefProps, FilterButtonProps>((props: FilterButtonProps, ref) => {
 
     const { colors } = useTheme();
     const { onPress } = props;
-    const buttonWidth = useSharedValue(100);
+    const buttonWidth = useSharedValue(MAX_WIDTH);
 
     const toggleFilter = useCallback((active: boolean) => {
         "worklet";
-        const newWidth = active ? 100 : 0;
+        const newWidth = active ? MAX_WIDTH : 0;
         buttonWidth.value = withSpring(newWidth, { damping: 50, mass: 0.3 });
     }, []);
 
@@ -46,8 +49,9 @@ const styles = StyleSheet.create({
     },
     innerView: {
         flexDirection: "row",
-        padding: 5,
         alignItems: "center",
+
+        padding: 5,
         borderRadius: 5,
         borderWidth: 1
     },
@@ -57,7 +61,7 @@ const styles = StyleSheet.create({
         maxHeight: 20
     },
     buttonText: {
-        marginLeft: 10,
-        fontSize: 15
+        marginLeft: 5,
+        fontSize: 15,
     }
 })
