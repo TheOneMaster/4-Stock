@@ -27,30 +27,30 @@ export const StaticFilterItem = (props: StaticFilterItemProps) => {
 }
 
 interface FilterDateProps extends FilterItemProps {
-    date: number
-    setDate: React.Dispatch<React.SetStateAction<Date>>
+    date: number | undefined
+    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>
 }
 
 export const FilterDate = (props: FilterDateProps) => {
 
-    const currentDate = convertAPITimeToDate(props.date);
+    const currentDateString = props.date ? convertAPITimeToDate(props.date).toLocaleDateString() : "Not applied";
 
     const onPress = useCallback(() => {
         DateTimePickerAndroid.open({
-            value: convertAPITimeToDate(props.date),
+            value: props.date ? convertAPITimeToDate(props.date) : new Date(),
             onChange: (event) => {
-                const newDate = new Date(event.nativeEvent.timestamp ?? currentDate);
+                const newDate = new Date(event.nativeEvent.timestamp ?? currentDateString);
                 props.setDate(newDate);
             }
         })
-    }, [props.setDate])
+    }, [props.setDate, props.date])
 
 
     return (
         <TransparentCard touchable onPress={onPress} style={styles.container}>
             <Text>
                 <MainText style={styles.filterText}>{props.title}: </MainText>
-                <SubtitleText style={styles.filterText}>{currentDate.toLocaleDateString()}</SubtitleText>
+                <SubtitleText style={styles.filterText}>{currentDateString}</SubtitleText>
             </Text>
         </TransparentCard>
     )

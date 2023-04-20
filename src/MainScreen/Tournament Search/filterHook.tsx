@@ -1,4 +1,5 @@
 import { addMonths, subYears } from "date-fns";
+import { after } from "node:test";
 import { useEffect, useState } from "react";
 
 import { convertDateToUnixSeconds } from "../../helper";
@@ -12,8 +13,8 @@ export function useFilter() {
     const [name, setName] = useState(debug ? "Genesis" : "");
 
     const [page, setPage] = useState(1);
-    const [afterDate, setAfterDate] = useState(subYears(new Date, 1));
-    const [beforeDate, setBeforeDate] = useState(addMonths(new Date, 1));
+    const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
+    const [beforeDate, setBeforeDate] = useState<Date | undefined>(addMonths(new Date, 1));
 
     useEffect(() => {
         if (debug) setName("Genesis");
@@ -26,8 +27,8 @@ export function useFilter() {
         filters: {
             name: name,
             videogameIds: mainGame ? [mainGame.value.toString()] : [],
-            afterDate: convertDateToUnixSeconds(afterDate),
-            beforeDate: convertDateToUnixSeconds(beforeDate),
+            afterDate: afterDate ? convertDateToUnixSeconds(afterDate) : afterDate,
+            beforeDate: beforeDate ? convertDateToUnixSeconds(beforeDate) : beforeDate,
             page: page
         },
         setFilters: {
