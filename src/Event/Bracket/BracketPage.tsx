@@ -1,17 +1,17 @@
 import { UseQueryResult } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
-import { IconNames, SelectedOptions, SetQuery, Status } from "./types";
-import { useSets } from "./SetHook";
+import { SelectedOptions, SetQuery } from "./types";
 import { PhaseGroupDetails } from "./PhaseGroupDetails";
-import { TestFilters } from "./BracketFilters";
+import { useSets } from "./SetHook";
 import SetResult from "./SetResult";
+import { TestFilters } from "./BracketFilters";
+
 import { truthyFilter } from "../../helper";
 import { BracketViewProps } from "../../navTypes";
-import { MainText } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
-import useDeepCompareEffect from "use-deep-compare-effect";
+import { MainText } from "../../Shared/Text";
 
 function convertSetPagesToSets(setPages: UseQueryResult<SetQuery>[]) {
     return setPages.map(page => page.data?.phaseGroup.sets?.nodes)

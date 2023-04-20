@@ -1,6 +1,6 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 
-import { MainText, SubtitleText } from "../Shared"
+import { MainText, SubtitleText } from "../Shared/Text"
 
 interface UserLoginProps {
     loggedIn: boolean

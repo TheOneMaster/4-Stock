@@ -1,5 +1,6 @@
 import { FlatList, StyleSheet, View } from "react-native";
-import { MainText } from "../ThemedNativeElements";
+
+import { MainText } from "../Text";
 import CarouselItem, { CarouselEmptyText } from "./CarouselItem";
 import { DetailsCarouselProps } from "./types";
 

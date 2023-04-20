@@ -3,8 +3,9 @@ import { StyleSheet, View } from "react-native";
 import { SubtitleProps, TournamentCardProps } from "./types";
 
 import { convertDateToString, truthyFilter } from "../../helper";
-import { getImageByType, MainText, PlaceholderImage, PrimaryCard, SubtitleText, TransparentCard } from "../../Shared";
+import { getImageByType, PlaceholderImage, PrimaryCard, TransparentCard } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
+import { MainText, SubtitleText } from "../../Shared/Text";
 
 
 export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {

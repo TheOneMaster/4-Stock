@@ -8,8 +8,8 @@ import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
 
 import { TournamentViewProps } from "../navTypes";
-import { MainText } from "../Shared";
 import ContactButton from "../Shared/ContactButton";
+import { MainText } from "../Shared/Text";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
     if (!show) {
@@ -30,11 +30,11 @@ const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
 
 const TournamentView = ({ navigation, route }: TournamentViewProps) => {
 
-    // 
-    // 
+    //
+    //
     // TODO: Rewrite this component using FlatList or SectionList instead of using map inside a ScrollView
-    // 
-    // 
+    //
+    //
 
     const tournamentID = route.params.id;
     const queryClient = useQueryClient();

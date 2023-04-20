@@ -1,8 +1,10 @@
 import { useCallback } from "react"
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
-import { convertAPITimeToDate } from "../../helper"
-import { MainText, SubtitleText, TransparentCard } from "../../Shared"
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
+
+import { convertAPITimeToDate } from "../../helper"
+import { MainText, SubtitleText } from "../../Shared/Text"
+import { TransparentCard } from "../../Shared"
 
 interface FilterItemProps {
     title: string

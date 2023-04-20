@@ -1,9 +1,9 @@
 import { StyleSheet, Text } from "react-native";
 
-import { EntrantRowProps, Set, SetResultProps } from "./types";
 import { truthyFilter } from "../../helper";
 import { PrimaryCard, TransparentCard } from "../../Shared";
-import { MainText } from "../../Shared/ThemedNativeElements";
+import { MainText } from "../../Shared/Text";
+import { EntrantRowProps, Set, SetResultProps } from "./types";
 
 function getWinner(set: Set) {
     return set.slots

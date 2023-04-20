@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { DetailsSectionProps } from "./types";
 import { convertDateToString } from "../helper";
-import { MainText } from "../Shared";
+import { MainText } from "../Shared/Text";
 
 function DetailSection(props: DetailsSectionProps) {
     const startDate = convertDateToString(props.startAt);

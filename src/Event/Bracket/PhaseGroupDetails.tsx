@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { convertAPITimeToDate } from "../../helper";
-import { AccentText, MainText } from "../../Shared";
+import { AccentText, MainText } from "../../Shared/Text";
 import { PhaseGroupDetailsProps } from "./types"
 
 export function PhaseGroupDetails(props: PhaseGroupDetailsProps) {

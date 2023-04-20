@@ -1,7 +1,8 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
 
-import { MainText, PrimaryCard } from "../../Shared"
+import { PrimaryCard } from "../../Shared"
+import { MainText } from "../../Shared/Text"
 
 interface SettingsGroupProps {
     title: string

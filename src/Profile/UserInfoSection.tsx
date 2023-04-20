@@ -1,9 +1,9 @@
 import { StyleSheet, View } from "react-native";
 
-import { MainText, SubtitleText, TransparentCard } from "../Shared";
-import { IoniconsThemed } from "../Shared/IconTheme";
-import { FontAwesomeThemed } from "../Shared/IconTheme/FontAwesome";
 import { UserInfoSectionProps } from "./types";
+import { TransparentCard } from "../Shared";
+import { IoniconsThemed, FontAwesomeThemed } from "../Shared/IconTheme";
+import { MainText, SubtitleText } from "../Shared/Text";
 
 function UserInfoSection(props: UserInfoSectionProps) {
     const { player, location, genderPronoun } = props;

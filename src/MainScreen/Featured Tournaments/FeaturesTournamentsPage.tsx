@@ -8,7 +8,7 @@ import { useFeaturedTournamentsQuery } from "../../gql/gql";
 import LargeTournamentCard from "./LargeTournamentCard";
 
 import { FeaturedTournamentsScreenProps } from "../../navTypes";
-import { MainText } from "../../Shared";
+import { MainText } from "../../Shared/Text";
 
 
 function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScreenProps) {

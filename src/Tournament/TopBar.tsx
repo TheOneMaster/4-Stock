@@ -1,8 +1,9 @@
 import { Image, StyleSheet, View } from "react-native";
+
 import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/ThemedNativeElements";
+import { MainText } from "../Shared/Text";
 import { TopBarProps } from "./types";
 
 export const TopBar = (props: TopBarProps) => {

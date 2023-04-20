@@ -1,7 +1,7 @@
-import { Image, StyleSheet, TouchableOpacity, View } from "react-native"
-import { useNavigation, useTheme } from "@react-navigation/native";
-import search_icon from "../../assets/icons8-search.png"
+import { useTheme } from "@react-navigation/native";
 import React from "react";
+import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import search_icon from "../../assets/icons8-search.png";
 
 
 interface SearchButtonProps {

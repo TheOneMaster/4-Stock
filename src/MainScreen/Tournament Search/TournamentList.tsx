@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
@@ -6,16 +7,16 @@ import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 import { useFilter } from "./filterHook";
 import TournamentCard from "./TournamentCard";
 import { EmptyTournamentListProps } from "./types";
+import { FilterDate } from "./FilterItem";
 
-import { useRef } from "react";
-import { checkID, convertAPITimeToDate, truthyFilter } from "../../helper";
+import { checkID, truthyFilter } from "../../helper";
 import { TournamentListViewProps } from "../../navTypes";
-import { MainText, PrimaryCard, SearchBar } from "../../Shared";
 import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
 import { FilterButton } from "../Debug/FilterButton";
 import { FilterButtonRefProps } from "../Debug/types";
-import { FilterDate, StaticFilterItem } from "./FilterItem";
+import { PrimaryCard, SearchBar } from "../../Shared";
+import { MainText } from "../../Shared/Text";
 
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {
@@ -137,7 +138,8 @@ const styles = StyleSheet.create({
         flexGrow: 1
     },
     titleText: {
-        fontSize: 17,
+        fontSize: 18,
+        // fontFamily: ,
         padding: 10
     }
 });

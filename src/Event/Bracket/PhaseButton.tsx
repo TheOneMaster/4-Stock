@@ -1,8 +1,9 @@
-import { StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
 
-import { MainText, PrimaryCard, SecondaryCard } from "../../Shared"
-import { testPhaseButtonProps } from "./types"
+import { SecondaryCard } from "../../Shared";
+import { MainText } from "../../Shared/Text";
+import { testPhaseButtonProps } from "./types";
 
 export function TestPhaseButton({ phase, selectPhase, active }: testPhaseButtonProps) {
 

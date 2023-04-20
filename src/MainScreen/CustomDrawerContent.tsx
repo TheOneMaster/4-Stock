@@ -5,7 +5,7 @@ import { useTheme } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons"
 
 import UserLogin from "./UserLogin";
-import { MainText } from "../Shared";
+import { MainText } from "../Shared/Text";
 
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {

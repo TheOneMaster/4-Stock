@@ -1,7 +1,8 @@
 import * as Application from "expo-application";
 import { StyleSheet, View } from "react-native";
 
-import { MainText, SubtitleText, TransparentCard } from "../../Shared";
+import { TransparentCard } from "../../Shared";
+import { MainText, SubtitleText } from "../../Shared/Text";
 import { InfoRowProps } from "./types";
 
 function AboutInfo() {

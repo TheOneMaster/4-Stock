@@ -5,7 +5,7 @@ import { getNumberOrdinal, truthyFilter } from "../../helper";
 import { ResultsNavigationProp } from "../../navTypes";
 import { getImageByType } from "../../Shared/APIConverters";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { MainText, SubtitleText } from "../../Shared/ThemedNativeElements";
+import { MainText, SubtitleText } from "../../Shared/Text";
 // import { Participant } from "../../types";
 import { Participants, ResultCardProps } from "./types";
 
@@ -44,7 +44,9 @@ const ResultCard = ({ playerData }: ResultCardProps) => {
         const profileImage = getImageByType(images, "any")
 
         const showUserProfile = () => {
-            navigator.push("Profile", { id: user?.id })
+            if (user?.id) {
+                navigator.push("Profile", { id: user.id })
+            }
         }
 
         return (
