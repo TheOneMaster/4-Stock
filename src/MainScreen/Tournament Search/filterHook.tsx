@@ -17,7 +17,9 @@ export function useFilter() {
     const [afterDate, setAfterDate] = useState<Date | undefined>(undefined);
     const [beforeDate, setBeforeDate] = useState<Date | undefined>(addMonths(new Date, 1));
     const [games, setGames] = useState<DropdownOption[]>(initGame)
-    const [past, setPast] = useState<boolean | null>(null);
+    const [past, setPast] = useState(false);
+    const [online, setOnline] = useState(true);
+    const [regOpen, setRegOpen] = useState<true | null>(null);
 
     useEffect(() => {
         if (mainGame) {
@@ -26,15 +28,15 @@ export function useFilter() {
     }, [mainGame])
 
     return {
-        filters: { name, games, afterDate, beforeDate, past, page },
-        setFilters: { setName, setGames, setAfterDate, setBeforeDate, setPast }
+        filters: { name, games, afterDate, beforeDate, past, online, regOpen, page },
+        setFilters: { setName, setGames, setAfterDate, setBeforeDate, setPast, setOnline, setRegOpen }
     }
 }
 
 type TournamentSearchFilters = ReturnType<typeof useFilter>['filters']
 
 export function convertStorageToAPI(filters: TournamentSearchFilters): TournamentListDataQueryVariables {
-    const { name, games, afterDate, beforeDate, page, past } = filters;
+    const { name, games, afterDate, beforeDate, page, past, online, regOpen } = filters;
 
     return {
         name,
@@ -42,6 +44,8 @@ export function convertStorageToAPI(filters: TournamentSearchFilters): Tournamen
         afterDate: afterDate ? convertDateToUnixSeconds(afterDate) : afterDate,
         beforeDate: beforeDate ? convertDateToUnixSeconds(beforeDate) : beforeDate,
         past,
+        online,
+        regOpen,
         page
     }
 }

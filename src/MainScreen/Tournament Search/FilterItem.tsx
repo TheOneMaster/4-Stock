@@ -56,19 +56,43 @@ export const FilterDate = (props: FilterDateProps) => {
     )
 }
 
-interface FilterCheckboxProps extends FilterItemProps {
-    value: boolean | null
-    setValue: React.Dispatch<React.SetStateAction<boolean | null>>
+// interface FilterCheckboxProps extends FilterItemProps {
+//     value: boolean | null
+//     nullValue?: boolean
+//     setValue: React.Dispatch<React.SetStateAction<boolean>> | React.Dispatch<React.SetStateAction<true | null>>
+// }
+
+interface FilterBoolean extends FilterItemProps {
+    value: boolean
+    nullValue?: false
+    setValue: React.Dispatch<React.SetStateAction<boolean>>
 }
 
+interface FilterNullBoolean extends FilterItemProps {
+    value: boolean | null
+    nullValue: true
+    setValue: React.Dispatch<React.SetStateAction<true | null>>
+}
+
+type FilterCheckboxProps = FilterBoolean | FilterNullBoolean
+
+
+
 export const FilterCheckbox = (props: FilterCheckboxProps) => {
-    const { title, setValue, style } = props;
+    const {
+        title,
+        style } = props;
     const value = props.value ? props.value : false;
 
+    const valueChange = useCallback((newValue: boolean) => {
+        if (!props.nullValue) props.setValue(newValue);
+        else props.setValue(newValue || null);
+    }, [props.setValue, props.nullValue])
+
     return (
-        <TransparentCard style={styles.container}>
+        <TransparentCard style={[styles.container, style]}>
             <MainText style={styles.filterText}>{title}</MainText>
-            <Checkbox value={value} onValueChange={setValue} style={styles.filterComponent} />
+            <Checkbox value={value} onValueChange={valueChange} style={styles.filterComponent} />
         </TransparentCard>
     )
 

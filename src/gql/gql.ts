@@ -2308,6 +2308,8 @@ export type TournamentListDataQueryVariables = Exact<{
   page: Scalars['Int'];
   videogameIds: InputMaybe<Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>>;
   past: InputMaybe<Scalars['Boolean']>;
+  online: InputMaybe<Scalars['Boolean']>;
+  regOpen: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -2513,9 +2515,9 @@ useInfiniteFeaturedTournamentsQuery.getKey = (variables?: FeaturedTournamentsQue
 ;
 
 export const TournamentListDataDocument = `
-    query TournamentListData($name: String, $afterDate: Timestamp, $beforeDate: Timestamp, $page: Int!, $videogameIds: [ID], $past: Boolean) {
+    query TournamentListData($name: String, $afterDate: Timestamp, $beforeDate: Timestamp, $page: Int!, $videogameIds: [ID], $past: Boolean, $online: Boolean, $regOpen: Boolean) {
   tournaments(
-    query: {page: $page, perPage: 25, filter: {name: $name, afterDate: $afterDate, beforeDate: $beforeDate, videogameIds: $videogameIds, past: $past}}
+    query: {page: $page, perPage: 25, filter: {name: $name, afterDate: $afterDate, beforeDate: $beforeDate, videogameIds: $videogameIds, past: $past, hasOnlineEvents: $online, regOpen: $regOpen}}
   ) {
     pageInfo {
       page

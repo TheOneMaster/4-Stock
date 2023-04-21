@@ -5,6 +5,8 @@ query TournamentListData(
   $page: Int!
   $videogameIds: [ID]
   $past: Boolean
+  $online: Boolean
+  $regOpen: Boolean
 ) {
   tournaments(
     query: {
@@ -16,6 +18,8 @@ query TournamentListData(
         beforeDate: $beforeDate
         videogameIds: $videogameIds
         past: $past
+        hasOnlineEvents: $online
+        regOpen: $regOpen
       }
     }
   ) {
