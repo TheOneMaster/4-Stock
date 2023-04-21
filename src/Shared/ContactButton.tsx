@@ -2,7 +2,7 @@ import * as React from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Linking, StyleSheet, TouchableHighlight } from "react-native";
 
-import { LinkText } from "./ThemedNativeElements";
+import { LinkText } from "./Text";
 
 function openLink(url: string, type: string | null) {
     switch (type) {

@@ -1,78 +1,114 @@
-import { useTheme } from "@react-navigation/native";
-import React, { useRef, useState } from "react";
-import { NativeSyntheticEvent, StyleSheet, TextInput, TextInputFocusEventData, TextInputProps, View } from "react-native";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
+import React, { useCallback } from "react"
+import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
 
-import { MainText } from "../Shared";
+import Checkbox from "expo-checkbox"
+import { TransparentCard } from "../../Shared"
+import { MainText, SubtitleText } from "../../Shared/Text"
 
-interface FilterTextProps extends TextInputProps {
+interface FilterItemProps {
     title: string
-    onUpdate: React.Dispatch<React.SetStateAction<string>>
+    style?: StyleProp<ViewStyle>
 }
 
-export function FilterText(props: FilterTextProps) {
+interface StaticFilterItemProps extends FilterItemProps {
+    value: string
+}
 
-    const { title, onUpdate } = props;
-
-    const [selected, setSelected] = useState(false);
-    const { colors } = useTheme();
-    const LIGHT_GREY = useRef("#d3d3d3");
-
-    const colorCSS = StyleSheet.create({
-        input: {
-            borderColor: colors.border,
-            color: colors.text
-        }
-    })
-
-    function handleFocus(event: NativeSyntheticEvent<TextInputFocusEventData>) {
-        setSelected(true);
-
-        if (props.onFocus) {
-            props.onFocus(event);
-        }
-    }
-
-    function handleBlur() {
-        setSelected(false);
-    }
-
-    function handleTextChange(newText: string) {
-        const trimmed = newText.trim();
-        onUpdate(trimmed);
-    }
-
+export const StaticFilterItem = (props: StaticFilterItemProps) => {
     return (
-        <View style={styles.container}>
-            <MainText style={styles.title}>{title}</MainText>
-            <TextInput
-
-                style={[styles.input, colorCSS.input]}
-                placeholder={'Genesis'}
-                placeholderTextColor={colors.secondaryText}
-                onFocus={handleFocus}
-                onChangeText={handleTextChange}
-                onBlur={handleBlur}
-                selectionColor={colors.primary}
-                underlineColorAndroid={selected ? colors.primary : LIGHT_GREY.current}
-
-                {...props}
-            />
-        </View>
+        <TransparentCard style={styles.container}>
+            <Text>
+                <MainText style={styles.filterText}>{props.title}: </MainText>
+                <SubtitleText style={styles.filterText}>{props.value}</SubtitleText>
+            </Text>
+        </TransparentCard>
     )
 }
 
+interface FilterDateProps extends FilterItemProps {
+    date: Date | undefined
+    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+}
+
+export const FilterDate = (props: FilterDateProps) => {
+
+    const currentDateString = props.date ? props.date.toLocaleDateString() : "Not applied";
+
+    const onPress = useCallback(() => {
+        DateTimePickerAndroid.open({
+            value: props.date ? props.date : new Date(),
+            onChange: (event) => {
+                const newDate = new Date(event.nativeEvent.timestamp ?? currentDateString);
+                props.setDate(newDate);
+            }
+        })
+    }, [props.setDate, props.date])
+
+
+    return (
+        <TransparentCard touchable onPress={onPress} style={styles.container}>
+            <Text>
+                <MainText style={styles.filterText}>{props.title}: </MainText>
+                <SubtitleText style={styles.filterText}>{currentDateString}</SubtitleText>
+            </Text>
+        </TransparentCard>
+    )
+}
+
+// interface FilterCheckboxProps extends FilterItemProps {
+//     value: boolean | null
+//     nullValue?: boolean
+//     setValue: React.Dispatch<React.SetStateAction<boolean>> | React.Dispatch<React.SetStateAction<true | null>>
+// }
+
+interface FilterBoolean extends FilterItemProps {
+    value: boolean
+    nullValue?: false
+    setValue: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+interface FilterNullBoolean extends FilterItemProps {
+    value: boolean | null
+    nullValue: true
+    setValue: React.Dispatch<React.SetStateAction<true | null>>
+}
+
+type FilterCheckboxProps = FilterBoolean | FilterNullBoolean
+
+
+
+export const FilterCheckbox = (props: FilterCheckboxProps) => {
+    const {
+        title,
+        style } = props;
+    const value = props.value ? props.value : false;
+
+    const valueChange = useCallback((newValue: boolean) => {
+        if (!props.nullValue) props.setValue(newValue);
+        else props.setValue(newValue || null);
+    }, [props.setValue, props.nullValue])
+
+    return (
+        <TransparentCard style={[styles.container, style]}>
+            <MainText style={styles.filterText}>{title}</MainText>
+            <Checkbox value={value} onValueChange={valueChange} style={styles.filterComponent} />
+        </TransparentCard>
+    )
+
+}
+
 const styles = StyleSheet.create({
-    input: {
-        padding: 7,
-        borderWidth: 1,
-        borderStyle: "solid",
-        fontSize: 15
-    },
-    title: {
-        marginBottom: 5,
-        fontSize: 17,
-    },
     container: {
-        padding: 10
+        borderBottomWidth: 1,
+        padding: 10,
+        flexDirection: "row",
+        // flexGrow: 1
+    },
+    filterText: {
+        fontSize: 16
+    },
+    filterComponent: {
+        marginLeft: "auto"
     }
 })

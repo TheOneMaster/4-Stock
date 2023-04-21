@@ -2,7 +2,8 @@ import { Text } from "react-native";
 import { UserDetailsQuery } from "../gql/gql";
 
 import { getNumberOrdinal, truthyFilter } from "../helper";
-import { CarouselDataItem, getImageByType, MainText } from "../Shared";
+import { CarouselDataItem, getImageByType } from "../Shared";
+import { MainText } from "../Shared/Text";
 
 type UserDetails = Exclude<UserDetailsQuery['user'], null>;
 

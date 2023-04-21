@@ -9,6 +9,7 @@ import FeaturedTournamentsPage from "./Featured Tournaments";
 import TournamentList from "./Tournament Search";
 import SettingsPage, { useSettings } from "./Settings";
 import AboutPage from "./About";
+import { DebugPage } from "./Debug"
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
@@ -34,6 +35,7 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
             {general.debug
                 ? <Drawer.Group>
+                    <Drawer.Screen name="Debug Testing" component={DebugPage} />
                 </Drawer.Group>
                 : null}
 

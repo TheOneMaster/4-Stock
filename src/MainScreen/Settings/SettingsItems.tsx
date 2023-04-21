@@ -5,8 +5,9 @@ import { StyleSheet, Switch, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv";
 
-import { EyeTextInput, MainText, PrimaryCard, TransparentCard } from "../../Shared";
+import { EyeTextInput, PrimaryCard, TransparentCard } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
+import { MainText } from "../../Shared/Text";
 import { AppSettings, DropdownItemListProps, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItem, SettingsTextInputProps, TitleBarProps } from "./types";
 
 

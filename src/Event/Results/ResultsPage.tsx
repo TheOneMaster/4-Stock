@@ -6,7 +6,8 @@ import { EventResultsQueryVariables, useInfiniteEventResultsQuery } from "../../
 
 import { checkID, truthyFilter } from "../../helper";
 import { ResultsViewProps } from "../../navTypes";
-import { SearchBar, MainText } from "../../Shared";
+import { SearchBar } from "../../Shared";
+import { MainText } from "../../Shared/Text";
 import ResultCard from "./ResultCard";
 
 function ResultsPage({ navigation, route }: ResultsViewProps) {

@@ -2,7 +2,7 @@
   "expo": {
     "name": "4 Stock",
     "slug": "4-stock",
-    "version": "0.6.2",
+    "version": "0.6.3",
     "orientation": "portrait",
     "icon": "./assets/final/icon.png",
     "userInterfaceStyle": "automatic",
@@ -27,7 +27,8 @@
         "backgroundColor": "#2C8F60"
       },
       "package": "com.theonemaster.four_stock",
-      "versionCode": 1
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./assets/favicon.png"

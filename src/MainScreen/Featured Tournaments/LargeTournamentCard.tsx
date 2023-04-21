@@ -3,7 +3,8 @@ import { StyleSheet, View } from "react-native";
 
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
-import { getImageByType, MainText, PlaceholderImage, TransparentCard } from "../../Shared";
+import { getImageByType, PlaceholderImage, TransparentCard } from "../../Shared";
+import { MainText } from "../../Shared/Text";
 import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {

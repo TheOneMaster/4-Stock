@@ -14,6 +14,8 @@ User login is currently unsupported on this app until [start.gg OAuth is availab
 <details><summary>Features</summary>
 
 - Tournament Search
+    - Name
+    - Tournament Attributes
 - Tournament Details
 - Event Details
 - User Details
@@ -23,7 +25,6 @@ User login is currently unsupported on this app until [start.gg OAuth is availab
 
 <details><summary>Features to be implemented</summary>
 
-- Better tournament filtering
 - Location support
 - Draw bracket as a tree
 - OTA update support

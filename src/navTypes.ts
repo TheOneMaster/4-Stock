@@ -22,6 +22,7 @@ export type HomeDrawerParamList = {
     "Tournament Search": NavigatorScreenParams<RootStackParamList>
     Settings: undefined
     About: undefined
+    "Debug Testing": undefined
 }
 
 export type RootStackParamList = {
@@ -48,15 +49,17 @@ export type TournamentListViewProps = CompositeScreenProps<
 >;
 
 export type SettingsViewProps = DrawerScreenProps<HomeDrawerParamList, "Settings">;
-
-export type ResultsViewProps = MaterialTopTabScreenProps<EventTabParamList, "Results">;
-export type BracketViewProps = MaterialTopTabScreenProps<EventTabParamList, "Bracket">;
-
 export type FeaturedTournamentsScreenProps = CompositeScreenProps<
     DrawerScreenProps<HomeDrawerParamList, "Featured Tournaments">,
     NativeStackScreenProps<RootStackParamList, "Home">
 >;
+export type DebugPageProps = CompositeScreenProps<
+    DrawerScreenProps<HomeDrawerParamList, "Debug Testing">,
+    HomeScreenProps
+>;
 
+export type ResultsViewProps = MaterialTopTabScreenProps<EventTabParamList, "Results">;
+export type BracketViewProps = MaterialTopTabScreenProps<EventTabParamList, "Bracket">;
 // Navigation Props
 
 export type TournamentsTopBarNavigationProp = CompositeNavigationProp<

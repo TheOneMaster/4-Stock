@@ -6,7 +6,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useEventDataQuery } from "../gql/gql";
 import { truthyFilter } from "../helper";
 import { EventTabParamList, EventViewProps } from "../navTypes";
-import { MainText } from "../Shared";
+import { MainText } from "../Shared/Text";
 import { BracketPage } from "./Bracket/BracketPage";
 import ResultsPage from "./Results/ResultsPage";
 

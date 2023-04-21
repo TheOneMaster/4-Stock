@@ -8,8 +8,9 @@ import EventCard from "./EventCard";
 import { TopBar } from "./TopBar";
 
 import { TournamentViewProps } from "../navTypes";
-import { MainText } from "../Shared";
 import ContactButton from "../Shared/ContactButton";
+import { MainText } from "../Shared/Text";
+import { truthyFilter } from "../helper";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
     if (!show) {
@@ -30,11 +31,11 @@ const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
 
 const TournamentView = ({ navigation, route }: TournamentViewProps) => {
 
-    // 
-    // 
+    //
+    //
     // TODO: Rewrite this component using FlatList or SectionList instead of using map inside a ScrollView
-    // 
-    // 
+    //
+    //
 
     const tournamentID = route.params.id;
     const queryClient = useQueryClient();
@@ -60,6 +61,8 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
         )
     }
 
+    const events = data.tournament.events?.filter(truthyFilter) ?? [];
+
     return (
         <View style={{ flex: 1 }}>
 
@@ -73,15 +76,11 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
 
                 <View style={styles.section}>
                     <MainText style={styles.sectionTitle}>Events</MainText>
-                    {data?.tournament?.events?.map(event => {
-                        if (event === null) {
+                    {events.map(event => {
+                        if (event.id === null) {
                             return null
                         }
-                        return (
-                            <View style={styles.eventCard} key={event.id}>
-                                <EventCard event={event} />
-                            </View>
-                        )
+                        return <EventCard event={event} style={styles.eventCard} key={event.id} />
                     })
 
                     }
