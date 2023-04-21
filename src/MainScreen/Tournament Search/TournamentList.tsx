@@ -1,21 +1,20 @@
-import { useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
-import { useFilter } from "./filterHook";
+import { convertStorageToAPI, useFilter } from "./filterHook";
+import { FilterCheckbox, FilterDate, StaticFilterItem } from "./FilterItem";
 import TournamentCard from "./TournamentCard";
-import { EmptyTournamentListProps } from "./types";
-import { FilterDate } from "./FilterItem";
+import { EmptyTournamentListProps, FilterButtonRefProps } from "./types";
+import { FilterButton } from "./FilterButton";
 
 import { checkID, truthyFilter } from "../../helper";
 import { TournamentListViewProps } from "../../navTypes";
+import { SearchBar, SecondaryCard } from "../../Shared";
 import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { FilterButton } from "../Debug/FilterButton";
-import { FilterButtonRefProps } from "../Debug/types";
-import { PrimaryCard, SearchBar } from "../../Shared";
 import { MainText } from "../../Shared/Text";
 
 
@@ -26,7 +25,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
     const filterSheetRef = useRef<BottomSheetRefProps>(null);
 
     const queryClient = useQueryClient();
-    const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", filters, {
+    const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", convertStorageToAPI(filters), {
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.tournaments?.pageInfo?.page ? lastPage.tournaments.pageInfo.page + 1 : filters.page + 1
             return { page: nextPage }
@@ -41,7 +40,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
     function refresh() {
         queryClient.invalidateQueries({
-            queryKey: useInfiniteTournamentListDataQuery.getKey({ ...filters }),
+            queryKey: useInfiniteTournamentListDataQuery.getKey(convertStorageToAPI(filters)),
         })
     }
 
@@ -75,7 +74,6 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                 onEndReachedThreshold={0.1}
                 onScroll={(event) => {
                     const { y: offsetY } = event.nativeEvent.contentOffset;
-
                     if (offsetY > 100) {
                         filterButtonRef.current?.toggleFilter(false);
                     } else {
@@ -90,11 +88,13 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
             <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
             <BottomSheet ref={filterSheetRef}>
-                <PrimaryCard style={styles.filterSheetInner}>
+                <SecondaryCard style={styles.filterSheetInner}>
                     <MainText style={styles.titleText}>Filters</MainText>
-                    <FilterDate title="Starting Date" date={filters.afterDate} setDate={setFilters.setAfterDate} />
-                    <FilterDate title="Before Date" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
-                </PrimaryCard>
+                    <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
+                    <FilterDate title="Till" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
+                    <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} />
+                    <StaticFilterItem title="Games" value={filters.games.map(game => game.label).join(", ")} />
+                </SecondaryCard>
             </BottomSheet>
 
         </View>
@@ -135,7 +135,10 @@ const styles = StyleSheet.create({
     },
     filterSheetInner: {
         flex: 1,
-        flexGrow: 1
+        flexGrow: 1,
+        borderRadius: 10,
+        overflow: "hidden"
+        // borderWidth: 1
     },
     titleText: {
         fontSize: 18,
