@@ -16,7 +16,7 @@ query TournamentDetails($ID: ID!) {
       videogame {
         id
         displayName
-        images {
+        images(type: "primary") {
           id
           type
           url
