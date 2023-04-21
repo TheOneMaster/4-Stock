@@ -7,7 +7,7 @@ import { PrimaryCard } from "../../Shared";
 import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
 import { MainText } from "../../Shared/Text";
-import { FilterButton } from "./FilterButton";
+import { FilterButton } from "../Tournament Search/FilterButton";
 
 export function DebugPage(props: DebugPageProps) {
 

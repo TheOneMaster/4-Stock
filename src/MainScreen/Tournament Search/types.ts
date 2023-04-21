@@ -27,3 +27,12 @@ export interface SubtitleProps {
     text: string | null
     iconName: keyof typeof Ionicons.glyphMap
 }
+
+export interface FilterButtonProps {
+    onPress: () => void
+    style?: StyleProp<ViewStyle>
+}
+
+export interface FilterButtonRefProps {
+    toggleFilter: (active: boolean) => void
+}
