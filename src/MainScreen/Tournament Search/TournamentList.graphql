@@ -4,6 +4,7 @@ query TournamentListData(
   $beforeDate: Timestamp
   $page: Int!
   $videogameIds: [ID]
+  $past: Boolean
 ) {
   tournaments(
     query: {
@@ -14,6 +15,7 @@ query TournamentListData(
         afterDate: $afterDate
         beforeDate: $beforeDate
         videogameIds: $videogameIds
+        past: $past
       }
     }
   ) {
