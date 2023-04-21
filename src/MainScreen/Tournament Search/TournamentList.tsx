@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
-import { FlatList, RefreshControl, StyleSheet, View } from "react-native";
+import { useRef, useState } from "react";
+import { FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
@@ -24,6 +24,8 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
     const filterButtonRef = useRef<FilterButtonRefProps>(null);
     const filterSheetRef = useRef<BottomSheetRefProps>(null);
 
+    const [overlay, setOverlay] = useState(false);
+
     const queryClient = useQueryClient();
     const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", convertStorageToAPI(filters), {
         getNextPageParam: (lastPage) => {
@@ -46,9 +48,11 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
     const onPress = () => {
         if (filterSheetRef.current?.isActive()) {
-            filterSheetRef.current.scrollTo(0)
+            filterSheetRef.current.scrollTo(0);
+            setOverlay(false);
         } else {
-            filterSheetRef.current?.scrollTo(MIN_TRANSLATE_Y)
+            filterSheetRef.current?.scrollTo(MIN_TRANSLATE_Y);
+            setOverlay(true);
         }
     };
 
@@ -87,7 +91,11 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
             />
 
             <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
-            <BottomSheet ref={filterSheetRef}>
+
+            {overlay ? <Pressable style={styles.overlay} onPress={onPress} /> : null}
+
+
+            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet}>
                 <SecondaryCard style={styles.filterSheetInner}>
                     <MainText style={styles.titleText}>Filters</MainText>
                     <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
@@ -128,6 +136,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
+    bottomSheet: {
+        zIndex: 3
+    },
     filterButton: {
         position: "absolute",
         bottom: 30,
@@ -144,6 +155,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         // fontFamily: ,
         padding: 10
+    },
+    overlay: {
+        position: "absolute",
+        height: "100%",
+        width: "100%",
+        backgroundColor: "#000000",
+        opacity: 0.6,
+        zIndex: 2
     }
 });
 
