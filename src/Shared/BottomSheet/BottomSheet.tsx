@@ -6,12 +6,13 @@ import { BottomSheetProps, BottomSheetRefProps } from "./types";
 
 
 const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
-const MAX_TRANSLATE_Y = -SCREEN_HEIGHT / 1.5;
-export const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 2;
 
 export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>((props: BottomSheetProps, ref) => {
 
-    // TODO: Add params that control max, min size and each step for the bottom sheet
+    // TODO: Add params that controls each step for the bottom sheet
+
+    const MAX_TRANSLATE_Y = props.maxSize ? props.maxSize : -SCREEN_HEIGHT / 1.5;
+    const MIN_TRANSLATE_Y = props.minSize ? props.minSize : -SCREEN_HEIGHT / 2;
 
     const translateY = useSharedValue(0);
     const context = useSharedValue({ y: 0 });
@@ -76,5 +77,6 @@ const styles = StyleSheet.create({
         width: "100%",
         position: "absolute",
         top: SCREEN_HEIGHT,
+        // backgroundColor: "purple"
     }
 })

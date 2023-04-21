@@ -4,19 +4,21 @@ import { FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-nat
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
+import { FilterButton } from "./FilterButton";
 import { convertStorageToAPI, useFilter } from "./filterHook";
 import { FilterCheckbox, FilterDate, StaticFilterItem } from "./FilterItem";
 import TournamentCard from "./TournamentCard";
 import { EmptyTournamentListProps, FilterButtonRefProps } from "./types";
-import { FilterButton } from "./FilterButton";
 
 import { checkID, truthyFilter } from "../../helper";
 import { TournamentListViewProps } from "../../navTypes";
 import { SearchBar, SecondaryCard } from "../../Shared";
-import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
+import { BottomSheet } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
 import { MainText, TitleText } from "../../Shared/Text";
 
+const MIN_BOTTOMSHEET_SIZE = -435;
+const MAX_BOTTOMSHEET_SIZE = -600;
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {
 
@@ -51,7 +53,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
             filterSheetRef.current.scrollTo(0);
             setOverlay(false);
         } else {
-            filterSheetRef.current?.scrollTo(MIN_TRANSLATE_Y);
+            filterSheetRef.current?.scrollTo(MIN_BOTTOMSHEET_SIZE);
             setOverlay(true);
         }
     };
@@ -100,7 +102,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
             {overlay ? <Pressable style={styles.overlay} onPress={overlayPress} /> : null}
 
 
-            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay}>
+            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay} minSize={MIN_BOTTOMSHEET_SIZE} maxSize={MAX_BOTTOMSHEET_SIZE}>
                 <SecondaryCard style={styles.filterSheetInner}>
                     <TitleText style={styles.titleText}>Filters</TitleText>
                     <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
