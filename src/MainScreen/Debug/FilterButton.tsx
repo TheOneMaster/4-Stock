@@ -34,7 +34,7 @@ export const FilterButton = React.forwardRef<FilterButtonRefProps, FilterButtonP
 
     return (
         <TransparentCard touchable onPress={handlePress} style={[styles.innerView, props.style, { backgroundColor: colors.primary }]}>
-            <IoniconsThemed name="filter-outline" size={25} />
+            <IoniconsThemed name="filter-outline" size={30} />
             <Animated.View style={[styles.textView, animatedStyle]}>
                 <MainText style={styles.buttonText}>Filter</MainText>
             </Animated.View>
@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         marginLeft: 5,
-        fontSize: 15,
+        fontSize: 16,
     }
 })
