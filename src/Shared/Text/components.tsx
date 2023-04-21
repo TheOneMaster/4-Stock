@@ -88,6 +88,7 @@ export function TitleText(props: TextProps) {
         padding: 10,
         fontSize: 18,
         fontFamily: "rubik",
+        fontWeight: "bold",
         color: colors.text,
     }, props.style]
 

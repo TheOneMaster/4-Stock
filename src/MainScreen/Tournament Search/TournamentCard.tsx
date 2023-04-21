@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { SubtitleProps, TournamentCardProps } from "./types";
@@ -5,31 +6,33 @@ import { SubtitleProps, TournamentCardProps } from "./types";
 import { convertDateToString, truthyFilter } from "../../helper";
 import { getImageByType, PlaceholderImage, PrimaryCard, TransparentCard } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
-import { MainText, SubtitleText } from "../../Shared/Text";
+import { SubtitleText, TitleText } from "../../Shared/Text";
 
 
 export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
     const dateString = startAt ? convertDateToString(startAt) : "Date not provided";
-
     const usableImages = images?.filter(truthyFilter) ?? [];
     const profile_image = getImageByType(usableImages, "profile")
 
-    function navigateToTournament() {
-        navigation.push("Tournament", { id: id });
-    }
+    const navigateToTournament = useCallback(() => {
+        navigation.push("Tournament", { id: id })
+    }, [id, navigation]);
 
     return (
-        <PrimaryCard touchable onPress={navigateToTournament} style={styles.container}>
+        <PrimaryCard touchable onPress={navigateToTournament} style={[styles.container, style]}>
+
             <TransparentCard style={styles.imageContainer}>
-                <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} />
+                <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} resize="stretch" />
             </TransparentCard>
+
             <View style={styles.textBox}>
-                <MainText style={styles.title}>{name}</MainText>
+                <TitleText numberOfLines={3} adjustsFontSizeToFit={true} style={styles.title}>{name}</TitleText>
                 <View style={styles.detailsText}>
                     <SubtitleRow text={city} iconName="location-outline" />
                     <SubtitleRow text={dateString} iconName="calendar-outline" />
                 </View>
             </View>
+
         </PrimaryCard>
     )
 }
@@ -57,13 +60,13 @@ const styles = StyleSheet.create({
     },
     imageContainer: {
         width: 100,
-        height: 100,
-        alignSelf: "center",
-        borderRightWidth: 1
+        minHeight: 100,
+        borderRightWidth: 1,
+        // backgroundColor: "purple",
     },
     image: {
-        width: '100%',
-        height: '100%'
+        // width: "100%",
+        height: "100%",
     },
     textBox: {
         paddingVertical: 5,
@@ -77,7 +80,8 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: 'bold',
         flexWrap: 'wrap',
-        flexShrink: 1
+        flexShrink: 1,
+        padding: 0
     },
 
     subtitle: {
