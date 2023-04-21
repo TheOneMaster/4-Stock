@@ -15,7 +15,7 @@ import { TournamentListViewProps } from "../../navTypes";
 import { SearchBar, SecondaryCard } from "../../Shared";
 import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { MainText } from "../../Shared/Text";
+import { MainText, TitleText } from "../../Shared/Text";
 
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {
@@ -102,7 +102,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
             <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay}>
                 <SecondaryCard style={styles.filterSheetInner}>
-                    <MainText style={styles.titleText}>Filters</MainText>
+                    <TitleText style={styles.titleText}>Filters</TitleText>
                     <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
                     <FilterDate title="Till" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
                     <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} />
@@ -157,9 +157,11 @@ const styles = StyleSheet.create({
         // borderWidth: 1
     },
     titleText: {
-        fontSize: 18,
+        // fontSize: 18,
         // fontFamily: ,
-        padding: 10
+        // padding: 10,
+        fontWeight: "400",
+        // padding: 0
     },
     overlay: {
         position: "absolute",
