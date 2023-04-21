@@ -1,7 +1,7 @@
 import React, { useCallback, useImperativeHandle } from "react";
 import { Dimensions, StyleSheet } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { BottomSheetProps, BottomSheetRefProps } from "./types";
 
 
@@ -20,7 +20,6 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
     const scrollTo = useCallback((destination: number) => {
         "worklet";
         active.value = destination !== 0;
-
         translateY.value = withSpring(destination, { damping: 50 });
     }, []);
 
@@ -29,6 +28,13 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
     }, [])
 
     useImperativeHandle(ref, () => ({ scrollTo, isActive }), [scrollTo, isActive])
+
+    const dropOverlay = () => {
+        if (props.setOverlay) {
+            props.setOverlay(false)
+        }
+    }
+
 
     const gesture = Gesture.Pan()
         .onStart(() => {
@@ -43,6 +49,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
                 scrollTo(MAX_TRANSLATE_Y);
             } else if (translateY.value > MIN_TRANSLATE_Y / 1.25) {
                 scrollTo(0);
+                if (!active.value) runOnJS(dropOverlay)()
             } else {
                 scrollTo(MIN_TRANSLATE_Y);
             }

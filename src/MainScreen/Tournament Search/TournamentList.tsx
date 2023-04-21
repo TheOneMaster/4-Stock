@@ -1,5 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
@@ -56,6 +56,11 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
         }
     };
 
+    const overlayPress = useCallback(() => {
+        filterSheetRef.current?.scrollTo(0);
+        setOverlay(false);
+    }, [filterSheetRef.current])
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -92,10 +97,10 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
             <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
 
-            {overlay ? <Pressable style={styles.overlay} onPress={onPress} /> : null}
+            {overlay ? <Pressable style={styles.overlay} onPress={overlayPress} /> : null}
 
 
-            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet}>
+            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay}>
                 <SecondaryCard style={styles.filterSheetInner}>
                     <MainText style={styles.titleText}>Filters</MainText>
                     <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
