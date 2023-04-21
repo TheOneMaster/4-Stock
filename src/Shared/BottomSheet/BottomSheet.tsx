@@ -39,7 +39,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
             translateY.value = Math.max(translateY.value, MAX_TRANSLATE_Y)
         })
         .onEnd(() => {
-            if (translateY.value < MIN_TRANSLATE_Y * 1.25) {
+            if (translateY.value < (MIN_TRANSLATE_Y + MAX_TRANSLATE_Y) / 2) {
                 scrollTo(MAX_TRANSLATE_Y);
             } else if (translateY.value > MIN_TRANSLATE_Y / 1.25) {
                 scrollTo(0);
@@ -69,7 +69,5 @@ const styles = StyleSheet.create({
         width: "100%",
         position: "absolute",
         top: SCREEN_HEIGHT,
-        borderRadius: 10,
-        overflow: "hidden"
     }
 })
