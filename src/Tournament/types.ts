@@ -1,3 +1,4 @@
+import { StyleProp, ViewStyle } from "react-native"
 import { TournamentDetailsQuery } from "../gql/gql"
 
 type TournamentDetails = Exclude<TournamentDetailsQuery['tournament'], null>
@@ -13,7 +14,8 @@ export interface RegisterButtonProps {
     disabled?: boolean
 }
 
-export type DetailsSectionProps = Omit<TournamentDetails, "__typename"|"name"|"id"|"events"|"images">
+export type DetailsSectionProps = Omit<TournamentDetails, "__typename" | "name" | "id" | "events" | "images">
 export interface EventCardProps {
     event: Exclude<TournamentDetails['events'], null>[0]
+    style?: StyleProp<ViewStyle>
 }
