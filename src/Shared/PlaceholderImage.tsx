@@ -1,11 +1,14 @@
-import { Image, ImageStyle, ImageURISource, StyleProp, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
+
+import FastImage, { FastImageProps, ImageStyle } from "react-native-fast-image"
 import { PlaceholderGame, PlaceHolderPlayer, PlaceholderTournament } from "../Shared/Logos"
 
 
 interface PlaceholderImageProps {
     imageSrc?: string | null
     placeholder?: "tournament" | "game" | "player"
-    style?: StyleProp<ImageStyle>
+    style?: ImageStyle
+    resize?: FastImageProps['resizeMode']
 }
 
 function getPlaceholderImage(placeholder: Required<PlaceholderImageProps['placeholder']>) {
@@ -19,13 +22,14 @@ function getPlaceholderImage(placeholder: Required<PlaceholderImageProps['placeh
 
 
 
-const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style }: PlaceholderImageProps) => {
+const PlaceholderImage = ({ imageSrc, placeholder = 'tournament', style, resize }: PlaceholderImageProps) => {
 
     const placeholderImage = getPlaceholderImage(placeholder);
+    const imageStyle = style ? [styles.image, style] : styles.image;
 
-    if (imageSrc) return <Image style={[styles.image, style]} source={{ uri: imageSrc }} defaultSource={placeholder as ImageURISource} />
+    if (imageSrc) return <FastImage style={imageStyle} source={{ uri: imageSrc }} resizeMode={resize} />
 
-    return <Image style={[styles.image, style]} source={placeholderImage} />;
+    return <FastImage style={imageStyle} source={placeholderImage} resizeMode={resize} />;
 }
 
 const styles = StyleSheet.create({
