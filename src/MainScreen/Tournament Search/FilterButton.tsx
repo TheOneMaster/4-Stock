@@ -6,7 +6,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 import { TransparentCard } from "../../Shared"
 import { IoniconsThemed } from "../../Shared/IconTheme"
 import { MainText } from "../../Shared/Text"
-import { FilterButtonProps, FilterButtonRefProps } from "../Debug/types"
+import { FilterButtonProps, FilterButtonRefProps } from "./types"
 
 const MAX_WIDTH = 200;
 
@@ -19,7 +19,7 @@ export const FilterButton = React.forwardRef<FilterButtonRefProps, FilterButtonP
     const toggleFilter = useCallback((active: boolean) => {
         "worklet";
         const newWidth = active ? MAX_WIDTH : 0;
-        buttonWidth.value = withSpring(newWidth, { damping: 50, mass: 0.3 });
+        buttonWidth.value = withSpring(newWidth, { damping: 50, mass: 0.5 });
     }, []);
 
     useImperativeHandle(ref, () => ({ toggleFilter }), [toggleFilter]);
