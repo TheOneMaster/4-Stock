@@ -38,19 +38,6 @@ export function convertStorageToAPI(params: StorageVariables): APIVariables {
     return final
 };
 
-export function cleanObject<T extends Object>(obj: T): Partial<T> {
-    return Object.keys(obj).reduce((prev, cur) => {
-        const valueUndefined = obj[cur] === undefined;
-        const valueEmptyObject = typeof obj[cur] === 'object' && Object.keys(obj[cur]).length === 0;
-
-        if (valueUndefined || valueEmptyObject) {
-            return prev
-        }
-        prev[cur] = obj[cur];
-        return prev
-    }, {});
-}
-
 export function getNumberOrdinal(num: number | null): string {
 
     if (num === null) return ""

@@ -80,7 +80,6 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
                         if (event.id === null) {
                             return null
                         }
-                        console.log(event.videogame)
                         return <EventCard event={event} style={styles.eventCard} key={event.id} />
                     })
 
