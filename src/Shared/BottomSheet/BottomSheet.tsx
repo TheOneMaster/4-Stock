@@ -5,7 +5,7 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withSpring } from 
 import { BottomSheetProps, BottomSheetRefProps } from "./types";
 
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const MAX_TRANSLATE_Y = -SCREEN_HEIGHT / 1.5;
 export const MIN_TRANSLATE_Y = -SCREEN_HEIGHT / 2;
 
@@ -49,7 +49,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
                 scrollTo(MAX_TRANSLATE_Y);
             } else if (translateY.value > MIN_TRANSLATE_Y / 1.25) {
                 scrollTo(0);
-                if (!active.value) runOnJS(dropOverlay)()
+                runOnJS(dropOverlay)()
             } else {
                 scrollTo(MIN_TRANSLATE_Y);
             }
