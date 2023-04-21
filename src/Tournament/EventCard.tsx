@@ -1,58 +1,45 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { useCallback } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import { EventCardProps } from "./types";
+
 import { EventCardNavigationProp } from "../navTypes";
+import { PrimaryCard, TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { MainText } from "../Shared/Text";
-import { EventCardProps } from "./types";
 
-const EventCard = ({ event }: EventCardProps) => {
-    const { colors } = useTheme();
+const EventCard = ({ event, style }: EventCardProps) => {
+    const navigation = useNavigation<EventCardNavigationProp>();
 
-    if (event == undefined || Object.keys(event).length === 0) {
+    if (event === null) {
         return null
     }
 
     const name = event.name;
     const videogameImages = event.videogame?.images?.flatMap(image => image ? [image] : []) ?? [];
-    const imageLogo = getImageByType(videogameImages, ['primary', 'primary-quality']);
-    const colorCSS = StyleSheet.create({
-        container: {
-            borderColor: colors.border,
-            backgroundColor: colors.card
-        },
-        game_container: {
-            borderColor: colors.border
-        }
-    });
-    const navigation = useNavigation<EventCardNavigationProp>();
+    const imageLogo = getImageByType(videogameImages, 'primary');
 
-    const eventTouch = () => {
+    const eventTouch = useCallback(() => {
         console.log(event);
-
-        const eventID = event.id
+        const eventID = event.id;
 
         if (eventID) {
-
-            navigation.push("Event", {
-                id: eventID,
-                type: event.type ?? 2
-            });
+            navigation.push("Event", { id: eventID, type: event.type ?? 2 })
         }
-
-    }
+    }, [event]);
 
     return (
-        <TouchableOpacity onPress={eventTouch} delayPressIn={50}>
-            <View style={[styles.container, colorCSS.container]}>
-                <View style={[styles.game_container, colorCSS.game_container]}>
-                    <PlaceholderImage imageSrc={imageLogo.url} placeholder="game" style={styles.game_image} />
-                </View>
+        <TouchableOpacity onPress={eventTouch} delayPressIn={50} style={style}>
+            <PrimaryCard style={styles.container}>
+                <TransparentCard style={styles.game_container}>
+                    <PlaceholderImage imageSrc={imageLogo.url} placeholder="game" resize="stretch" style={styles.game_image} />
+                </TransparentCard>
                 <View style={styles.event_text}>
                     <MainText style={styles.event_title}>{name}</MainText>
                 </View>
-            </View>
+            </PrimaryCard>
         </TouchableOpacity>
     )
 }
@@ -64,8 +51,7 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
     },
     game_image: {
-        resizeMode: 'stretch',
-        flex: 1,
+        height: "100%",
     },
     game_container: {
         width: 100,
