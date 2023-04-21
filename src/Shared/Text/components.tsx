@@ -22,7 +22,7 @@ export function AccentText(props: TextProps) {
     return <Text {...newProps} />
 }
 
-function RobotoText(props: TextProps) {
+export function RobotoText(props: TextProps) {
     const [fontLoaded] = useFonts({
         roboto: Roboto_400Regular
     });
@@ -35,7 +35,7 @@ function RobotoText(props: TextProps) {
     return <Text {...newProps} />
 }
 
-function AnuphanText(props: TextProps) {
+export function AnuphanText(props: TextProps) {
     const [fontLoaded] = useFonts({
         anuphan: require("../../../assets/fonts/Anuphan.ttf")
     });

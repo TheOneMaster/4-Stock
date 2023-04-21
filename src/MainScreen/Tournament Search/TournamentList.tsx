@@ -17,7 +17,7 @@ import { BottomSheet } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
 import { MainText, TitleText } from "../../Shared/Text";
 
-const MIN_BOTTOMSHEET_SIZE = -435;
+const MIN_BOTTOMSHEET_SIZE = -440;
 const MAX_BOTTOMSHEET_SIZE = -600;
 
 function TournamentList({ navigation, route }: TournamentListViewProps) {

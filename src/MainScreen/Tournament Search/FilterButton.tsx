@@ -5,7 +5,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-na
 
 import { TransparentCard } from "../../Shared"
 import { IoniconsThemed } from "../../Shared/IconTheme"
-import { MainText } from "../../Shared/Text"
+import { AnuphanText, MainText } from "../../Shared/Text"
 import { FilterButtonProps, FilterButtonRefProps } from "./types"
 
 const MAX_WIDTH = 200;
@@ -36,7 +36,9 @@ export const FilterButton = React.forwardRef<FilterButtonRefProps, FilterButtonP
         <TransparentCard touchable onPress={handlePress} style={[styles.innerView, props.style, { backgroundColor: colors.primary }]}>
             <IoniconsThemed name="filter-outline" size={30} />
             <Animated.View style={[styles.textView, animatedStyle]}>
-                <MainText style={styles.buttonText}>Filter</MainText>
+                <AnuphanText style={styles.buttonText}>
+                    <MainText>Filter</MainText>
+                </AnuphanText>
             </Animated.View>
         </TransparentCard>
     )
@@ -49,8 +51,6 @@ const styles = StyleSheet.create({
     },
     innerView: {
         flexDirection: "row",
-        alignItems: "center",
-
         padding: 5,
         borderRadius: 5,
         borderWidth: 1
@@ -58,10 +58,16 @@ const styles = StyleSheet.create({
 
     textView: {
         overflow: "hidden",
-        maxHeight: 20
+        maxHeight: 20,
+        alignSelf: "center",
     },
     buttonText: {
         marginLeft: 5,
         fontSize: 16,
+        includeFontPadding: false,
+        textAlignVertical: "center",
+        verticalAlign: "middle",
+        padding: 0,
+        lineHeight: 20
     }
 })
