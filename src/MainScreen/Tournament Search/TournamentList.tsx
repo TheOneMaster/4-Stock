@@ -108,7 +108,7 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
                     <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} />
                     <FilterCheckbox title="Has online events" value={filters.online} setValue={setFilters.setOnline} />
                     <FilterCheckbox title="Open for registration" value={filters.regOpen} setValue={setFilters.setRegOpen} nullValue />
-                    <StaticFilterItem title="Games" value={filters.games.map(game => game.label).join(", ")} />
+                    <StaticFilterItem title="Game filter" value={filters.games.map(game => game.label).join(", ")} />
                 </SecondaryCard>
             </BottomSheet>
 

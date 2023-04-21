@@ -18,7 +18,7 @@ export function useFilter() {
     const [beforeDate, setBeforeDate] = useState<Date | undefined>(addMonths(new Date, 1));
     const [games, setGames] = useState<DropdownOption[]>(initGame)
     const [past, setPast] = useState(false);
-    const [online, setOnline] = useState(true);
+    const [online, setOnline] = useState(false);
     const [regOpen, setRegOpen] = useState<true | null>(null);
 
     useEffect(() => {
