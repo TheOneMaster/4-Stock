@@ -1,4 +1,4 @@
-import { Image, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
@@ -18,7 +18,7 @@ export const TopBar = (props: TopBarProps) => {
             <View style={styles.container}>
 
                 <TransparentCard style={styles.banner_container}>
-                    <Image source={{ uri: bannerImage.url }} style={styles.banner_image}></Image>
+                    <PlaceholderImage imageSrc={bannerImage.url} style={styles.banner_image} resize="stretch" />
                 </TransparentCard>
 
                 <View style={[styles.profile_container, { marginTop: -20 }]}>
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
     },
     banner_image: {
         flex: 1,
-        resizeMode: "stretch",
     },
     profile_container: {
         height: 80,

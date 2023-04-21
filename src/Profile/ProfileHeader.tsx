@@ -1,4 +1,5 @@
-import { Image, StyleSheet, View } from "react-native";
+// import { Image } from "expo-image";
+import { StyleSheet, View } from "react-native";
 import { truthyFilter } from "../helper";
 
 import { getImageByType, PlaceholderImage, TransparentCard } from "../Shared";
@@ -16,7 +17,7 @@ function ProfileHeader(props: ProfileHeaderProps) {
 
             {bannerImage.url
                 ? <TransparentCard style={bannerStyles.bannerImageBox}>
-                    <Image source={{ uri: bannerImage.url }} style={bannerStyles.bannerImage} />
+                    <PlaceholderImage imageSrc={bannerImage.url} style={bannerStyles.bannerImage} />
                 </TransparentCard>
                 : null}
 
@@ -70,7 +71,9 @@ const bannerStyles = StyleSheet.create({
     },
     bannerImage: {
         flex: 1,
-        resizeMode: "cover"
+        width: "100%",
+        height: "100%",
+        resizeMode: "stretch"
     },
     bannerImageBox: {
         flexGrow: 1,
