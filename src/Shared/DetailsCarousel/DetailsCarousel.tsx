@@ -1,6 +1,6 @@
 import { FlatList, StyleSheet, View } from "react-native";
 
-import { MainText } from "../Text";
+import { CustomText } from "../Text";
 import CarouselItem, { CarouselEmptyText } from "./CarouselItem";
 import { DetailsCarouselProps } from "./types";
 
@@ -10,7 +10,7 @@ function DetailsCarousel(props: DetailsCarouselProps) {
     return (
         <View style={props.style}>
 
-            {props.title ? <MainText style={styles.title}>{props.title}</MainText> : null}
+            {props.title ? <CustomText style={styles.title}>{props.title}</CustomText> : null}
 
             <FlatList
                 contentContainerStyle={styles.container}

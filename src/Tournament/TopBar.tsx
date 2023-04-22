@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 import { TopBarProps } from "./types";
 
 export const TopBar = (props: TopBarProps) => {
@@ -28,7 +28,7 @@ export const TopBar = (props: TopBarProps) => {
                     </TransparentCard>
 
                     <View style={[styles.profile_text, { marginTop: 20 }]}>
-                        <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
+                        <CustomText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</CustomText>
                     </View>
 
                 </View>
@@ -43,7 +43,7 @@ export const TopBar = (props: TopBarProps) => {
                     <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
                 </View>
                 <View style={[styles.profile_text, { justifyContent: "center" }]}>
-                    <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
+                    <CustomText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</CustomText>
                 </View>
             </View>
         </View>

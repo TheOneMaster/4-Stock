@@ -7,7 +7,7 @@ import { useMMKVBoolean, useMMKVObject, useMMKVString } from "react-native-mmkv"
 
 import { EyeTextInput, PrimaryCard, TransparentCard } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import { AppSettings, DropdownItemListProps, DropdownItemProps, DropdownOption, SettingsDropdownProps, SettingsItem, SettingsTextInputProps, TitleBarProps } from "./types";
 
 
@@ -100,7 +100,7 @@ export function SettingsDropdown<Group extends keyof AppSettings>(props: Setting
                 <TitleBar title={title} iconName={iconName} />
 
                 <View style={styles.componentView}>
-                    {selected ? <MainText style={styles.selectedText}>{selected.label}</MainText> : null}
+                    {selected ? <CustomText style={styles.selectedText}>{selected.label}</CustomText> : null}
                     <AntDesign name={drawer ? "arrowleft" : "arrowdown"} size={15} color={colors.text} />
                 </View>
             </PrimaryCard>
@@ -132,7 +132,7 @@ function DropdownItem({ item, active, onPress }: DropdownItemProps) {
                 ? <AntDesign name="checksquare" size={15} color={colors.primary} style={styles.ddItemIcon} />
                 : <View style={[{ width: 15 }, styles.ddItemIcon]}></View>
             }
-            <MainText style={styles.itemText}>{label}</MainText>
+            <CustomText style={styles.itemText}>{label}</CustomText>
         </TransparentCard>
     )
 }
@@ -141,7 +141,7 @@ function TitleBar({ title, iconName, style }: TitleBarProps) {
     return (
         <View style={[styles.titleBar, style]}>
             {iconName ? <IoniconsThemed name={iconName} text="primary" style={[styles.titleText, styles.titleIcon]} /> : null}
-            <MainText style={styles.titleText}>{title}</MainText>
+            <CustomText style={styles.titleText}>{title}</CustomText>
         </View>
     )
 }

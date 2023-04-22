@@ -3,7 +3,7 @@ import { UserDetailsQuery } from "../gql/gql";
 
 import { getNumberOrdinal, truthyFilter } from "../helper";
 import { CarouselDataItem, getImageByType } from "../Shared";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 
 type UserDetails = Exclude<UserDetailsQuery['user'], null>;
 
@@ -24,8 +24,8 @@ export function convertUserEventToCarouselItem(events: Events, activeColor?: str
         const subtitleNode = curEvent?.userEntrant?.standing
             ? (
                 <Text style={{ flexWrap: "wrap", flexShrink: 1 }}>
-                    <MainText>{getNumberOrdinal(curEvent?.userEntrant?.standing?.placement).toString()}</MainText>
-                    <MainText> at </MainText>
+                    <CustomText>{getNumberOrdinal(curEvent?.userEntrant?.standing?.placement).toString()}</CustomText>
+                    <CustomText> at </CustomText>
                     <Text style={{ color: activeColor }}>{curEvent.name}</Text>
                 </Text>
             )

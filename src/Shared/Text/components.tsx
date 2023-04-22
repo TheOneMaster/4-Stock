@@ -1,8 +1,32 @@
-import { Roboto_400Regular } from "@expo-google-fonts/roboto";
-import { Rubik_400Regular } from "@expo-google-fonts/rubik";
 import { useTheme } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { StyleProp, Text, TextProps, TextStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, TextProps, TextStyle } from "react-native";
+import { FontFamily } from "../../Themes";
+
+
+interface CustomTextProps extends TextProps {
+    font?: FontFamily
+    themed?: boolean
+    primary?: boolean
+}
+
+export function CustomText(props: CustomTextProps) {
+    const { colors } = useTheme();
+    const { font, themed = true, primary = true, ...textProps } = props;
+
+    let textColor: string | undefined = undefined;
+    if (themed) textColor = primary ? colors.text : colors.secondaryText;
+
+    const newStyle: StyleProp<TextStyle> = {
+        fontFamily: props.font,
+        color: textColor
+    }
+
+    const newProps = Object.assign({}, textProps);
+    newProps.style = [newStyle, props.style];
+
+    return <Text {...newProps} />
+}
+
 
 export function LinkText(props: TextProps) {
     const { colors } = useTheme();
@@ -22,58 +46,22 @@ export function AccentText(props: TextProps) {
     return <Text {...newProps} />
 }
 
-export function RobotoText(props: TextProps) {
-    const newProps = Object.assign({}, props);
-    newProps.style = [{ fontFamily: "roboto" }, props.style];
-
-    return <Text {...newProps} />
-}
-
-export function AnuphanText(props: TextProps) {
-    const newProps = Object.assign({}, props);
-    newProps.style = [{ fontFamily: "Anuphan" }, props.style];
-
-    return <Text {...newProps} />
-}
-
-export function MainText(props: TextProps) {
-    const { colors } = useTheme();
-
-    const newProps = Object.assign({}, props);
-    const colorText: StyleProp<TextStyle> = {
-        color: colors.text
-    }
-    newProps.style = [props.style, colorText]
-
-    return <Text {...newProps} />
-}
-
-export function SubtitleText(props: TextProps) {
-    const { colors } = useTheme();
-
-    const newProps = Object.assign({}, props);
-    const colorText: StyleProp<TextStyle> = {
-        color: colors.secondaryText
-    }
-    newProps.style = [props.style, colorText]
-
-    return <AnuphanText {...newProps} />
-}
-
 
 // Fully themed text components
 export function TitleText(props: TextProps) {
-
-    const { colors } = useTheme();
-
     const newProps = Object.assign({}, props);
-    newProps.style = [{
-        padding: 10,
-        fontSize: 18,
-        fontFamily: "Rubik",
-        fontWeight: "bold",
-        color: colors.text,
-    }, props.style]
+    newProps.style = [styles.title, props.style];
 
-    return <Text {...newProps} />
+    return <CustomText themed font="Rubik_bold" {...newProps} />
 }
+
+export function SubtitleText(props: TextProps) {
+    return <CustomText themed primary={false} font="Anuphan" {...props} />
+}
+
+const styles = StyleSheet.create({
+    title: {
+        padding: 10,
+        fontSize: 18
+    }
+})

@@ -4,7 +4,7 @@ import { StyleSheet, View } from "react-native";
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
 import { getImageByType, PlaceholderImage, TransparentCard } from "../../Shared";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {
@@ -24,7 +24,7 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
                 <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={styles.image} />
             </TransparentCard>
 
-            <MainText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</MainText>
+            <CustomText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</CustomText>
         </View>
     )
 }

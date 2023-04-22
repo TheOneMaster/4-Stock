@@ -15,7 +15,7 @@ import { TournamentListViewProps } from "../../navTypes";
 import { SearchBar, SecondaryCard } from "../../Shared";
 import { BottomSheet } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { MainText, TitleText } from "../../Shared/Text";
+import { CustomText, TitleText } from "../../Shared/Text";
 
 const MIN_BOTTOMSHEET_SIZE = -440;
 const MAX_BOTTOMSHEET_SIZE = -600;
@@ -130,7 +130,7 @@ function EmptyTournamentList({ status }: EmptyTournamentListProps) {
 
     return (
         <View style={styles.centerView}>
-            <MainText>{statusString}</MainText>
+            <CustomText>{statusString}</CustomText>
         </View>
     )
 }

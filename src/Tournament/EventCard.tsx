@@ -8,7 +8,7 @@ import { EventCardNavigationProp } from "../navTypes";
 import { PrimaryCard, TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 
 const EventCard = ({ event, style }: EventCardProps) => {
     const navigation = useNavigation<EventCardNavigationProp>();
@@ -37,7 +37,7 @@ const EventCard = ({ event, style }: EventCardProps) => {
                     <PlaceholderImage imageSrc={imageLogo.url} placeholder="game" resize="stretch" style={styles.game_image} />
                 </TransparentCard>
                 <View style={styles.event_text}>
-                    <MainText style={styles.event_title}>{name}</MainText>
+                    <CustomText style={styles.event_title}>{name}</CustomText>
                 </View>
             </PrimaryCard>
         </TouchableOpacity>

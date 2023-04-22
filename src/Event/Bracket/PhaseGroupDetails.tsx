@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 
 import { convertAPITimeToDate } from "../../helper";
-import { AccentText, MainText } from "../../Shared/Text";
+import { AccentText, CustomText } from "../../Shared/Text";
 import { PhaseGroupDetailsProps } from "./types"
 
 export function PhaseGroupDetails(props: PhaseGroupDetailsProps) {
@@ -13,11 +13,11 @@ export function PhaseGroupDetails(props: PhaseGroupDetailsProps) {
     return (
         <View style={props.style}>
             {startTime
-                ? <MainText>
+                ? <CustomText>
                     {isPast ? "Started at " : "Starting at "}
                     <Text style={styles.dateText}>{startTime.toLocaleDateString()} </Text>
                     <AccentText>{startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</AccentText>
-                </MainText>
+                </CustomText>
                 : null}
         </View>
     )

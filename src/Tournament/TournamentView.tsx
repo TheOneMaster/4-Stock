@@ -9,7 +9,7 @@ import { TopBar } from "./TopBar";
 
 import { TournamentViewProps } from "../navTypes";
 import ContactButton from "../Shared/ContactButton";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 import { truthyFilter } from "../helper";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
@@ -48,7 +48,7 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
     if (isLoading) {
         return (
             <View style={styles.centerView}>
-                <MainText>Loading...</MainText>
+                <CustomText>Loading...</CustomText>
             </View>
         )
     }
@@ -56,7 +56,7 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
     if (isError || data.tournament === null) {
         return (
             <View>
-                <MainText>Unable to load Tournament details from API</MainText>
+                <CustomText>Unable to load Tournament details from API</CustomText>
             </View>
         )
     }
@@ -70,12 +70,12 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
                 <TopBar images={data.tournament.images} name={data.tournament.name}></TopBar>
 
                 <View style={styles.section}>
-                    <MainText style={styles.sectionTitle}>Details</MainText>
+                    <CustomText style={styles.sectionTitle}>Details</CustomText>
                     <DetailSection {...data.tournament}></DetailSection>
                 </View>
 
                 <View style={styles.section}>
-                    <MainText style={styles.sectionTitle}>Events</MainText>
+                    <CustomText style={styles.sectionTitle}>Events</CustomText>
                     {events.map(event => {
                         if (event.id === null) {
                             return null
@@ -87,7 +87,7 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
                 </View>
 
                 <View style={styles.section}>
-                    <MainText style={styles.sectionTitle}>Contact</MainText>
+                    <CustomText style={styles.sectionTitle}>Contact</CustomText>
                     <ContactButton type={data.tournament.primaryContactType} url={data.tournament.primaryContact} />
                 </View>
 

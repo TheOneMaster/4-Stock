@@ -2,7 +2,7 @@ import { useTheme } from "@react-navigation/native";
 import { StyleSheet } from "react-native";
 
 import { SecondaryCard } from "../../Shared";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import { testPhaseButtonProps } from "./types";
 
 export function TestPhaseButton({ phase, selectPhase, active }: testPhaseButtonProps) {
@@ -28,7 +28,7 @@ export function TestPhaseButton({ phase, selectPhase, active }: testPhaseButtonP
 
     return (
         <SecondaryCard touchable onPress={handlePress} style={active ? activeColors.container : styles.container}>
-            <MainText style={active ? activeColors.text : styles.text}>{phase?.name}</MainText>
+            <CustomText style={active ? activeColors.text : styles.text}>{phase?.name}</CustomText>
         </SecondaryCard>
     )
 }

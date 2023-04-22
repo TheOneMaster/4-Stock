@@ -4,7 +4,7 @@ import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
 
 import Checkbox from "expo-checkbox"
 import { TransparentCard } from "../../Shared"
-import { MainText, SubtitleText } from "../../Shared/Text"
+import { CustomText, SubtitleText } from "../../Shared/Text"
 
 interface FilterItemProps {
     title: string
@@ -19,7 +19,7 @@ export const StaticFilterItem = (props: StaticFilterItemProps) => {
     return (
         <TransparentCard style={styles.container}>
             <Text>
-                <MainText style={styles.filterText}>{props.title}: </MainText>
+                <CustomText style={styles.filterText}>{props.title}: </CustomText>
                 <SubtitleText style={styles.filterText}>{props.value}</SubtitleText>
             </Text>
         </TransparentCard>
@@ -49,7 +49,7 @@ export const FilterDate = (props: FilterDateProps) => {
     return (
         <TransparentCard touchable onPress={onPress} style={styles.container}>
             <Text>
-                <MainText style={styles.filterText}>{props.title}: </MainText>
+                <CustomText style={styles.filterText}>{props.title}: </CustomText>
                 <SubtitleText style={styles.filterText}>{currentDateString}</SubtitleText>
             </Text>
         </TransparentCard>
@@ -91,7 +91,7 @@ export const FilterCheckbox = (props: FilterCheckboxProps) => {
 
     return (
         <TransparentCard style={[styles.container, style]}>
-            <MainText style={styles.filterText}>{title}</MainText>
+            <CustomText style={styles.filterText}>{title}</CustomText>
             <Checkbox value={value} onValueChange={valueChange} style={styles.filterComponent} />
         </TransparentCard>
     )

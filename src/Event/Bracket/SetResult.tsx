@@ -2,7 +2,7 @@ import { StyleSheet, Text } from "react-native";
 
 import { truthyFilter } from "../../helper";
 import { PrimaryCard, TransparentCard } from "../../Shared";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import { EntrantRowProps, Set, SetResultProps } from "./types";
 
 function getWinner(set: Set) {
@@ -45,7 +45,7 @@ function EntrantRow(props: EntrantRowProps) {
 
     return (
         <TransparentCard style={[styles.entrantRow, style]}>
-            <MainText style={styles.entrantRowName}>{name}</MainText>
+            <CustomText style={styles.entrantRowName}>{name}</CustomText>
             <TransparentCard style={[styles.entrantRowScoreBox, { backgroundColor: props.winner ? "green" : "red" }]}>
                 {score === null
                     ? <Text style={styles.entrantRowScore}>{winner ? "W" : "L"}</Text>

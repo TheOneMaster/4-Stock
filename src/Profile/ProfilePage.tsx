@@ -5,7 +5,7 @@ import { useUserDetailsQuery } from "../gql/gql";
 import { UserProfileProps } from "../navTypes";
 import DetailsCarousel from "../Shared/DetailsCarousel/DetailsCarousel";
 import { convertLeagueToCarouselItem, convertTournamentToCarouselItem, convertUserEventToCarouselItem } from "./api";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 import ProfileHeader from "./ProfileHeader";
 
 function UserProfilePage({ navigation, route }: UserProfileProps) {
@@ -14,7 +14,7 @@ function UserProfilePage({ navigation, route }: UserProfileProps) {
 
     if (status !== "success" || data.user === null) return (
         <View style={styles.centerView}>
-            <MainText>{status === "loading" ? "Loading..." : "Error loading profile details"}</MainText>
+            <CustomText>{status === "loading" ? "Loading..." : "Error loading profile details"}</CustomText>
         </View>
     )
 
