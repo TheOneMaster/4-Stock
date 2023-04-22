@@ -23,12 +23,6 @@ export function AccentText(props: TextProps) {
 }
 
 export function RobotoText(props: TextProps) {
-    const [fontLoaded] = useFonts({
-        roboto: Roboto_400Regular
-    });
-
-    if (!fontLoaded) return null
-
     const newProps = Object.assign({}, props);
     newProps.style = [{ fontFamily: "roboto" }, props.style];
 
@@ -36,14 +30,8 @@ export function RobotoText(props: TextProps) {
 }
 
 export function AnuphanText(props: TextProps) {
-    const [fontLoaded] = useFonts({
-        anuphan: require("../../../assets/fonts/Anuphan.ttf")
-    });
-
-    if (!fontLoaded) return null;
-
     const newProps = Object.assign({}, props);
-    newProps.style = [{ fontFamily: "anuphan" }, props.style];
+    newProps.style = [{ fontFamily: "Anuphan" }, props.style];
 
     return <Text {...newProps} />
 }
@@ -77,17 +65,12 @@ export function SubtitleText(props: TextProps) {
 export function TitleText(props: TextProps) {
 
     const { colors } = useTheme();
-    const [fontLoaded] = useFonts({
-        rubik: Rubik_400Regular
-    })
-
-    if (!fontLoaded) return null
 
     const newProps = Object.assign({}, props);
     newProps.style = [{
         padding: 10,
         fontSize: 18,
-        fontFamily: "rubik",
+        fontFamily: "Rubik",
         fontWeight: "bold",
         color: colors.text,
     }, props.style]
