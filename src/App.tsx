@@ -8,17 +8,13 @@ import { StatusBar } from 'expo-status-bar';
 import { LogBox, useColorScheme } from "react-native";
 
 import { RootStackParamList } from './navTypes';
-import { customDarkTheme, customLightTheme } from "./Themes";
+import { customDarkTheme, customLightTheme, useApplicationFonts } from "./Themes";
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import EventView from './Event';
 import MainScreen from './MainScreen';
 import UserProfilePage from './Profile';
 import TournamentView from './Tournament';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useFonts } from 'expo-font';
-import { Roboto_400Regular } from '@expo-google-fonts/roboto';
-import { Rubik_400Regular } from '@expo-google-fonts/rubik';
-import Anuphan_Font from "../assets/fonts/Anuphan.ttf"
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,11 +25,7 @@ function App() {
   const colorScheme = useColorScheme();
   const colorTheme = colorScheme === "dark" ? customDarkTheme : customLightTheme;
 
-  const [fontsLoading] = useFonts({
-    Roboto: Roboto_400Regular,
-    Rubik: Rubik_400Regular,
-    Anuphan: Anuphan_Font
-  })
+  const fontsLoading = useApplicationFonts();
 
   if (!fontsLoading) return null
 
