@@ -15,7 +15,8 @@
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": [
-      "**/*"
+      "**/*",
+      "assets/fonts/*"
     ],
     "ios": {
       "supportsTablet": true,
@@ -33,7 +34,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "entryPoint": "./src/App.tsx",
     "jsEngine": "hermes",
     "extra": {
       "eas": {
