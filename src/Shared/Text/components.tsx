@@ -61,7 +61,6 @@ export function SubtitleText(props: TextProps) {
 
 const styles = StyleSheet.create({
     title: {
-        padding: 10,
         fontSize: 18
     }
 })
