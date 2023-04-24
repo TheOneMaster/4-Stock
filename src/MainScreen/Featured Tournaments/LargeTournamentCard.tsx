@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
+import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
 import { getImageByType, PlaceholderImage, TransparentCard } from "../../Shared";
-import { CustomText } from "../../Shared/Text";
+import { CustomText, TitleText } from "../../Shared/Text";
 import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {
@@ -13,9 +14,9 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
     const profileImage = getImageByType(images, 'profile');
     const navigation = useNavigation<FeaturedTournamentCardNavigationProp>();
 
-    function handlePress() {
-        navigation.push("Tournament", { id: props.id })
-    }
+    const handlePress = useCallback(() => {
+        navigation.push("Tournament", { id: props.id });
+    }, [navigation, props.id])
 
     return (
         <View style={styles.container}>
@@ -24,7 +25,7 @@ function LargeTournamentCard(props: LargeTournamentCardProps) {
                 <PlaceholderImage imageSrc={profileImage.url} placeholder="tournament" style={styles.image} />
             </TransparentCard>
 
-            <CustomText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</CustomText>
+            <TitleText style={styles.title} adjustsFontSizeToFit numberOfLines={2}>{props.name}</TitleText>
         </View>
     )
 }
@@ -35,8 +36,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         flex: 1
     },
-
-
     imageContainer: {
         width: 140,
         height: 140,
@@ -50,8 +49,6 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: "center",
-        fontWeight: 'bold',
-        fontSize: 18
     }
 });
 
