@@ -1,6 +1,6 @@
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 
-import { MainText, SubtitleText } from "../Shared/Text"
+import { CustomText, SubtitleText } from "../Shared/Text"
 
 interface UserLoginProps {
     loggedIn: boolean
@@ -11,7 +11,7 @@ const UserLogin = ({ loggedIn, style }: UserLoginProps) => {
 
     if (loggedIn) return (
         <View style={[styles.container, style]}>
-            <MainText>Logged In</MainText>
+            <CustomText>Logged In</CustomText>
         </View>
     )
 

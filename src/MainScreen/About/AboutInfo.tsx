@@ -2,7 +2,7 @@ import * as Application from "expo-application";
 import { StyleSheet, View } from "react-native";
 
 import { TransparentCard } from "../../Shared";
-import { MainText, SubtitleText } from "../../Shared/Text";
+import { CustomText, SubtitleText } from "../../Shared/Text";
 import { InfoRowProps } from "./types";
 
 function AboutInfo() {
@@ -25,7 +25,7 @@ function AboutInfo() {
 function InfoRow({ title, value }: InfoRowProps) {
     return (
         <View style={styles.infoRow}>
-            <MainText style={styles.rowTitle}>{title}</MainText>
+            <CustomText style={styles.rowTitle}>{title}</CustomText>
             <SubtitleText style={styles.rowValue}>{value}</SubtitleText>
         </View>
     )

@@ -5,7 +5,7 @@ import { useTheme } from "@react-navigation/native";
 import Ionicons from "@expo/vector-icons/Ionicons"
 
 import UserLogin from "./UserLogin";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
@@ -24,7 +24,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
 
             <View style={styles.bottomBox}>
                 <Text>
-                    <MainText>Thanks for using this app! </MainText>
+                    <CustomText>Thanks for using this app! </CustomText>
                     <Ionicons name="heart" size={14} color="red" />
                 </Text>
             </View>

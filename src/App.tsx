@@ -8,13 +8,13 @@ import { StatusBar } from 'expo-status-bar';
 import { LogBox, useColorScheme } from "react-native";
 
 import { RootStackParamList } from './navTypes';
-import { customDarkTheme, customLightTheme } from "./Themes";
+import { customDarkTheme, customLightTheme, useApplicationFonts } from "./Themes";
 
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import EventView from './Event';
 import MainScreen from './MainScreen';
 import UserProfilePage from './Profile';
 import TournamentView from './Tournament';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 LogBox.ignoreAllLogs();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -24,6 +24,11 @@ function App() {
 
   const colorScheme = useColorScheme();
   const colorTheme = colorScheme === "dark" ? customDarkTheme : customLightTheme;
+
+  const fontsLoading = useApplicationFonts();
+
+  if (!fontsLoading) return null
+
   // const statusbarBackground = colorScheme === "dark" ? "black" : colorTheme.colors.primary;
 
   return (

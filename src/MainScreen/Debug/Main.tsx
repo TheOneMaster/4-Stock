@@ -6,7 +6,7 @@ import { PrimaryCard } from "../../Shared";
 // import { MainText, PrimaryCard, RubikText } from "../../Shared";
 import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
 import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import { FilterButton } from "../Tournament Search/FilterButton";
 
 export function DebugPage(props: DebugPageProps) {
@@ -24,11 +24,11 @@ export function DebugPage(props: DebugPageProps) {
         <View style={styles.container}>
             <TouchableOpacity onPress={onPress} style={styles.button} />
             <FilterButton onPress={onPress} style={styles.filterButton} />
-            <MainText>Testing</MainText>
+            <CustomText>Testing</CustomText>
             <BottomSheet ref={bottomSheetRef}>
 
                 <PrimaryCard style={styles.bottomCard}>
-                    <MainText style={styles.titleText}>Filters</MainText>
+                    <CustomText style={styles.titleText}>Filters</CustomText>
 
                 </PrimaryCard>
 

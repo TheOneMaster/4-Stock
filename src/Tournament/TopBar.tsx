@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/Text";
+import { CustomText, TitleText } from "../Shared/Text";
 import { TopBarProps } from "./types";
 
 export const TopBar = (props: TopBarProps) => {
@@ -28,7 +28,7 @@ export const TopBar = (props: TopBarProps) => {
                     </TransparentCard>
 
                     <View style={[styles.profile_text, { marginTop: 20 }]}>
-                        <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
+                        <TitleText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</TitleText>
                     </View>
 
                 </View>
@@ -43,7 +43,7 @@ export const TopBar = (props: TopBarProps) => {
                     <PlaceholderImage imageSrc={profileImage.url} style={styles.profile_image} />
                 </View>
                 <View style={[styles.profile_text, { justifyContent: "center" }]}>
-                    <MainText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</MainText>
+                    <TitleText style={styles.profile_title} adjustsFontSizeToFit={true} numberOfLines={3}>{props.name}</TitleText>
                 </View>
             </View>
         </View>
@@ -59,11 +59,11 @@ const styles = StyleSheet.create({
     },
     banner_container: {
         height: 200,
-        borderBottomWidth: 1,
+        borderBottomWidth: 2,
         borderStyle: 'solid',
     },
     banner_image: {
-        flex: 1,
+        height: "100%"
     },
     profile_container: {
         height: 80,
@@ -89,8 +89,6 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     profile_title: {
-        fontWeight: 'bold',
-        fontSize: 20,
         flexWrap: 'wrap',
         flexShrink: 1,
     }

@@ -6,7 +6,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useEventDataQuery } from "../gql/gql";
 import { truthyFilter } from "../helper";
 import { EventTabParamList, EventViewProps } from "../navTypes";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 import { BracketPage } from "./Bracket/BracketPage";
 import ResultsPage from "./Results/ResultsPage";
 
@@ -52,7 +52,7 @@ function EmptyEventView({ status, color }: EmptyEventViewProps) {
         <View style={styles.centerView}>
             {status === "loading"
                 ? <ActivityIndicator size="large" color={color} />
-                : <MainText>Error retrieving event details</MainText>}
+                : <CustomText>Error retrieving event details</CustomText>}
         </View>
     )
 }

@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 
 import { DetailsSectionProps } from "./types";
 import { convertDateToString } from "../helper";
-import { MainText } from "../Shared/Text";
+import { CustomText } from "../Shared/Text";
 
 function DetailSection(props: DetailsSectionProps) {
     const startDate = convertDateToString(props.startAt);
@@ -11,13 +11,13 @@ function DetailSection(props: DetailsSectionProps) {
     return (
         <View style={styles.container}>
             <View>
-                <MainText>City: {props.city}</MainText>
-                <MainText>Starting At: {startDate}</MainText>
-                <MainText>Country: {props.countryCode}</MainText>
-                <MainText>Currency: {props.currency}</MainText>
-                {props.eventRegistrationClosesAt && <MainText>Last date for registration: {lastDateRegister}</MainText>}
-                <MainText>Number of attendees: {props.numAttendees}</MainText>
-                <MainText>Venue Address: {props.venueAddress}</MainText>
+                <CustomText>City: {props.city}</CustomText>
+                <CustomText>Starting At: {startDate}</CustomText>
+                <CustomText>Country: {props.countryCode}</CustomText>
+                <CustomText>Currency: {props.currency}</CustomText>
+                {props.eventRegistrationClosesAt && <CustomText>Last date for registration: {lastDateRegister}</CustomText>}
+                <CustomText>Number of attendees: {props.numAttendees}</CustomText>
+                <CustomText>Venue Address: {props.venueAddress}</CustomText>
             </View>
         </View>
     );

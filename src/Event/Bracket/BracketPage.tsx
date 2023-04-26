@@ -11,7 +11,7 @@ import { TestFilters } from "./BracketFilters";
 import { truthyFilter } from "../../helper";
 import { BracketViewProps } from "../../navTypes";
 import { IoniconsThemed } from "../../Shared/IconTheme";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 
 function convertSetPagesToSets(setPages: UseQueryResult<SetQuery>[]) {
     return setPages.map(page => page.data?.phaseGroup.sets?.nodes)
@@ -69,7 +69,7 @@ function EmptyBracket({ status }: EmptyBracketProps) {
     return (
         <View style={styles.center}>
             <IoniconsThemed name="alert-circle-outline" size={30} />
-            <MainText style={{ fontSize: 20 }}>Brackets not found</MainText>
+            <CustomText style={{ fontSize: 20 }}>Brackets not found</CustomText>
         </View>
     )
 }

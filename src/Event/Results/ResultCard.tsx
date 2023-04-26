@@ -5,7 +5,7 @@ import { getNumberOrdinal, truthyFilter } from "../../helper";
 import { ResultsNavigationProp } from "../../navTypes";
 import { getImageByType } from "../../Shared/APIConverters";
 import PlaceholderImage from "../../Shared/PlaceholderImage";
-import { MainText, SubtitleText } from "../../Shared/Text";
+import { CustomText, SubtitleText, TitleText } from "../../Shared/Text";
 // import { Participant } from "../../types";
 import { Participants, ResultCardProps } from "./types";
 
@@ -57,11 +57,11 @@ const ResultCard = ({ playerData }: ResultCardProps) => {
                     </View>
                     <View style={styles.detailsContainer}>
                         <View style={styles.playerTitle}>
-                            <MainText style={styles.playerTag}>{player.gamerTag}</MainText>
+                            <TitleText style={styles.playerTag}>{player.gamerTag}</TitleText>
                             {player.prefix && <SubtitleText style={styles.playerSponsor}>{player.prefix}</SubtitleText>}
-                            {user !== null && user.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
+                            {user?.genderPronoun && <SubtitleText style={styles.playerPronoun}>{user.genderPronoun}</SubtitleText>}
                         </View>
-                        <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                        <CustomText style={styles.playerPlacement}>{placementString}</CustomText>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -81,9 +81,9 @@ const ResultCard = ({ playerData }: ResultCardProps) => {
             </View>
             <View style={styles.detailsContainer}>
                 <View style={styles.playerTitle}>
-                    <MainText style={styles.playerTag}>{entrant.name}</MainText>
+                    <TitleText style={styles.playerTag}>{entrant.name}</TitleText>
                 </View>
-                <MainText style={styles.playerPlacement}>{placementString}</MainText>
+                <CustomText style={styles.playerPlacement}>{placementString}</CustomText>
             </View>
         </View>
     )
@@ -114,13 +114,10 @@ const styles = StyleSheet.create({
         marginLeft: 5
     },
     playerTag: {
-        fontWeight: 'bold',
-        fontSize: 18,
         flexWrap: 'wrap',
         flexShrink: 1
     },
     playerSponsor: {
-        fontWeight: 'bold',
         fontSize: 15,
     },
     playerPronoun: {

@@ -8,7 +8,7 @@ import { EventCardNavigationProp } from "../navTypes";
 import { PrimaryCard, TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { MainText } from "../Shared/Text";
+import { CustomText, TitleText } from "../Shared/Text";
 
 const EventCard = ({ event, style }: EventCardProps) => {
     const navigation = useNavigation<EventCardNavigationProp>();
@@ -37,7 +37,7 @@ const EventCard = ({ event, style }: EventCardProps) => {
                     <PlaceholderImage imageSrc={imageLogo.url} placeholder="game" resize="stretch" style={styles.game_image} />
                 </TransparentCard>
                 <View style={styles.event_text}>
-                    <MainText style={styles.event_title}>{name}</MainText>
+                    <TitleText style={styles.event_title}>{name}</TitleText>
                 </View>
             </PrimaryCard>
         </TouchableOpacity>
@@ -64,8 +64,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 5,
     },
     event_title: {
-        fontWeight: 'bold',
-        fontSize: 20,
         flexWrap: 'wrap',
         flexShrink: 1,
     }

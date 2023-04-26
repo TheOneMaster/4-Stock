@@ -7,7 +7,7 @@ import { EventResultsQueryVariables, useInfiniteEventResultsQuery } from "../../
 import { checkID, truthyFilter } from "../../helper";
 import { ResultsViewProps } from "../../navTypes";
 import { SearchBar } from "../../Shared";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 import ResultCard from "./ResultCard";
 
 function ResultsPage({ navigation, route }: ResultsViewProps) {
@@ -96,7 +96,7 @@ function EmptyResults({ status }: EmptyResultsProps) {
 
     return (
         <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <MainText>{statusString}</MainText>
+            <CustomText>{statusString}</CustomText>
         </View>
     )
 }

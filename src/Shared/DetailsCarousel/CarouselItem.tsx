@@ -3,7 +3,7 @@ import { useTheme } from "@react-navigation/native";
 
 import PlaceholderImage from "../PlaceholderImage";
 import { CarouselEmptyTextProps, CarouselItemProps } from "./types";
-import { MainText } from "../Text";
+import { CustomText } from "../Text";
 
 function CarouselItem(props: CarouselItemProps) {
 
@@ -36,11 +36,11 @@ function CarouselItem(props: CarouselItemProps) {
                 </View>
 
                 <View style={styles.textBox}>
-                    <MainText style={styles.title} numberOfLines={2}>{props.item.title}</MainText>
+                    <CustomText style={styles.title} numberOfLines={2}>{props.item.title}</CustomText>
 
                     {props.item.subtitle
                         ? <View style={styles.subtitleContainer}>
-                            <MainText style={styles.subtitle} numberOfLines={2}>{props.item.subtitle}</MainText>
+                            <CustomText style={styles.subtitle} numberOfLines={2}>{props.item.subtitle}</CustomText>
                         </View>
                         : null}
 
@@ -62,7 +62,7 @@ export function CarouselEmptyText(props: CarouselEmptyTextProps) {
 
     return (
         <View style={styles.centerBox}>
-            <MainText>{props.text}</MainText>
+            <CustomText>{props.text}</CustomText>
         </View>
     )
 }

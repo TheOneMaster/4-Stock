@@ -8,7 +8,7 @@ import { useFeaturedTournamentsQuery } from "../../gql/gql";
 import LargeTournamentCard from "./LargeTournamentCard";
 
 import { FeaturedTournamentsScreenProps } from "../../navTypes";
-import { MainText } from "../../Shared/Text";
+import { CustomText } from "../../Shared/Text";
 
 
 function FeaturedTournamentsPage({ navigation, route }: FeaturedTournamentsScreenProps) {
@@ -81,7 +81,7 @@ function EmptyTournaments({ status }: EmptyTournamentsProps) {
         <View style={styles.centerView}>
             {icon === "error-outline" ? <MaterialIcons name={icon} size={20} color={colors.text} /> : null}
             {icon === "exclamationcircleo" ? <AntDesign name="exclamationcircleo" size={20} color={colors.text} /> : null}
-            <MainText>{text}</MainText>
+            <CustomText>{text}</CustomText>
         </View>
     )
 }

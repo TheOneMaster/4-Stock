@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet, View } from "react-native"
 
 import { PrimaryCard } from "../../Shared"
-import { MainText } from "../../Shared/Text"
+import { CustomText } from "../../Shared/Text"
 
 interface SettingsGroupProps {
     title: string
@@ -17,7 +17,7 @@ function SettingsGroup(props: SettingsGroupProps) {
 
     return (
         <PrimaryCard style={styles.container}>
-            <MainText style={styles.title}>{title}</MainText>
+            <CustomText style={styles.title}>{title}</CustomText>
             <View style={styles.innerContainer}>
                 {
                     React.Children.map(children, (child, index) => {

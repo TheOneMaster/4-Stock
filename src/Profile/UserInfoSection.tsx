@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { UserInfoSectionProps } from "./types";
 import { TransparentCard } from "../Shared";
 import { IoniconsThemed, FontAwesomeThemed } from "../Shared/IconTheme";
-import { MainText, SubtitleText } from "../Shared/Text";
+import { CustomText, SubtitleText } from "../Shared/Text";
 
 function UserInfoSection(props: UserInfoSectionProps) {
     const { player, location, genderPronoun } = props;
@@ -16,7 +16,7 @@ function UserInfoSection(props: UserInfoSectionProps) {
         <View style={[styles.profileInfo, props.style]}>
 
             <View style={styles.profileNames}>
-                <MainText style={styles.profileName}>{gamerTag}</MainText>
+                <CustomText style={styles.profileName}>{gamerTag}</CustomText>
                 {realName && <SubtitleText>{realName}</SubtitleText>}
             </View>
 

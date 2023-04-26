@@ -62,10 +62,8 @@ const styles = StyleSheet.create({
         width: 100,
         minHeight: 100,
         borderRightWidth: 1,
-        // backgroundColor: "purple",
     },
     image: {
-        // width: "100%",
         height: "100%",
     },
     textBox: {
@@ -78,12 +76,9 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
     },
     title: {
-        fontWeight: 'bold',
         flexWrap: 'wrap',
         flexShrink: 1,
-        padding: 0
     },
-
     subtitle: {
         alignItems: "center",
         flexDirection: "row",
