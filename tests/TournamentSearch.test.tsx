@@ -23,14 +23,7 @@ jest.mock("../src/gql/gql", () => {
     }
 })
 
-import { useInfiniteTournamentListDataQuery } from "../src/gql/gql"
-
-
 describe("Tournament search page", () => {
-
-
-
-    // jest.mocked(useInfiniteTournamentListDataQuery);
 
     it("Tournament Card navigates to tournament page", () => {
         const navigation = { push: () => { } };
@@ -42,7 +35,6 @@ describe("Tournament search page", () => {
         fireEvent.press(touchableCard);
         expect(navigation.push).toHaveBeenCalledWith("Tournament", { id: mockTournamentData.id });
     });
-
 
     it("Tournament search filters", () => {
 
@@ -67,6 +59,5 @@ describe("Tournament search page", () => {
         expect(filterSheet).toContainElement(online);
         expect(filterSheet).toContainElement(open);
     })
-
 
 })
