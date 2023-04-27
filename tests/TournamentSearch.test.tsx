@@ -1,4 +1,5 @@
 import React from "react"
+import "@testing-library/jest-native/extend-expect"
 import { fireEvent, render } from "@testing-library/react-native"
 
 import TournamentList from "../src/MainScreen/Tournament Search"
@@ -7,6 +8,7 @@ import TournamentCard from "../src/MainScreen/Tournament Search/TournamentCard"
 
 import mockTournamentData from "./tournamentData.json"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { TournamentCardNavigationProp, TournamentSearchNavigationProp } from "../src/navTypes"
 
 jest.mock("../src/gql/gql", () => {
     return {
@@ -26,7 +28,7 @@ jest.mock("../src/gql/gql", () => {
 describe("Tournament search page", () => {
 
     it("Tournament Card navigates to tournament page", () => {
-        const navigation = { push: () => { } };
+        const navigation = { push: () => { } } as TournamentCardNavigationProp;
         jest.spyOn(navigation, "push");
 
         const tournamentCard = render(<TournamentCard {...mockTournamentData} navigation={navigation} />);
@@ -39,9 +41,10 @@ describe("Tournament search page", () => {
     it("Tournament search filters", () => {
 
         const queryClient = new QueryClient();
+        const navigation = { navigate: () => { } } as TournamentSearchNavigationProp
         const searchPage = render(
             <QueryClientProvider client={queryClient}>
-                <TournamentList />
+                <TournamentList navigation={navigation} />
             </QueryClientProvider>
         );
         const filterSheet = searchPage.getByTestId("filterBottomSheet");

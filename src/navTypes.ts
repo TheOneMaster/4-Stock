@@ -83,3 +83,8 @@ export type FeaturedTournamentCardNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<HomeDrawerParamList, "Featured Tournaments">,
     NativeStackNavigationProp<RootStackParamList, "Home">
 >;
+
+export type TournamentSearchNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<HomeDrawerParamList, "Tournament Search">,
+    NativeStackNavigationProp<RootStackParamList, "Home">
+>
