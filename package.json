@@ -16,6 +16,9 @@
     "preset": "jest-expo",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ],
+    "setupFilesAfterEnv": [
+      "./jest-setup.js"
     ]
   },
   "dependencies": {
@@ -64,6 +67,7 @@
     "@graphql-codegen/introspection": "3.0.1",
     "@graphql-codegen/typescript-operations": "^3.0.2",
     "@graphql-codegen/typescript-react-query": "^4.1.0",
+    "@testing-library/jest-native": "^5.4.2",
     "@testing-library/react-native": "^12.0.1",
     "@types/jest": "^29.5.1",
     "@types/node": "^18.11.18",
