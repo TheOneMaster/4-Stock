@@ -1,14 +1,13 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import React, { useCallback } from "react"
-import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, Text, ViewProps, ViewStyle } from "react-native"
 
 import Checkbox from "expo-checkbox"
 import { TransparentCard } from "../../Shared"
 import { CustomText, SubtitleText } from "../../Shared/Text"
 
-interface FilterItemProps {
+interface FilterItemProps extends ViewProps {
     title: string
-    style?: StyleProp<ViewStyle>
 }
 
 interface StaticFilterItemProps extends FilterItemProps {
@@ -16,11 +15,14 @@ interface StaticFilterItemProps extends FilterItemProps {
 }
 
 export const StaticFilterItem = (props: StaticFilterItemProps) => {
+
+    const { title, value, ...viewProps } = props
+
     return (
-        <TransparentCard style={styles.container}>
+        <TransparentCard style={styles.container} {...viewProps}>
             <Text>
-                <CustomText style={styles.filterText}>{props.title}: </CustomText>
-                <SubtitleText style={styles.filterText}>{props.value}</SubtitleText>
+                <CustomText style={styles.filterText}>{title}: </CustomText>
+                <SubtitleText style={styles.filterText}>{value}</SubtitleText>
             </Text>
         </TransparentCard>
     )
@@ -33,23 +35,25 @@ interface FilterDateProps extends FilterItemProps {
 
 export const FilterDate = (props: FilterDateProps) => {
 
-    const currentDateString = props.date ? props.date.toLocaleDateString() : "Not applied";
+    const { title, date, setDate, ...viewProps } = props;
+
+    const currentDateString = date ? date.toLocaleDateString() : "Not applied";
 
     const onPress = useCallback(() => {
         DateTimePickerAndroid.open({
-            value: props.date ? props.date : new Date(),
+            value: date ? date : new Date(),
             onChange: (event) => {
                 const newDate = new Date(event.nativeEvent.timestamp ?? currentDateString);
-                props.setDate(newDate);
+                setDate(newDate);
             }
         })
-    }, [props.setDate, props.date])
+    }, [setDate, date])
 
 
     return (
-        <TransparentCard touchable onPress={onPress} style={styles.container}>
+        <TransparentCard touchable onPress={onPress} style={styles.container} {...viewProps}>
             <Text>
-                <CustomText style={styles.filterText}>{props.title}: </CustomText>
+                <CustomText style={styles.filterText}>{title}: </CustomText>
                 <SubtitleText style={styles.filterText}>{currentDateString}</SubtitleText>
             </Text>
         </TransparentCard>
@@ -79,9 +83,8 @@ type FilterCheckboxProps = FilterBoolean | FilterNullBoolean
 
 
 export const FilterCheckbox = (props: FilterCheckboxProps) => {
-    const {
-        title,
-        style } = props;
+
+    const { title, style, ...viewProps } = props;
     const value = props.value ? props.value : false;
 
     const valueChange = useCallback((newValue: boolean) => {
@@ -90,7 +93,7 @@ export const FilterCheckbox = (props: FilterCheckboxProps) => {
     }, [props.setValue, props.nullValue])
 
     return (
-        <TransparentCard style={[styles.container, style]}>
+        <TransparentCard style={[styles.container, style]} {...viewProps}>
             <CustomText style={styles.filterText}>{title}</CustomText>
             <Checkbox value={value} onValueChange={valueChange} style={styles.filterComponent} />
         </TransparentCard>

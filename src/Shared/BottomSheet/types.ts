@@ -1,15 +1,10 @@
 import React from "react";
-import { StyleProp, ViewStyle } from "react-native";
+import { StyleProp, ViewProps, ViewStyle } from "react-native";
 
-export interface BottomSheetProps {
-
+export interface BottomSheetProps extends ViewProps {
     maxSize?: number
     minSize?: number
-
     setOverlay?: React.Dispatch<React.SetStateAction<boolean>>
-
-    children?: React.ReactNode
-    style?: StyleProp<ViewStyle>
 }
 
 export interface BottomSheetRefProps {

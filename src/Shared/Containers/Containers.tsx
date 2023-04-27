@@ -56,10 +56,10 @@ export function TransparentCard(props: CardProps) {
 
 function StaticCard(props: StaticCardProps) {
 
-    const { style, children } = props;
+    const { children, ...otherProps } = props;
 
     return (
-        <View style={style}>
+        <View {...otherProps}>
             {children}
         </View>
     )
@@ -70,20 +70,21 @@ function TouchableCard(props: TouchableCardProps) {
     const {
         style, children,
         onPress, hitslop,
-        activeColor = colors.primary, activeOpacity = 0.85, highlight = false
+        activeColor = colors.primary, activeOpacity = 0.85, highlight = false,
+        ...otherProps
     } = props
 
     if (highlight) return (
         <Pressable onPress={onPress} hitSlop={hitslop} style={({ pressed }) => [style, {
             backgroundColor: pressed ? activeColor : undefined,
             opacity: pressed ? activeOpacity : undefined
-        }]}>
+        }]} {...otherProps}>
             {children}
         </Pressable>
     )
 
     return (
-        <Pressable onPress={onPress} hitSlop={hitslop} style={style}>
+        <Pressable onPress={onPress} hitSlop={hitslop} style={style} {...otherProps}>
             {children}
         </Pressable>
     )

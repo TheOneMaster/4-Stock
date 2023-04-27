@@ -1,9 +1,7 @@
-import { GestureResponderEvent, Insets, StyleProp, ViewStyle } from "react-native"
+import { GestureResponderEvent, Insets, StyleProp, ViewProps, ViewStyle } from "react-native"
 
-export interface BaseCardProps {
+export interface BaseCardProps extends ViewProps {
     touchable?: boolean
-    style?: StyleProp<ViewStyle>
-    children?: React.ReactNode
 }
 
 export interface StaticCardProps extends BaseCardProps {

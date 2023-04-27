@@ -11,8 +11,10 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
 
     // TODO: Add params that controls each step for the bottom sheet
 
-    const MAX_TRANSLATE_Y = props.maxSize ? props.maxSize : -SCREEN_HEIGHT / 1.5;
-    const MIN_TRANSLATE_Y = props.minSize ? props.minSize : -SCREEN_HEIGHT / 2;
+    const { maxSize, minSize, style, ...viewProps } = props;
+
+    const MAX_TRANSLATE_Y = maxSize ? maxSize : -SCREEN_HEIGHT / 1.5;
+    const MIN_TRANSLATE_Y = minSize ? minSize : -SCREEN_HEIGHT / 2;
 
     const translateY = useSharedValue(0);
     const context = useSharedValue({ y: 0 });
@@ -35,7 +37,6 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
             props.setOverlay(false)
         }
     }
-
 
     const gesture = Gesture.Pan()
         .onStart(() => {
@@ -64,7 +65,7 @@ export const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProp
 
     return (
         <GestureDetector gesture={gesture}>
-            <Animated.View style={[styles.container, props.style, reanimatedStyle]}>
+            <Animated.View style={[styles.container, style, reanimatedStyle]} {...viewProps}>
                 {props.children}
             </Animated.View>
         </GestureDetector>
