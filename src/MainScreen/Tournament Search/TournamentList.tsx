@@ -102,14 +102,14 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
             {overlay ? <Pressable style={styles.overlay} onPress={overlayPress} /> : null}
 
 
-            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay} minSize={MIN_BOTTOMSHEET_SIZE} maxSize={MAX_BOTTOMSHEET_SIZE}>
+            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay} minSize={MIN_BOTTOMSHEET_SIZE} maxSize={MAX_BOTTOMSHEET_SIZE} testID="filterBottomSheet">
                 <SecondaryCard style={styles.filterSheetInner}>
                     <TitleText style={styles.titleText}>Filters</TitleText>
-                    <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
-                    <FilterDate title="Till" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
-                    <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} />
-                    <FilterCheckbox title="Has online events" value={filters.online} setValue={setFilters.setOnline} />
-                    <FilterCheckbox title="Open for registration" value={filters.regOpen} setValue={setFilters.setRegOpen} nullValue />
+                    <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} testID="afterDateFilter" />
+                    <FilterDate title="Till" date={filters.beforeDate} setDate={setFilters.setBeforeDate} testID="beforeDateFilter" />
+                    <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} testID="pastTournamentFilter" />
+                    <FilterCheckbox title="Has online events" value={filters.online} setValue={setFilters.setOnline} testID="onlineTournamentFilter" />
+                    <FilterCheckbox title="Open for registration" value={filters.regOpen} setValue={setFilters.setRegOpen} nullValue testID="openTournamentFilter" />
                     <StaticFilterItem title="Game filter" value={filters.games.map(game => game.label).join(", ")} />
                 </SecondaryCard>
             </BottomSheet>

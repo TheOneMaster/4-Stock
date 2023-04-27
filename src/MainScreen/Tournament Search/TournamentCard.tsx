@@ -9,26 +9,28 @@ import { IoniconsThemed } from "../../Shared/IconTheme";
 import { SubtitleText, TitleText } from "../../Shared/Text";
 
 
-export const TournamentCard = ({ id, name, city, startAt, images, navigation, style }: TournamentCardProps) => {
-    const dateString = startAt ? convertDateToString(startAt) : "Date not provided";
-    const usableImages = images?.filter(truthyFilter) ?? [];
+export const TournamentCard = (props: TournamentCardProps) => {
+    const { navigation, ...details } = props
+    const dateString = details.startAt ? convertDateToString(details.startAt) : "Date not provided";
+    const usableImages = details.images?.filter(truthyFilter) ?? [];
     const profile_image = getImageByType(usableImages, "profile")
 
     const navigateToTournament = useCallback(() => {
-        navigation.push("Tournament", { id: id })
-    }, [id, navigation]);
+        // console.log(details)
+        navigation.push("Tournament", { id: details.id })
+    }, [details.id, navigation]);
 
     return (
-        <PrimaryCard touchable onPress={navigateToTournament} style={[styles.container, style]}>
+        <PrimaryCard touchable onPress={navigateToTournament} style={[styles.container, details.style]} testID="touchableTournamentCard">
 
             <TransparentCard style={styles.imageContainer}>
                 <PlaceholderImage style={styles.image} imageSrc={profile_image?.url} resize="stretch" />
             </TransparentCard>
 
             <View style={styles.textBox}>
-                <TitleText numberOfLines={3} adjustsFontSizeToFit={true} style={styles.title}>{name}</TitleText>
+                <TitleText numberOfLines={3} adjustsFontSizeToFit={true} style={styles.title}>{details.name}</TitleText>
                 <View style={styles.detailsText}>
-                    <SubtitleRow text={city} iconName="location-outline" />
+                    <SubtitleRow text={details.city} iconName="location-outline" />
                     <SubtitleRow text={dateString} iconName="calendar-outline" />
                 </View>
             </View>
