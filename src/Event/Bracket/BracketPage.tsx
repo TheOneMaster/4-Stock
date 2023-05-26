@@ -38,7 +38,8 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
         selectedPGroup: initPGroupID
     });
 
-    const { setPages, pGroupInfo } = useSets(selectedOptions.selectedPGroup);
+    const { setPages, pGroupInfo, loadingPGroupData, queriesStatus } = useSets(selectedOptions.selectedPGroup);
+    
 
     return (
         <View style={{ flex: 1 }}>
@@ -52,6 +53,9 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
                 style={styles.container}
 
                 ItemSeparatorComponent={() => <View style={styles.seperator} />}
+
+                ListEmptyComponent={<EmptyBracket pGroupStatus={loadingPGroupData} queriesStatus={queriesStatus} />}
+
             />
 
         </View>
@@ -61,15 +65,26 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
 }
 
 interface EmptyBracketProps {
-    status: "success" | "loading" | "error"
+    queriesStatus: ("success" | "loading" | "error")[]
+    pGroupStatus: boolean
 }
 
-function EmptyBracket({ status }: EmptyBracketProps) {
+function getErrorMessage({queriesStatus, pGroupStatus}: EmptyBracketProps) {
+    if (!pGroupStatus) return "No bracket found";
+    if (queriesStatus.some(status => status === "error")) return "Error loading bracket";
+    if (queriesStatus.every(status => status === "loading")) return "Loading sets...";
+    if (queriesStatus.every(status => status === "success")) return "No sets found";
+}
+
+
+function EmptyBracket({ queriesStatus, pGroupStatus }: EmptyBracketProps) {
+
+    let errorMessage = getErrorMessage({queriesStatus, pGroupStatus});
 
     return (
         <View style={styles.center}>
             <IoniconsThemed name="alert-circle-outline" size={30} />
-            <CustomText style={{ fontSize: 20 }}>Brackets not found</CustomText>
+            <CustomText style={{ fontSize: 20 }}>{errorMessage}</CustomText>
         </View>
     )
 }

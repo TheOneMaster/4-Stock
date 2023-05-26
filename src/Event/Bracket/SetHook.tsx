@@ -4,7 +4,7 @@ import { PhaseGroupDetails, SetQuery } from "./types";
 
 export function useSets(pGroupID: string | null) {
 
-  const { data: PhaseGroupDetails } = useQuery({
+  const { data: PhaseGroupDetails, isInitialLoading: loadingPGroupData } = useQuery({
     queryKey: ['pGroupInfo', pGroupID],
     queryFn: () => useFetchData<PhaseGroupDetails, { pgID: string }>(phaseGroupInfo)({ pgID: pGroupID! }),
     enabled: !!pGroupID
@@ -26,7 +26,11 @@ export function useSets(pGroupID: string | null) {
     })
   });
 
-  return { setPages: setQueries, pGroupInfo: pGroupInfo }
+  const queriesStatus = setQueries.map(query => query.status);
+
+  console.log(loadingPGroupData, queriesStatus);
+
+  return { setPages: setQueries, pGroupInfo, loadingPGroupData, queriesStatus }
 }
 
 
