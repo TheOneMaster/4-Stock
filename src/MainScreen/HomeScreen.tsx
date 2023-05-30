@@ -35,7 +35,9 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
             {general.debug
                 ? <Drawer.Group>
-                    <Drawer.Screen name="Debug Testing" component={DebugPage} />
+                    <Drawer.Screen name="Debug Testing" component={DebugPage} options={{
+                        swipeEdgeWidth: 1
+                    }} />
                 </Drawer.Group>
                 : null}
 
