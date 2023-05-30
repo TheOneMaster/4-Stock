@@ -1,0 +1,363 @@
+{
+  "phaseGroup": {
+    "displayIdentifier": "MLS1",
+    "sets": {
+      "pageInfo": {
+        "page": 1,
+        "totalPages": 1
+      },
+      "nodes": [
+        {
+          "id": 56187734,
+          "round": 3,
+          "setGamesType": 1,
+          "fullRoundText": "Grand Final",
+          "winnerId": 11902773,
+          "slots": [
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "FLY | Jmook"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 1
+                  }
+                },
+                "entrant": {
+                  "name": "CLG | Cody Schwab"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187733,
+          "round": 2,
+          "setGamesType": 1,
+          "fullRoundText": "Winners Final",
+          "winnerId": 11902773,
+          "slots": [
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "moist | moky"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "FLY | Jmook"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187749,
+          "round": -6,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Final",
+          "winnerId": 11902769,
+          "slots": [
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "moist | moky"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "CLG | Cody Schwab"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187748,
+          "round": -5,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Semi-Final",
+          "winnerId": 11902769,
+          "slots": [
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "CLG | Cody Schwab"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 1
+                  }
+                },
+                "entrant": {
+                  "name": "RB | Plup"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187731,
+          "round": 1,
+          "setGamesType": 1,
+          "fullRoundText": "Winners Semi-Final",
+          "winnerId": 11597392,
+          "slots": [
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "RB | Plup"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "moist | moky"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187732,
+          "round": 1,
+          "setGamesType": 1,
+          "fullRoundText": "Winners Semi-Final",
+          "winnerId": 11902773,
+          "slots": [
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "FLY | Jmook"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 2
+                  }
+                },
+                "entrant": {
+                  "name": "Zain"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187746,
+          "round": -4,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Quarter-Final",
+          "winnerId": 11902769,
+          "slots": [
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "Zain"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "CLG | Cody Schwab"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187747,
+          "round": -4,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Quarter-Final",
+          "winnerId": 11980562,
+          "slots": [
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "RB | Plup"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 1
+                  }
+                },
+                "entrant": {
+                  "name": "Liquid | Hungrybox"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187744,
+          "round": -3,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Round 1",
+          "winnerId": 11902769,
+          "slots": [
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "2saint"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "CLG | Cody Schwab"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": 56187745,
+          "round": -3,
+          "setGamesType": 1,
+          "fullRoundText": "Losers Round 1",
+          "winnerId": 11897155,
+          "slots": [
+            {
+              "standing": {
+                "placement": 1,
+                "stats": {
+                  "score": {
+                    "value": 3
+                  }
+                },
+                "entrant": {
+                  "name": "Liquid | Hungrybox"
+                }
+              }
+            },
+            {
+              "standing": {
+                "placement": 2,
+                "stats": {
+                  "score": {
+                    "value": 0
+                  }
+                },
+                "entrant": {
+                  "name": "TSM | Leffen"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

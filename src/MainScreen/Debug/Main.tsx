@@ -1,67 +1,95 @@
-import { useCallback, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { DebugPageProps } from "../../navTypes";
-import { PrimaryCard } from "../../Shared";
-// import { MainText, PrimaryCard, RubikText } from "../../Shared";
-import { BottomSheet, MIN_TRANSLATE_Y } from "../../Shared/BottomSheet/BottomSheet";
-import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { CustomText } from "../../Shared/Text";
-import { FilterButton } from "../Tournament Search/FilterButton";
+import { BracketTree } from "./BracketTree";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { useDerivedValue, useSharedValue } from "react-native-reanimated";
+
+import SetData from "./Sets.json"
+import { SetQuery } from "../../Event/Bracket/types";
+
+export type BracketRounds = {
+    [round: number]: ReturnType<typeof reduceSets>
+}
+
+export function reduceSets(sets: SetQuery) {
+    return sets.phaseGroup.sets?.nodes.map(set => {
+        return {
+            id: set?.id,
+            round: set?.round,
+            slots: set?.slots ?? []
+        }
+    }) ?? [];
+}
+
+export function convertSets(sets: SetQuery) {
+    const setMap = reduceSets(sets);
+
+    const maxRound = Math.max(...setMap.map(set => set.round ?? -1));
+    const minRound = Math.min(...setMap.map(set => set.round ?? 1));
+
+    console.log(maxRound);
+    const winnersBracket: BracketRounds = {}
+    for (let i=0;i<=maxRound;i++) {
+        const setsInRound = setMap.filter(set => set.round === i);
+        winnersBracket[i] = setsInRound;
+    }
+
+    const losersBracket: BracketRounds = {};
+    for (let i=-1;i>minRound;i--) {
+        const setsInRound = setMap.filter(set => set.round === i);
+        losersBracket[i] = setsInRound;
+    }
+
+    return {
+        winners: winnersBracket,
+        losers: losersBracket
+    }
+
+}
+
 
 export function DebugPage(props: DebugPageProps) {
 
-    const bottomSheetRef = useRef<BottomSheetRefProps>(null);
-    const onPress = useCallback(() => {
-        if (bottomSheetRef.current?.isActive()) {
-            bottomSheetRef.current.scrollTo(0);
-        } else {
-            bottomSheetRef.current?.scrollTo(MIN_TRANSLATE_Y)
-        }
-    }, [])
+    const translateX = useSharedValue(0);
+    const translateY = useSharedValue(0);
+    const context = useSharedValue({x: 0, y: 0});
+
+    const clampedTranslateX = useDerivedValue(() => {
+        return Math.min(translateX.value, 0);
+    });
+    const clampedTranslateY = useDerivedValue(() => {
+        return Math.min(translateY.value, 0);
+    })
+
+    const panGesture = Gesture.Pan().onStart(event => {
+        context.value = {y: clampedTranslateY.value, x: clampedTranslateX.value};
+    }).onUpdate(event => {
+        translateX.value = event.translationX + context.value.x;
+        translateY.value = event.translationY + context.value.y;
+
+        // console.log(translateX.value)
+
+    }).onEnd(event => {
+
+    });
+
+    const sets = convertSets(SetData);
+    console.log(sets.winners)
+    
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity onPress={onPress} style={styles.button} />
-            <FilterButton onPress={onPress} style={styles.filterButton} />
-            <CustomText>Testing</CustomText>
-            <BottomSheet ref={bottomSheetRef}>
+        <GestureDetector gesture={panGesture}>
+            <View style={styles.mainPage}>
+                <BracketTree translateX={clampedTranslateX} translateY={clampedTranslateY} bracket={sets.winners} />
+            </View>
+        </GestureDetector>
 
-                <PrimaryCard style={styles.bottomCard}>
-                    <CustomText style={styles.titleText}>Filters</CustomText>
-
-                </PrimaryCard>
-
-
-            </BottomSheet>
-        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    mainPage: {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    button: {
-        height: 50,
-        borderRadius: 25,
-        aspectRatio: 1,
-        backgroundColor: "white",
-        opacity: 0.6
-    },
-    bottomCard: {
-        flex: 1,
-        flexGrow: 1
-    },
-    titleText: {
-        fontSize: 18,
-        padding: 10
-    },
-    filterButton: {
-        position: "absolute",
-        bottom: 30,
-        right: 30
+        // backgroundColor: "blue"
     }
 })
