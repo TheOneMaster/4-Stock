@@ -21,23 +21,32 @@ export function MatchResult(props: MatchResultProps) {
         offsetY = 0,
         match
     } = props;
+    const {colors} = useTheme();
 
     const winnerSlot = match.slots?.find(slot => slot?.standing?.placement === 1);
     const loserSlot = match.slots?.find(slot => slot?.standing?.placement !== 1);
+
+    const winnerName = winnerSlot?.standing?.entrant?.name ?? "N/A";
+    const winnerScore = winnerSlot?.standing?.stats?.score?.value;
+
+    const loserName = loserSlot?.standing?.entrant?.name ?? "N/A";
+    const loserScore = loserSlot?.standing?.stats?.score?.value;
 
 
     return (
         <>
 
-        <G x={offsetX} y={offsetY}>
-            
-            <EntrantRow x={0} y={0} entrantName={winnerSlot?.standing?.entrant?.name} score={winnerSlot?.standing?.stats?.score?.value} scoreColor="green" />
-            <EntrantRow x={0} y={ROW_HEIGHT} entrantName={loserSlot?.standing?.entrant?.name} score={winnerSlot?.standing?.stats?.score?.value} scoreColor="red" />
+            <G x={offsetX} y={offsetY}>
 
-            <Rect x={0} y={0} width={MATCH_WIDTH} height={MATCH_HEIGHT} stroke="grey" />
-            <Line x1={0} x2={MATCH_WIDTH} y={ROW_HEIGHT} stroke="grey" />
-        </G>
-        
+                <EntrantRow x={0} y={0} entrantName={winnerName} score={winnerScore} scoreColor="green" />
+                <EntrantRow x={0} y={ROW_HEIGHT} entrantName={loserName} score={loserScore} scoreColor="red" />
+
+                <Rect x={0} y={0} width={MATCH_WIDTH} height={MATCH_HEIGHT} stroke={colors.border} strokeWidth={2} />
+                <Line x1={0} x2={MATCH_WIDTH} y={ROW_HEIGHT} stroke={colors.border} />
+                <Line x={MATCH_WIDTH - SCORE_WIDTH} y1={0} y2={MATCH_HEIGHT} stroke={colors.border} strokeWidth={2} />
+
+            </G>
+
         </>
     )
 }
@@ -52,28 +61,26 @@ interface EntrantRowProps {
 
 function EntrantRow(props: EntrantRowProps) {
 
-    const {colors} = useTheme();
-
+    const { colors } = useTheme();
 
     const textOffsetY = props.y + (ROW_HEIGHT / 2) + 2;
-    const scoreTextOffset = props.x + (MATCH_WIDTH - SCORE_WIDTH) + (SCORE_WIDTH/2);
+    const scoreTextOffset = props.x + (MATCH_WIDTH - SCORE_WIDTH) + (SCORE_WIDTH / 2);
 
-    const name = props.entrantName ? props.entrantName : "N/A";
-    const score = props.score ? props.score : "N/A";
-    
+    const name = props.entrantName ?? "N/A"
+    const score = props.score?.toString() ?? "N/A"
+
     return (
         <>
-        
-        <Text x={props.x + 5} y={textOffsetY} fontSize="16" fill={colors.text} alignmentBaseline="middle">{name}</Text>
-        <Rect 
-            x={MATCH_WIDTH - SCORE_WIDTH}
-            y={props.y}
-            width={SCORE_WIDTH}
-            height={ROW_HEIGHT}
-            fill={props.scoreColor}
+
+            <Text x={props.x + 5} y={textOffsetY} fontSize="16" fill={colors.text} alignmentBaseline="middle">{name}</Text>
+            <Rect
+                x={MATCH_WIDTH - SCORE_WIDTH}
+                y={props.y}
+                width={SCORE_WIDTH}
+                height={ROW_HEIGHT}
+                fill={props.scoreColor}
             />
-        <Line x={MATCH_WIDTH - SCORE_WIDTH} y1={props.y} y2={props.y + (ROW_HEIGHT)} stroke="grey" />
-        <Text x={scoreTextOffset} y={textOffsetY} fontSize="15" fill="white" alignmentBaseline="middle" textAnchor="middle" >{score}</Text>
+            <Text x={scoreTextOffset} y={textOffsetY} fontSize="15" fill="white" alignmentBaseline="middle" textAnchor="middle">{score}</Text>
 
         </>
     )
