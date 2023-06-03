@@ -1,12 +1,14 @@
 import { G, Rect, Svg } from "react-native-svg"
 import { MATCH_HEIGHT, MATCH_WIDTH, MatchResult } from "./MatchSVG"
-import { BracketRounds } from "./Main"
+import { BracketRounds, convertSets } from "./Main"
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { Dimensions, StyleSheet, View } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { getBracketData } from "./BracketData"
+import { BracketData, Position } from "./types"
 
 interface TreeSVGProps {
-    bracket: BracketRounds
+    bracket: ReturnType<typeof convertSets>
 }
 
 const multiplierX = 160;
@@ -16,35 +18,46 @@ const SCREEN_DIMENSIONS = Dimensions.get("screen");
 const SCREEN_HEIGHT = SCREEN_DIMENSIONS.height;
 const SCREEN_WIDTH = SCREEN_DIMENSIONS.width;
 
+
+const BRACKET_SEPERATOR = 50;
+
 export function TreeSVG(props: TreeSVGProps) {
 
+
+    const bracket = props.bracket.winners;
+
     // Round manipulation
-    const rounds = Object.keys(props.bracket).map(round => parseInt(round)).sort((a, b) => Math.abs(a) - Math.abs(b));
-    const absRounds = rounds.map(round => Math.abs(round));
+    const bracketAnalysis = getBracketData(props.bracket);
+    const {maxLength: winnerLength } = bracketAnalysis.winners;
+    const {maxLength: loserLength} = bracketAnalysis.losers
+    const {length} = bracketAnalysis.total;
 
-    const maxRound = Math.max(...absRounds);
-    const minRound = Math.min(...absRounds);
 
-    const roundOffset = minRound;
+    const roundOffset = bracketAnalysis.total.roundOffset;
 
-    const maxLength = Math.max(...rounds.map(round => props.bracket[round].length));
-    
+    const losersPosition: Position = {
+        x: 0,
+        y: (winnerLength * multiplierY) + BRACKET_SEPERATOR
+    }
+
+
+
     // SVG variables
-    const svgWidth = ((maxRound - roundOffset) * multiplierX) + MATCH_WIDTH + (styles.svgContainer.left * 2);
-    const svgHeight = ((maxLength - 1) * multiplierY) + MATCH_HEIGHT + (styles.svgContainer.top * 2);
+    const svgWidth = ((length - roundOffset) * multiplierX) + MATCH_WIDTH + (styles.svgContainer.left);
+    const svgHeight = ((winnerLength * multiplierY) + (styles.svgContainer.top * 2)) + BRACKET_SEPERATOR + ((loserLength * multiplierY) + (styles.svgContainer.top))
 
     // Transform values
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
-    const context = useSharedValue({x: 0, y: 0});
+    const context = useSharedValue({ x: 0, y: 0 });
+
+    const viewHeight = useSharedValue(0);
 
     const rStyle = useAnimatedStyle(() => {
         return {
-            transform: [{translateX: translateX.value}, {translateY: translateY.value}]
+            transform: [{ translateX: translateX.value }, { translateY: translateY.value }]
         }
     });
-
-    console.log(svgWidth);
 
     const clampedTranslateX = useDerivedValue(() => {
         const leftBound = Math.min(translateX.value, 0);
@@ -54,18 +67,18 @@ export function TreeSVG(props: TreeSVGProps) {
     });
     const clampedTranslateY = useDerivedValue(() => {
         const upperBound = Math.min(translateY.value, 0);
-        const lowerBound = -svgHeight + styles.svgContainer.top;
+        const lowerBound = -(svgHeight - viewHeight.value + styles.svgContainer.top);
 
         return Math.max(upperBound, lowerBound);
     })
 
 
-    const panGesture = Gesture.Pan().onStart((event) => {
-        context.value = {x: clampedTranslateX.value, y: clampedTranslateY.value};
+    const panGesture = Gesture.Pan().onStart(() => {
+        context.value = { x: clampedTranslateX.value, y: clampedTranslateY.value };
     }).onUpdate(event => {
         translateX.value = event.translationX + context.value.x;
         translateY.value = event.translationY + context.value.y;
-    }).onEnd(event => {
+    }).onEnd(() => {
         translateX.value = clampedTranslateX.value;
         translateY.value = clampedTranslateY.value;
     })
@@ -73,30 +86,60 @@ export function TreeSVG(props: TreeSVGProps) {
 
     return (
         <GestureDetector gesture={panGesture}>
-            <View style={styles.gestureView}>
-                <Animated.View style={[rStyle]}>
+            <View style={styles.gestureView} onLayout={(event => {
+                viewHeight.value = event.nativeEvent.layout.height;
+            })}>
+                <Animated.View style={[styles.transformView, rStyle]}>
+
                     <Svg height={svgHeight} width={svgWidth}>
-                    
                         <G x={styles.svgContainer.left} y={styles.svgContainer.top}>
-                            {rounds.map(round => {
-
-                                const offsetX = (Math.abs(round) - roundOffset) * multiplierX;
-                                
-                                const sets = props.bracket[round];
-
-                                return sets.map((set, index) => {
-                                    const offsetY = index * multiplierY;
-                                    return <MatchResult match={set} offsetX={offsetX} offsetY={offsetY} key={set.id} />;
-                                })
-                            })}
+                            <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={roundOffset} position={{x: 0, y: 0}}  />
+                            <BracketSVG bracket={props.bracket.losers} bracketAnalysis={bracketAnalysis.losers} offsetRounds={roundOffset} position={losersPosition} />
                         </G>
-
                     </Svg>
+
                 </Animated.View>
             </View>
         </GestureDetector>
     )
 }
+
+interface BracketSVGProps {
+    bracket: BracketRounds
+    position: Position 
+    bracketAnalysis: BracketData,
+    offsetRounds: number
+
+}
+
+function BracketSVG(props: BracketSVGProps) {
+
+    const {rounds, roundOffset} = props.bracketAnalysis;
+    const {x, y} = props.position
+
+    return (
+        <>
+        
+        <G x={x} y={y}>
+            {rounds.map(round => {
+                const offsetX = (Math.abs(round) - roundOffset) * multiplierX;
+                const sets = props.bracket[round];
+
+                return sets.map((set, index) => {
+                    const offsetY = index * multiplierY;
+                    return <MatchResult match={set} offsetX={offsetX} offsetY={offsetY} key={set.id} />
+                })
+            })}
+
+        </G>
+        
+        </>
+    )
+
+
+}
+
+
 
 const styles = StyleSheet.create({
     svgContainer: {
@@ -104,7 +147,12 @@ const styles = StyleSheet.create({
         left: 10
     },
     gestureView: {
-        borderWidth: 1,
-        borderColor: "red"
+        // borderWidth: 1,
+        // borderColor: "red",
+        overflow: "hidden"
+    },
+    transformView: {
+        // borderWidth: 1,
+        // color: "green"
     }
 })

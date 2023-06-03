@@ -6,26 +6,38 @@ import { reduceSets } from "./Main"
 
 interface GameMatchProps {
     match: ReturnType<typeof reduceSets>[number]
-    offsetX: number
-    offsetY: number
+    x: number
+    y: number
 }
+
+const offsetXMultiplier = 1;
+const offsetYMultiplier = 1;
 
 export function GameMatch(props: GameMatchProps) {
 
     const matchID = props.match;
     // console.log(props.match)
-    console.log(`X: ${props.offsetX}, Y: ${props.offsetY}`)
 
     const winnerSlot = props.match.slots?.find(slot => slot?.standing?.placement === 1);
     const loserSlot = props.match.slots?.find(slot => slot?.standing?.placement !== 1);
 
+    const offsetX = props.x * offsetXMultiplier;
+    const offsetY = props.y * offsetYMultiplier;
+
+    const offsets = {
+        // top: offsetY,
+        top: 0,
+        // left: offsetX
+        left: 0
+    }
+
     return (
-        <TransparentCard style={[styles.container, {top: props.offsetY, left: props.offsetX}]}>
+        <TransparentCard style={[styles.container, offsets]}>
 
             <View style={styles.entrantRow}>
                 <CustomText style={styles.entrantText} numberOfLines={1}>{winnerSlot?.standing?.entrant?.name}</CustomText>
                 <View style={{backgroundColor: "green"}}>
-                    <Text style={styles.scoreText}>3</Text>
+                    <Text style={styles.scoreText}>{winnerSlot?.standing?.stats?.score?.value}</Text>
                 </View>
             </View>
 
@@ -34,7 +46,7 @@ export function GameMatch(props: GameMatchProps) {
             <View style={styles.entrantRow}>
                 <CustomText style={styles.entrantText} numberOfLines={1}>{loserSlot?.standing?.entrant?.name}</CustomText>
                 <View style={{backgroundColor: "red"}}>
-                    <Text style={styles.scoreText}>2</Text>
+                    <Text style={styles.scoreText}>{loserSlot?.standing?.stats?.score?.value}</Text>
                 </View>
             </View>
 
@@ -45,10 +57,12 @@ export function GameMatch(props: GameMatchProps) {
 
 const styles = StyleSheet.create({
     container: {
-        position: "absolute",
+        // position: "absolute",
         borderWidth: 1,
         // left: 10,
-        width: 150
+        width: 150,
+        // maxWidth: 150,
+        // minWidth: 150
     },
     entrantRow: {
         flexDirection: "row",
