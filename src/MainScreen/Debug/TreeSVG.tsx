@@ -1,25 +1,29 @@
+import { Dimensions, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated"
 import { G, Rect, Svg } from "react-native-svg"
-import { MATCH_HEIGHT, MATCH_WIDTH, MatchResult } from "./MatchSVG"
-import { BracketRounds, convertSets } from "./Main"
-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated"
-import { Dimensions, StyleSheet, View } from "react-native"
-import { Gesture, GestureDetector } from "react-native-gesture-handler"
+import { Layout } from "./Bracket"
 import { getBracketData } from "./BracketData"
-import { BracketData, Position } from "./types"
+import { MATCH_WIDTH, MatchResult } from "./MatchSVG"
+import { BracketData, BracketRounds, FullBracket, Position } from "./types"
 
 interface TreeSVGProps {
-    bracket: ReturnType<typeof convertSets>
+    bracket: FullBracket
+    svgLayout: SharedValue<Layout>
+    viewLayout: SharedValue<Layout>
+    translateX: SharedValue<number>
+    translateY: SharedValue<number>
+    style?: StyleProp<ViewStyle>
 }
 
 const multiplierX = 160;
 const multiplierY = 60;
 
-const SCREEN_DIMENSIONS = Dimensions.get("screen");
-const SCREEN_HEIGHT = SCREEN_DIMENSIONS.height;
-const SCREEN_WIDTH = SCREEN_DIMENSIONS.width;
-
-
 const BRACKET_SEPERATOR = 50;
+
+// Window dimensions
+const SCREEN_DIMENSIONS = Dimensions.get("window");
+const SCREEN_HEIGHT = SCREEN_DIMENSIONS.height;
+const SCREEN_WIDTH = SCREEN_DIMENSIONS. width;
 
 export function TreeSVG(props: TreeSVGProps) {
 
@@ -28,8 +32,8 @@ export function TreeSVG(props: TreeSVGProps) {
 
     // Round manipulation
     const bracketAnalysis = getBracketData(props.bracket);
-    const {maxLength: winnerLength } = bracketAnalysis.winners;
-    const {maxLength: loserLength} = bracketAnalysis.losers
+    const {maxLength: winnerLength, roundOffset: winnerOffset } = bracketAnalysis.winners;
+    const {maxLength: loserLength, roundOffset: loserOffset} = bracketAnalysis.losers
     const {length} = bracketAnalysis.total;
 
 
@@ -40,67 +44,33 @@ export function TreeSVG(props: TreeSVGProps) {
         y: (winnerLength * multiplierY) + BRACKET_SEPERATOR
     }
 
-
-
     // SVG variables
-    const svgWidth = ((length - roundOffset) * multiplierX) + MATCH_WIDTH + (styles.svgContainer.left);
-    const svgHeight = ((winnerLength * multiplierY) + (styles.svgContainer.top * 2)) + BRACKET_SEPERATOR + ((loserLength * multiplierY) + (styles.svgContainer.top))
+    const svgWidth = ((length - roundOffset) * multiplierX) + MATCH_WIDTH + (styles.svgContainer.left * 2);
+    const svgHeight = ((winnerLength * multiplierY) + (styles.svgContainer.top * 2)) + BRACKET_SEPERATOR + ((loserLength * multiplierY));
 
-    // Transform values
-    const translateX = useSharedValue(0);
-    const translateY = useSharedValue(0);
-    const context = useSharedValue({ x: 0, y: 0 });
-
-    const viewHeight = useSharedValue(0);
+    props.svgLayout.value = {height: svgHeight, width: svgWidth};
 
     const rStyle = useAnimatedStyle(() => {
         return {
-            transform: [{ translateX: translateX.value }, { translateY: translateY.value }]
+            transform: [{ translateX: props.translateX.value }, { translateY: props.translateY.value }]
         }
     });
 
-    const clampedTranslateX = useDerivedValue(() => {
-        const leftBound = Math.min(translateX.value, 0);
-        const rightBound = -(svgWidth - SCREEN_WIDTH + styles.svgContainer.left);
-
-        return Math.max(leftBound, rightBound);
-    });
-    const clampedTranslateY = useDerivedValue(() => {
-        const upperBound = Math.min(translateY.value, 0);
-        const lowerBound = -(svgHeight - viewHeight.value + styles.svgContainer.top);
-
-        return Math.max(upperBound, lowerBound);
-    })
-
-
-    const panGesture = Gesture.Pan().onStart(() => {
-        context.value = { x: clampedTranslateX.value, y: clampedTranslateY.value };
-    }).onUpdate(event => {
-        translateX.value = event.translationX + context.value.x;
-        translateY.value = event.translationY + context.value.y;
-    }).onEnd(() => {
-        translateX.value = clampedTranslateX.value;
-        translateY.value = clampedTranslateY.value;
-    })
-
-
     return (
-        <GestureDetector gesture={panGesture}>
-            <View style={styles.gestureView} onLayout={(event => {
-                viewHeight.value = event.nativeEvent.layout.height;
-            })}>
-                <Animated.View style={[styles.transformView, rStyle]}>
+        <Animated.View style={[props.style, rStyle]} onLayout={event => {
+            // props.viewLayout.value = {height: event.nativeEvent.layout.height, width: event.nativeEvent.layout.width}
+            // console.log('transform', event.nativeEvent.layout)
+        }}>
 
-                    <Svg height={svgHeight} width={svgWidth}>
-                        <G x={styles.svgContainer.left} y={styles.svgContainer.top}>
-                            <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={roundOffset} position={{x: 0, y: 0}}  />
-                            <BracketSVG bracket={props.bracket.losers} bracketAnalysis={bracketAnalysis.losers} offsetRounds={roundOffset} position={losersPosition} />
-                        </G>
-                    </Svg>
+            <Svg height={svgHeight} width={svgWidth}>
+                <Rect x="0" y="0" width="100%" height="100%" stroke="blue" strokeWidth={2} />
+                <G x={styles.svgContainer.left} y={styles.svgContainer.top}>
+                    <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={winnerOffset} position={{x: 0, y: 0}}  />
+                    <BracketSVG bracket={props.bracket.losers} bracketAnalysis={bracketAnalysis.losers} offsetRounds={loserOffset} position={losersPosition} />
+                </G>
+            </Svg>
 
-                </Animated.View>
-            </View>
-        </GestureDetector>
+        </Animated.View>
     )
 }
 
@@ -117,12 +87,14 @@ function BracketSVG(props: BracketSVGProps) {
     const {rounds, roundOffset} = props.bracketAnalysis;
     const {x, y} = props.position
 
+    const offset = props.offsetRounds;
+
     return (
         <>
         
         <G x={x} y={y}>
             {rounds.map(round => {
-                const offsetX = (Math.abs(round) - roundOffset) * multiplierX;
+                const offsetX = (Math.abs(round) - offset) * multiplierX;
                 const sets = props.bracket[round];
 
                 return sets.map((set, index) => {
@@ -147,12 +119,16 @@ const styles = StyleSheet.create({
         left: 10
     },
     gestureView: {
-        // borderWidth: 1,
-        // borderColor: "red",
+        borderWidth: 1,
+        borderColor: "red",
         overflow: "hidden"
     },
     transformView: {
+        // flexGrow: 1,
         // borderWidth: 1,
-        // color: "green"
+        // color: "green",
+        backgroundColor: "green",
+        // flexShrink: 1
+        height: "100%"
     }
 })
