@@ -1,17 +1,18 @@
-import { UseQueryResult } from "@tanstack/react-query";
+import { QueryStatus, UseQueryResult } from "@tanstack/react-query";
 import { useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { SelectedOptions, SetQuery } from "./types";
+import { TestFilters } from "./BracketFilters";
 import { PhaseGroupDetails } from "./PhaseGroupDetails";
 import { useSets } from "./SetHook";
-import SetResult from "./SetResult";
-import { TestFilters } from "./BracketFilters";
+import { SelectedOptions, SetQuery } from "./types";
 
-import { truthyFilter } from "../../helper";
-import { BracketViewProps } from "../../navTypes";
+import { DoubleElimBracket } from "../../MainScreen/Debug/Bracket";
+import { convertSets } from "../../MainScreen/Debug/BracketData";
 import { IoniconsThemed } from "../../Shared/IconTheme";
 import { CustomText } from "../../Shared/Text";
+import { truthyFilter } from "../../helper";
+import { BracketViewProps } from "../../navTypes";
 
 function convertSetPagesToSets(setPages: UseQueryResult<SetQuery>[]) {
     return setPages.map(page => page.data?.phaseGroup.sets?.nodes)
@@ -38,26 +39,23 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
         selectedPGroup: initPGroupID
     });
 
-    const { setPages, pGroupInfo, loadingPGroupData, queriesStatus } = useSets(selectedOptions.selectedPGroup);
+    const { setPages, pGroupInfo, loadingPGroupData, queriesStatus, success, pGroupStatus } = useSets(selectedOptions.selectedPGroup);
     
+    if (!success) {
+        return <EmptyBracket queriesStatus={queriesStatus} pGroupStatus={pGroupStatus} initialLoading={loadingPGroupData} />;
+    }
+    
+    const sets = convertSetPagesToSets(setPages);
+    const bracket = convertSets(sets);
 
     return (
         <View style={{ flex: 1 }}>
             <TestFilters eventDetails={params} filters={selectedOptions} setFilters={setSelectedOptions} style={styles.header} />
             <PhaseGroupDetails details={pGroupInfo} style={styles.details} />
 
-            <FlatList
-                data={convertSetPagesToSets(setPages)}
-                renderItem={({ item }) => <SetResult set={item} />}
-                contentContainerStyle={styles.container}
-                style={styles.container}
-
-                ItemSeparatorComponent={() => <View style={styles.seperator} />}
-
-                ListEmptyComponent={<EmptyBracket pGroupStatus={loadingPGroupData} queriesStatus={queriesStatus} />}
-
-            />
-
+            { pGroupInfo?.bracketType === "DOUBLE_ELIMINATION" &&
+                <DoubleElimBracket bracket={bracket} />
+            }
         </View>
     )
 
@@ -65,21 +63,27 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
 }
 
 interface EmptyBracketProps {
-    queriesStatus: ("success" | "loading" | "error")[]
-    pGroupStatus: boolean
+    queriesStatus: QueryStatus[]
+    pGroupStatus: QueryStatus
+    initialLoading: boolean
 }
 
-function getErrorMessage({queriesStatus, pGroupStatus}: EmptyBracketProps) {
-    if (!pGroupStatus) return "No bracket found";
+function getErrorMessage({queriesStatus, pGroupStatus, initialLoading}: EmptyBracketProps) {
+
+    if (initialLoading) return "Loading bracket";
+
+    if (pGroupStatus === "error") return "No bracket found";
+
     if (queriesStatus.some(status => status === "error")) return "Error loading bracket";
-    if (queriesStatus.every(status => status === "loading")) return "Loading sets...";
     if (queriesStatus.every(status => status === "success")) return "No sets found";
+
+    return "Loading sets...";
 }
 
 
-function EmptyBracket({ queriesStatus, pGroupStatus }: EmptyBracketProps) {
+function EmptyBracket({ queriesStatus, pGroupStatus, initialLoading }: EmptyBracketProps) {
 
-    let errorMessage = getErrorMessage({queriesStatus, pGroupStatus});
+    let errorMessage = getErrorMessage({queriesStatus, pGroupStatus, initialLoading});
 
     return (
         <View style={styles.center}>
