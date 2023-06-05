@@ -1,18 +1,21 @@
-import { G, Line, Rect, Svg, Text } from "react-native-svg";
 import { useTheme } from "@react-navigation/native";
-import { reduceSets } from "./Main";
+import { G, Line, Rect, Text } from "react-native-svg";
+import { Match } from "./types";
 
 export const MATCH_WIDTH = 150;
 export const MATCH_HEIGHT = 50;
 const ROW_HEIGHT = MATCH_HEIGHT / 2;
 
-const SCORE_WIDTH = 20
+const SCORE_WIDTH = 25;
+
+
 
 interface MatchResultProps {
-    match: ReturnType<typeof reduceSets>[number]
+    match: Match
     offsetX?: number
     offsetY?: number
 }
+
 
 export function MatchResult(props: MatchResultProps) {
 
@@ -27,10 +30,11 @@ export function MatchResult(props: MatchResultProps) {
     const loserSlot = match.slots?.find(slot => slot?.standing?.placement !== 1);
 
     const winnerName = winnerSlot?.standing?.entrant?.name ?? "N/A";
-    const winnerScore = winnerSlot?.standing?.stats?.score?.value;
-
     const loserName = loserSlot?.standing?.entrant?.name ?? "N/A";
-    const loserScore = loserSlot?.standing?.stats?.score?.value;
+
+    // TODO: If null or undefined, return score as NA; if score === -1, return DQ
+    const winnerScore = winnerSlot?.standing?.stats?.score?.value?.toString();
+    const loserScore = loserSlot?.standing?.stats?.score?.value?.toString();
 
 
     return (
@@ -55,7 +59,7 @@ interface EntrantRowProps {
     x: number
     y: number
     entrantName?: string | null
-    score?: number | null
+    score?: string
     scoreColor: string
 }
 
