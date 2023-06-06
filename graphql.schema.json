@@ -182,6 +182,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "BATTLENET",
+            "description": "",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DISCORD",
             "description": "",
             "isDeprecated": false,

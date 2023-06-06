@@ -53,6 +53,7 @@ export type Address = {
 
 /** Represents the name of the third-party service (e.g Twitter) for OAuth */
 export enum AuthorizationType {
+  Battlenet = 'BATTLENET',
   Discord = 'DISCORD',
   Epic = 'EPIC',
   Mixer = 'MIXER',
@@ -2279,6 +2280,21 @@ export type WaveUpsertInput = {
   startAt: Scalars['Timestamp'];
 };
 
+export type PhaseGroupDetailsQueryVariables = Exact<{
+  pgID: Scalars['ID'];
+}>;
+
+
+export type PhaseGroupDetailsQuery = { __typename?: 'Query', phaseGroup: { __typename?: 'PhaseGroup', displayIdentifier: string | null, bracketType: BracketType | null, startAt: any | null, state: number | null, sets: { __typename?: 'SetConnection', pageInfo: { __typename?: 'PageInfo', perPage: number | null, totalPages: number | null, total: number | null } | null } | null } | null };
+
+export type GetPhaseGroupSetsQueryVariables = Exact<{
+  pgID: Scalars['ID'];
+  page: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetPhaseGroupSetsQuery = { __typename?: 'Query', phaseGroup: { __typename?: 'PhaseGroup', sets: { __typename?: 'SetConnection', pageInfo: { __typename?: 'PageInfo', page: number | null } | null, nodes: Array<{ __typename?: 'Set', id: string | null, round: number | null, setGamesType: number | null, winnerId: number | null, slots: Array<{ __typename?: 'SetSlot', standing: { __typename?: 'Standing', placement: number | null, stats: { __typename?: 'StandingStats', score: { __typename?: 'Score', value: number | null } | null } | null, entrant: { __typename?: 'Entrant', name: string | null, participants: Array<{ __typename?: 'Participant', gamerTag: string | null, prefix: string | null } | null> | null } | null } | null } | null> | null } | null> | null } | null } | null };
+
 export type EventDataQueryVariables = Exact<{
   id: InputMaybe<Scalars['ID']>;
 }>;
@@ -2330,6 +2346,127 @@ export type TournamentDetailsQueryVariables = Exact<{
 
 export type TournamentDetailsQuery = { __typename?: 'Query', tournament: { __typename?: 'Tournament', id: string | null, name: string | null, city: string | null, countryCode: string | null, currency: string | null, eventRegistrationClosesAt: any | null, isRegistrationOpen: boolean | null, mapsPlaceId: string | null, numAttendees: number | null, primaryContact: string | null, primaryContactType: string | null, startAt: any | null, venueName: string | null, venueAddress: string | null, events: Array<{ __typename?: 'Event', id: string | null, type: number | null, name: string | null, phases: Array<{ __typename?: 'Phase', id: string | null } | null> | null, videogame: { __typename?: 'Videogame', id: string | null, displayName: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null } | null> | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null };
 
+
+export const PhaseGroupDetailsDocument = `
+    query PhaseGroupDetails($pgID: ID!) {
+  phaseGroup(id: $pgID) {
+    displayIdentifier
+    bracketType
+    startAt
+    state
+    sets(perPage: 30) {
+      pageInfo {
+        perPage
+        totalPages
+        total
+      }
+    }
+  }
+}
+    `;
+export const usePhaseGroupDetailsQuery = <
+      TData = PhaseGroupDetailsQuery,
+      TError = unknown
+    >(
+      variables: PhaseGroupDetailsQueryVariables,
+      options?: UseQueryOptions<PhaseGroupDetailsQuery, TError, TData>
+    ) =>
+    useQuery<PhaseGroupDetailsQuery, TError, TData>(
+      ['PhaseGroupDetails', variables],
+      useFetchData<PhaseGroupDetailsQuery, PhaseGroupDetailsQueryVariables>(PhaseGroupDetailsDocument).bind(null, variables),
+      options
+    );
+
+usePhaseGroupDetailsQuery.getKey = (variables: PhaseGroupDetailsQueryVariables) => ['PhaseGroupDetails', variables];
+;
+
+export const useInfinitePhaseGroupDetailsQuery = <
+      TData = PhaseGroupDetailsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof PhaseGroupDetailsQueryVariables,
+      variables: PhaseGroupDetailsQueryVariables,
+      options?: UseInfiniteQueryOptions<PhaseGroupDetailsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<PhaseGroupDetailsQuery, PhaseGroupDetailsQueryVariables>(PhaseGroupDetailsDocument)
+    return useInfiniteQuery<PhaseGroupDetailsQuery, TError, TData>(
+      ['PhaseGroupDetails.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfinitePhaseGroupDetailsQuery.getKey = (variables: PhaseGroupDetailsQueryVariables) => ['PhaseGroupDetails.infinite', variables];
+;
+
+export const GetPhaseGroupSetsDocument = `
+    query getPhaseGroupSets($pgID: ID!, $page: Int) {
+  phaseGroup(id: $pgID) {
+    sets(perPage: 30, page: $page) {
+      pageInfo {
+        page
+      }
+      nodes {
+        id
+        round
+        setGamesType
+        winnerId
+        slots {
+          standing {
+            placement
+            stats {
+              score {
+                value
+              }
+            }
+            entrant {
+              name
+              participants {
+                gamerTag
+                prefix
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+export const useGetPhaseGroupSetsQuery = <
+      TData = GetPhaseGroupSetsQuery,
+      TError = unknown
+    >(
+      variables: GetPhaseGroupSetsQueryVariables,
+      options?: UseQueryOptions<GetPhaseGroupSetsQuery, TError, TData>
+    ) =>
+    useQuery<GetPhaseGroupSetsQuery, TError, TData>(
+      ['getPhaseGroupSets', variables],
+      useFetchData<GetPhaseGroupSetsQuery, GetPhaseGroupSetsQueryVariables>(GetPhaseGroupSetsDocument).bind(null, variables),
+      options
+    );
+
+useGetPhaseGroupSetsQuery.getKey = (variables: GetPhaseGroupSetsQueryVariables) => ['getPhaseGroupSets', variables];
+;
+
+export const useInfiniteGetPhaseGroupSetsQuery = <
+      TData = GetPhaseGroupSetsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof GetPhaseGroupSetsQueryVariables,
+      variables: GetPhaseGroupSetsQueryVariables,
+      options?: UseInfiniteQueryOptions<GetPhaseGroupSetsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<GetPhaseGroupSetsQuery, GetPhaseGroupSetsQueryVariables>(GetPhaseGroupSetsDocument)
+    return useInfiniteQuery<GetPhaseGroupSetsQuery, TError, TData>(
+      ['getPhaseGroupSets.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteGetPhaseGroupSetsQuery.getKey = (variables: GetPhaseGroupSetsQueryVariables) => ['getPhaseGroupSets.infinite', variables];
+;
 
 export const EventDataDocument = `
     query EventData($id: ID) {

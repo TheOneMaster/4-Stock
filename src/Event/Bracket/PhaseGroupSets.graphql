@@ -1,0 +1,32 @@
+query getPhaseGroupSets($pgID: ID!, $page: Int) {
+  phaseGroup(id: $pgID) {
+    sets(perPage: 30, page: $page) {
+      pageInfo {
+        page
+      }
+      nodes {
+        id
+        round
+        setGamesType
+        winnerId
+        slots {
+          standing {
+            placement
+            stats {
+              score {
+                value
+              }
+            }
+            entrant {
+              name
+              participants {
+                gamerTag
+                prefix
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

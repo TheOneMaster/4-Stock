@@ -1,0 +1,15 @@
+query PhaseGroupDetails($pgID: ID!) {
+  phaseGroup(id: $pgID) {
+    displayIdentifier
+    bracketType
+    startAt
+    state
+    sets(perPage: 30) {
+      pageInfo {
+        perPage
+        totalPages
+        total
+      }
+    }
+  }
+}
