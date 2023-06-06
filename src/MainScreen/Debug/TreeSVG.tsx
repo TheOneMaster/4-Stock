@@ -63,7 +63,6 @@ export function TreeSVG(props: TreeSVGProps) {
         }}>
 
             <Svg height={svgHeight} width={svgWidth}>
-                <Rect x="0" y="0" width="100%" height="100%" stroke="blue" strokeWidth={2} />
                 <G x={styles.svgContainer.left} y={styles.svgContainer.top}>
                     <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={winnerOffset} position={{x: 0, y: 0}}  />
                     <BracketSVG bracket={props.bracket.losers} bracketAnalysis={bracketAnalysis.losers} offsetRounds={loserOffset} position={losersPosition} />
