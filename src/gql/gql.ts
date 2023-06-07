@@ -2293,7 +2293,7 @@ export type GetPhaseGroupSetsQueryVariables = Exact<{
 }>;
 
 
-export type GetPhaseGroupSetsQuery = { __typename?: 'Query', phaseGroup: { __typename?: 'PhaseGroup', sets: { __typename?: 'SetConnection', pageInfo: { __typename?: 'PageInfo', page: number | null } | null, nodes: Array<{ __typename?: 'Set', id: string | null, round: number | null, setGamesType: number | null, winnerId: number | null, slots: Array<{ __typename?: 'SetSlot', standing: { __typename?: 'Standing', placement: number | null, stats: { __typename?: 'StandingStats', score: { __typename?: 'Score', value: number | null } | null } | null, entrant: { __typename?: 'Entrant', name: string | null, participants: Array<{ __typename?: 'Participant', gamerTag: string | null, prefix: string | null } | null> | null } | null } | null } | null> | null } | null> | null } | null } | null };
+export type GetPhaseGroupSetsQuery = { __typename?: 'Query', phaseGroup: { __typename?: 'PhaseGroup', sets: { __typename?: 'SetConnection', pageInfo: { __typename?: 'PageInfo', page: number | null } | null, nodes: Array<{ __typename?: 'Set', id: string | null, round: number | null, setGamesType: number | null, winnerId: number | null, identifier: string | null, slots: Array<{ __typename?: 'SetSlot', standing: { __typename?: 'Standing', placement: number | null, stats: { __typename?: 'StandingStats', score: { __typename?: 'Score', value: number | null } | null } | null, entrant: { __typename?: 'Entrant', name: string | null, participants: Array<{ __typename?: 'Participant', gamerTag: string | null, prefix: string | null } | null> | null } | null } | null } | null> | null } | null> | null } | null } | null };
 
 export type EventDataQueryVariables = Exact<{
   id: InputMaybe<Scalars['ID']>;
@@ -2411,6 +2411,7 @@ export const GetPhaseGroupSetsDocument = `
         round
         setGamesType
         winnerId
+        identifier
         slots {
           standing {
             placement

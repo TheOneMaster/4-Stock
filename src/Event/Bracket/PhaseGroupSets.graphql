@@ -9,6 +9,7 @@ query getPhaseGroupSets($pgID: ID!, $page: Int) {
         round
         setGamesType
         winnerId
+        identifier
         slots {
           standing {
             placement
