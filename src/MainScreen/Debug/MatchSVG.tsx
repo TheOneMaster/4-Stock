@@ -58,7 +58,6 @@ export function MatchResult(props: MatchResultProps) {
         offsetY = 0,
         match
     } = props;
-    const { colors } = useTheme();
 
     const winnerSlot = match.slots?.find(slot => slot?.standing?.placement === 1);
     const loserSlot = match.slots?.find(slot => slot?.standing?.placement !== 1);
@@ -126,41 +125,6 @@ interface PlayerData {
     score: string
 }
 
-interface TestMatchProps {
-    winner: PlayerData[]
-    loser: PlayerData[]
-}
-
-function TestMatch(props: TestMatchProps) {
-
-    return (
-        <View style={[styles.container]}>
-            <View style={styles.entrantRow}>
-                <View style={styles.entrantName}>
-                    {props.winner[0].sponsor && <CustomText numberOfLines={1} style={{maxWidth: 30}}>{props.winner[0].sponsor}</CustomText>}
-                    {props.winner[0].sponsor && <CustomText> | </CustomText>}
-                    <CustomText numberOfLines={1}>{props.winner[0].name}</CustomText>
-                </View>
-                <View style={[styles.scoreBox, {backgroundColor: "green"}]}>
-                    <CustomText>{props.winner[0].score}</CustomText>
-                </View>
-            </View>
-
-            <View style={{width: "100%", height: 1, backgroundColor: "grey"}} />
-
-            <View style={styles.entrantRow}>
-                <View style={styles.entrantName}>
-                    {props.loser[0].sponsor && <CustomText numberOfLines={1} style={{maxWidth: 40}}>{props.loser[0].sponsor}</CustomText>}
-                    {props.loser[0].sponsor && <CustomText> | </CustomText>}
-                    <CustomText numberOfLines={1} style={{flex: 1}}>{props.loser[0].name}</CustomText>
-                </View>
-                <View style={[styles.scoreBox, {backgroundColor: "red"}]}>
-                    <CustomText>{props.loser[0].score}</CustomText>
-                </View>
-            </View>
-        </View>
-    )
-}
 
 
 const styles = StyleSheet.create({
