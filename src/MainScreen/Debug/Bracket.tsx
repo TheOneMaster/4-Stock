@@ -34,6 +34,7 @@ export function DoubleElimBracket(props: GameBracketProps) {
     useEffect(() => {
         translateX.value = 0
         translateY.value = 0
+        context.value = {x: 0, y: 0}
     }, [props.bracket])
 
     const clampedTranslateX = useDerivedValue(() => {
