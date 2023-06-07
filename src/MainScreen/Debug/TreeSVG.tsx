@@ -1,6 +1,6 @@
 import { Dimensions, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { SharedValue, useAnimatedStyle } from "react-native-reanimated"
-import { G, Rect, Svg } from "react-native-svg"
+import { G, Rect, Svg, Text } from "react-native-svg"
 import { Layout } from "./Bracket"
 import { getBracketData } from "./BracketData"
 import { MATCH_WIDTH, MatchResult } from "./MatchSVG"
@@ -59,9 +59,8 @@ export function TreeSVG(props: TreeSVGProps) {
     return (
         <Animated.View style={[props.style, rStyle]}>
             <Svg height={svgHeight} width={svgWidth}>
-                <Rect x={0} y={0} width="100%" height="100%" stroke="blue" />
                 <G x={styles.svgContainer.left} y={styles.svgContainer.top}>
-                    <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={winnerOffset} position={{x: 0, y: 0}}  />
+                    <BracketSVG bracket={bracket} bracketAnalysis={bracketAnalysis.winners} offsetRounds={winnerOffset} position={{x: 0, y: 0}} title="Winner"  />
                     <BracketSVG bracket={props.bracket.losers} bracketAnalysis={bracketAnalysis.losers} offsetRounds={loserOffset} position={losersPosition} />
                 </G>
             </Svg>
@@ -74,7 +73,7 @@ interface BracketSVGProps {
     position: Position 
     bracketAnalysis: BracketData,
     offsetRounds: number
-
+    title?: string
 }
 
 function BracketSVG(props: BracketSVGProps) {
@@ -88,15 +87,18 @@ function BracketSVG(props: BracketSVGProps) {
         <>
         
         <G x={x} y={y}>
-            {rounds.map(round => {
-                const offsetX = (Math.abs(round) - offset) * multiplierX;
-                const sets = props.bracket[round];
+            {/* {props.title && <Text x={0} y={0} fill="white" fontSize={16}>{props.title}</Text>} */}
+            <G x={0} y={0}>
+                {rounds.map(round => {
+                    const offsetX = (Math.abs(round) - offset) * multiplierX;
+                    const sets = props.bracket[round];
 
-                return sets.map((set, index) => {
-                    const offsetY = index * multiplierY;
-                    return <MatchResult match={set} offsetX={offsetX} offsetY={offsetY} key={set.id} />
-                })
-            })}
+                    return sets.map((set, index) => {
+                        const offsetY = index * multiplierY;
+                        return <MatchResult match={set} offsetX={offsetX} offsetY={offsetY} key={set.id} />
+                    })
+                })}
+            </G>
 
         </G>
         
