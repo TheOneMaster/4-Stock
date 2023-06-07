@@ -48,6 +48,8 @@ export function BracketPage({ navigation, route }: BracketViewProps) {
     const sets = convertSetPagesToSets(setPages);
     const bracket = convertSets(sets);
 
+    // console.log(new Set(sets.map(set => set.round)))
+
     return (
         <View style={{ flex: 1 }}>
             <TestFilters eventDetails={params} filters={selectedOptions} setFilters={setSelectedOptions} style={styles.header} />
@@ -72,7 +74,10 @@ function getErrorMessage({queriesStatus, pGroupStatus, initialLoading}: EmptyBra
 
     if (initialLoading) return "Loading bracket";
 
-    if (pGroupStatus === "error") return "No bracket found";
+    // If initial loading has errored out, or is still returning the loading status
+    // Explanation for why loading status is used to show error message https://github.com/TanStack/query/issues/3584
+    // Here are the docs for it https://tanstack.com/query/v4/docs/react/guides/disabling-queries#isInitialLoading
+    if (pGroupStatus === "loading" || pGroupStatus === "error") return "No bracket found";
 
     if (queriesStatus.some(status => status === "error")) return "Error loading bracket";
     if (queriesStatus.every(status => status === "success")) return "No sets found";
