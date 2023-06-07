@@ -1,17 +1,20 @@
-import { SetQuery } from "../../Event/Bracket/types";
 import { GetPhaseGroupSetsQuery } from "../../gql/gql";
 import { NodeArray, PropertyDetails } from "../../helperTypes";
-import { convertSets, reduceSets } from "./BracketData";
+import { convertSets } from "./BracketData";
 
 
 export type BracketRounds = {
-    [round: number]: ReturnType<typeof reduceSets>
+    [round: number]: SetList
 }
 
 export type SetList = NodeArray<PropertyDetails<GetPhaseGroupSetsQuery, 'phaseGroup'>['sets']>
+export type Match = Exclude<SetList[number], null>;
+export type MatchSlot = PropertyDetails<Match, "slots">[number]
+
+
 
 export type FullBracket = ReturnType<typeof convertSets>;
-export type RoundSets = ReturnType<typeof reduceSets>;
+export type RoundSets = SetList;
 export type BracketData = {
     rounds: number[]
     maxRound: number
@@ -32,5 +35,4 @@ export type Position = {
     y: number
 }
 
-export type Match = ReturnType<typeof reduceSets>[number]
-export type PlayerSlot = PropertyDetails<Match, "slots">[number] | undefined
+export type PlayerSlot = PropertyDetails<Match, "slots"> | undefined
