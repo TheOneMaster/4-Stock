@@ -1,52 +1,9 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { DebugPageProps } from "../../navTypes";
 
-import { SetQuery } from "../../Event/Bracket/types";
-import { GameBracket } from "./Bracket";
+import { DoubleElimBracket } from "./Bracket";
 import SetData from "./Sets.json";
-
-export type BracketRounds = {
-    [round: number]: ReturnType<typeof reduceSets>
-}
-
-export function reduceSets(sets: SetQuery) {
-    return sets.phaseGroup.sets?.nodes.map(set => {
-        return {
-            id: set?.id,
-            round: set?.round,
-            slots: set?.slots ?? []
-        }
-    }) ?? [];
-}
-
-export function convertSets(sets: SetQuery) {
-    const setMap = reduceSets(sets);
-
-    const maxRound = Math.max(...setMap.map(set => set.round ?? -1));
-    const minRound = Math.min(...setMap.map(set => set.round ?? 1));
-
-    const winnersBracket: BracketRounds = {}
-    for (let i=0;i<=maxRound;i++) {
-        const setsInRound = setMap.filter(set => set.round === i);
-        if (setsInRound.length > 0) {
-            winnersBracket[i] = setsInRound;
-        }
-    }
-
-    const losersBracket: BracketRounds = {};
-    for (let i=-1;i>minRound;i--) {
-        const setsInRound = setMap.filter(set => set.round === i);
-        if (setsInRound.length > 0) {
-            losersBracket[i] = setsInRound;
-        }
-    }
-
-    return {
-        winners: winnersBracket,
-        losers: losersBracket
-    }
-
-}
+import { convertSets } from "./BracketData";
 
 
 export function DebugPage(props: DebugPageProps) {
@@ -54,9 +11,7 @@ export function DebugPage(props: DebugPageProps) {
 
     return (
         <>
-            {/* <GameBracket title="Winners" bracket={sets.winners} /> */}
-            {/* <GameBracket title="Losers" bracket={sets.losers} /> */}
-            <GameBracket bracket={sets} />
+            <DoubleElimBracket bracket={sets} />
         </>
     )
 }
