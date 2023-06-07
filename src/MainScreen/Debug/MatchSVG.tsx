@@ -90,32 +90,32 @@ export function MatchResult(props: MatchResultProps) {
         <>
             <ForeignObject x={offsetX} y={offsetY} width={MATCH_WIDTH} height={MATCH_HEIGHT}>
                 <View style={[styles.container]}>
-                    <View style={styles.entrantRow}>
-                        <View style={styles.entrantName}>
-                            {winnerData[0].sponsor && <CustomText numberOfLines={1} style={{maxWidth: 30}}>{winnerData[0].sponsor}</CustomText>}
-                            {winnerData[0].sponsor && <CustomText> | </CustomText>}
-                            <CustomText numberOfLines={1}>{winnerData[0].name}</CustomText>
-                        </View>
-                        <View style={[styles.scoreBox, {backgroundColor: "green"}]}>
-                            <CustomText>{winnerData[0].score}</CustomText>
-                        </View>
-                    </View>
-
+                    <EntrantRow player={winnerData[0]} scoreColor="green" />
                     <View style={{width: "100%", height: 1, backgroundColor: "grey"}} />
-
-                    <View style={styles.entrantRow}>
-                        <View style={styles.entrantName}>
-                            {loserData[0].sponsor && <CustomText numberOfLines={1} style={{maxWidth: 40}}>{loserData[0].sponsor}</CustomText>}
-                            {loserData[0].sponsor && <CustomText> | </CustomText>}
-                            <CustomText numberOfLines={1} style={{flex: 1}}>{loserData[0].name}</CustomText>
-                        </View>
-                        <View style={[styles.scoreBox, {backgroundColor: "red"}]}>
-                            <CustomText>{loserData[0].score}</CustomText>
-                        </View>
-                    </View>
+                    <EntrantRow player={loserData[0]} scoreColor="red" />
                 </View>
             </ForeignObject>
         </>
+    )
+}
+
+interface EntrantRowProps {
+    player: PlayerData,
+    scoreColor: string
+}
+
+function EntrantRow(props: EntrantRowProps) {
+    return(
+        <View style={[styles.entrantRow]}>
+            <View style={styles.entrantName}>
+                {props.player.sponsor && <CustomText numberOfLines={1} style={{maxWidth: 30}}>{props.player.sponsor}</CustomText>}
+                {props.player.sponsor && <CustomText> | </CustomText>}
+                <CustomText numberOfLines={1}>{props.player.name}</CustomText>
+            </View>
+            <View style={[styles.scoreBox, {backgroundColor: props.scoreColor}]}>
+                <CustomText style={styles.scoreText} numberOfLines={1} adjustsFontSizeToFit>{props.player.score}</CustomText>
+            </View>
+        </View>
     )
 }
 
@@ -139,14 +139,20 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     entrantName: {
-        flex: 1,
+        flex: 9,
         paddingLeft: 5,
         overflow: "hidden",
         flexDirection: "row"
     },
     scoreBox: {
         paddingHorizontal: 5,
-        left: "auto"
+        left: "auto",
+        flex: 1,
+    },
+    scoreText: {
+        textAlign: "center",
+        // flexShrink: 1,
+        // flexWrap: "wrap"
     },
     seperator: {
         width: "100",
