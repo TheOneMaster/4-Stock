@@ -4,6 +4,7 @@ import { useDerivedValue, useSharedValue } from "react-native-reanimated";
 import { TitleText } from "../../Shared/Text";
 import { TreeSVG } from "./TreeSVG";
 import { FullBracket } from "./types";
+import { useEffect } from "react";
 
 interface GameBracketProps {
     bracket: FullBracket
@@ -28,6 +29,12 @@ export function DoubleElimBracket(props: GameBracketProps) {
     const translateY = useSharedValue(0);
     const context = useSharedValue({ x: 0, y: 0 });
 
+    // Reset bracket to top left when drawing new bracket
+    useEffect(() => {
+        translateX.value = 0
+        translateY.value = 0
+    }, [props.bracket])
+
     const clampedTranslateX = useDerivedValue(() => {
         const leftBound = Math.min(translateX.value, 0);
         const rightBound = -Math.abs(svgLayout.value.width - viewLayout.value.width);
@@ -43,7 +50,6 @@ export function DoubleElimBracket(props: GameBracketProps) {
 
         
         return Math.max(upperBound, lowerBound);
-        return upperBound
     })
 
     const panGesture = Gesture.Pan().onStart(() => {
@@ -51,8 +57,6 @@ export function DoubleElimBracket(props: GameBracketProps) {
     }).onUpdate(event => {
         translateX.value = event.translationX + context.value.x;
         translateY.value = event.translationY + context.value.y;
-        // console.log(event.translationX, event.translationY)
-        console.log(viewLayout.value)
     }).onEnd(() => {
         translateX.value = clampedTranslateX.value;
         translateY.value = clampedTranslateY.value;
