@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import { GameMatch } from "./GameMatch";
-import { BracketRounds } from "./Main";
+import { BracketRounds } from "./types";
 
 interface BracketTreeProps {
     translateX: Animated.SharedValue<number>;
@@ -9,10 +9,6 @@ interface BracketTreeProps {
     bracket: BracketRounds
 }
 
-
-
-const offsetXMultiplier = 200;
-const offsetYMultiplier = 50;
 
 export function BracketTree(props: BracketTreeProps) {
 
@@ -24,18 +20,19 @@ export function BracketTree(props: BracketTreeProps) {
 
     const bracketRounds = Object.keys(props.bracket).map(num => parseInt(num));
 
-
     return (
         <Animated.View style={[styles.container, rStyle]}>
             {bracketRounds.map((round) => {
 
                 const sets = props.bracket[round];
 
+                
+
                 return sets.map((set, index) => {
-                    const offsetX = (Math.abs(round) - 1) * offsetXMultiplier;
-                    const offsetY = (index) * offsetYMultiplier; 
+                    const offsetX = (Math.abs(round) - 1);
+                    const offsetY = (index); 
     
-                    return <GameMatch match={set} offsetX={offsetX} offsetY={offsetY} key={set.id}/>
+                    return <GameMatch match={set} x={offsetX} y={offsetY} key={set.id}/>
                 })
                 
             })}
@@ -48,8 +45,8 @@ const styles = StyleSheet.create({
     container: {
         // flex: 1,
         zIndex: 1,
-        // borderWidth: 1,
-        // borderColor: "red",
+        borderWidth: 1,
+        borderColor: "red",
         position: "relative",
         left: 10,
         top: 10
