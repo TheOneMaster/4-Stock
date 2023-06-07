@@ -5,6 +5,7 @@ import { TitleText } from "../../Shared/Text";
 import { TreeSVG } from "./TreeSVG";
 import { FullBracket } from "./types";
 import { useEffect } from "react";
+import { MATCH_HEIGHT } from "./MatchSVG";
 
 interface GameBracketProps {
     bracket: FullBracket
@@ -40,14 +41,10 @@ export function DoubleElimBracket(props: GameBracketProps) {
         const rightBound = -Math.abs(svgLayout.value.width - viewLayout.value.width);
 
         return Math.max(leftBound, rightBound);
-        // return leftBound
     });
     const clampedTranslateY = useDerivedValue(() => {
         const upperBound = Math.min(translateY.value, 0);
-        // const lowerBound = svgHeight
-        const lowerBound = -Math.abs(svgLayout.value.height - viewLayout.value.height) ;
-        // console.log(lowerBound);
-
+        const lowerBound = -Math.abs(svgLayout.value.height - viewLayout.value.height + MATCH_HEIGHT) ;
         
         return Math.max(upperBound, lowerBound);
     })
@@ -57,6 +54,7 @@ export function DoubleElimBracket(props: GameBracketProps) {
     }).onUpdate(event => {
         translateX.value = event.translationX + context.value.x;
         translateY.value = event.translationY + context.value.y;
+
     }).onEnd(() => {
         translateX.value = clampedTranslateX.value;
         translateY.value = clampedTranslateY.value;
