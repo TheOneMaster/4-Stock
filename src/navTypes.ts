@@ -20,6 +20,7 @@ type Waves = Exclude<PropertyDetails<Event, "waves">[0], null>[]
 export type HomeDrawerParamList = {
     "Featured Tournaments": undefined
     "Tournament Search": NavigatorScreenParams<RootStackParamList>
+    "Saved Tournaments": undefined
     Settings: undefined
     About: undefined
     "Debug Testing": undefined
@@ -58,10 +59,15 @@ export type DebugPageProps = CompositeScreenProps<
     HomeScreenProps
 >;
 
+export type SavedTournamentsScreenProps = CompositeScreenProps<
+    DrawerScreenProps<HomeDrawerParamList, "Saved Tournaments">,
+    HomeScreenProps
+>;
+
 export type ResultsViewProps = MaterialTopTabScreenProps<EventTabParamList, "Results">;
 export type BracketViewProps = MaterialTopTabScreenProps<EventTabParamList, "Bracket">;
-// Navigation Props
 
+// Navigation Props
 export type TournamentsTopBarNavigationProp = CompositeNavigationProp<
     NativeStackNavigationProp<RootStackParamList, "Home">,
     DrawerNavigationProp<HomeDrawerParamList, "Tournament Search">
@@ -71,6 +77,11 @@ export type TournamentCardNavigationProp = CompositeNavigationProp<
     DrawerNavigationProp<HomeDrawerParamList, "Tournament Search">,
     NativeStackNavigationProp<RootStackParamList, "Home">
 >;
+
+export type SavedTournamentsCardNavigationProp = CompositeNavigationProp<
+    DrawerNavigationProp<HomeDrawerParamList, "Saved Tournaments">,
+    NativeStackNavigationProp<RootStackParamList, "Home">
+    >;
 
 export type EventCardNavigationProp = NativeStackNavigationProp<RootStackParamList, "Tournament">;
 
