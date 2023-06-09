@@ -11,6 +11,7 @@ import FeaturedTournamentsPage from "./Featured Tournaments";
 import SettingsPage from "./Settings";
 import TournamentSearchPage from "./Tournament Search";
 import { useSettings } from "../Context";
+import SavedTournamentsPage from "./Saved Tournaments";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
@@ -31,6 +32,7 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
             <Drawer.Screen name="Featured Tournaments" component={FeaturedTournamentsPage} />
             <Drawer.Screen name="Tournament Search" component={TournamentSearchPage} />
+            <Drawer.Screen name="Saved Tournaments" component={SavedTournamentsPage} />
             <Drawer.Screen name="Settings" component={SettingsPage} />
             <Drawer.Screen name="About" component={AboutPage} />
 
