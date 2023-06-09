@@ -1,50 +1,32 @@
-import { StyleSheet, View } from "react-native";
-import { SavedTournamentsScreenProps } from "../../navTypes";
-import { useSavedTournaments } from "./tournamentsHook";
-import { useSavedTournamentsQuery } from "../../gql/gql";
-import { CustomText } from "../../Shared/Text";
+import { useState } from "react";
+import { Modal, StyleSheet, View } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
+import { CenterMessage } from "../../Shared";
 import { IoniconsThemed } from "../../Shared/IconTheme";
+import { CustomText } from "../../Shared/Text";
+import { useSavedTournamentsQuery } from "../../gql/gql";
 import { truthyFilter } from "../../helper";
+import { SavedTournamentsScreenProps } from "../../navTypes";
 import { TournamentView } from "./TournamentView";
 
 export function SavedTournamentsPage({navigation, route}: SavedTournamentsScreenProps) {
-    // const [saved, setSaved] = useSavedTournaments();
-
+    // Tipped off 14, TBH 11, SSC '23, Shine '23
     const saved = ["511041", "548572", "470565", "540064"];
 
     const {data, status} = useSavedTournamentsQuery({ids: saved});
 
-
-    if (status === "loading") {
-        return (
-            <View style={styles.center}>
-                <CustomText>Loading...</CustomText>
-            </View>
-        )
-    }
-
-    if (status === "error") {
-        return (
-            <View>
-                <IoniconsThemed name="alert" />
-                <CustomText>Error Loading Tournaments</CustomText>
-            </View>
-        )
-    }
+    if (status === "loading") return <CenterMessage message="Loading..." />
+    if (status === "error") return <CenterMessage message="Error loading tournaments" icon={<IoniconsThemed name="alert" />} />
 
     const tournaments = data.tournaments?.nodes?.filter(truthyFilter) ?? [];
-    console.log(tournaments)
 
     return (
         <View>
-            {/* <CustomText>Loaded Tournaments</CustomText> */}
             <FlatList
                 data={tournaments}
                 renderItem={({item}) => <TournamentView data={item} height={200} /> }
                 numColumns={2}
                 />
-
         </View>
     )
 }
