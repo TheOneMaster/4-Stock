@@ -53,6 +53,7 @@ export type Address = {
 
 /** Represents the name of the third-party service (e.g Twitter) for OAuth */
 export enum AuthorizationType {
+  Battlenet = 'BATTLENET',
   Discord = 'DISCORD',
   Epic = 'EPIC',
   Mixer = 'MIXER',
@@ -2301,6 +2302,13 @@ export type FeaturedTournamentsQueryVariables = Exact<{ [key: string]: never; }>
 
 export type FeaturedTournamentsQuery = { __typename?: 'Query', tournaments: { __typename?: 'TournamentConnection', nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null> | null } | null };
 
+export type SavedTournamentsQueryVariables = Exact<{
+  ids: Array<InputMaybe<Scalars['ID']>> | InputMaybe<Scalars['ID']>;
+}>;
+
+
+export type SavedTournamentsQuery = { __typename?: 'Query', tournaments: { __typename?: 'TournamentConnection', nodes: Array<{ __typename?: 'Tournament', id: string | null, name: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null> | null } | null };
+
 export type TournamentListDataQueryVariables = Exact<{
   name: InputMaybe<Scalars['String']>;
   afterDate: InputMaybe<Scalars['Timestamp']>;
@@ -2512,6 +2520,56 @@ export const useInfiniteFeaturedTournamentsQuery = <
 
 
 useInfiniteFeaturedTournamentsQuery.getKey = (variables?: FeaturedTournamentsQueryVariables) => variables === undefined ? ['FeaturedTournaments.infinite'] : ['FeaturedTournaments.infinite', variables];
+;
+
+export const SavedTournamentsDocument = `
+    query SavedTournaments($ids: [ID]!) {
+  tournaments(query: {filter: {ids: $ids}}) {
+    nodes {
+      id
+      name
+      images(type: "profile") {
+        id
+        type
+        url
+      }
+    }
+  }
+}
+    `;
+export const useSavedTournamentsQuery = <
+      TData = SavedTournamentsQuery,
+      TError = unknown
+    >(
+      variables: SavedTournamentsQueryVariables,
+      options?: UseQueryOptions<SavedTournamentsQuery, TError, TData>
+    ) =>
+    useQuery<SavedTournamentsQuery, TError, TData>(
+      ['SavedTournaments', variables],
+      useFetchData<SavedTournamentsQuery, SavedTournamentsQueryVariables>(SavedTournamentsDocument).bind(null, variables),
+      options
+    );
+
+useSavedTournamentsQuery.getKey = (variables: SavedTournamentsQueryVariables) => ['SavedTournaments', variables];
+;
+
+export const useInfiniteSavedTournamentsQuery = <
+      TData = SavedTournamentsQuery,
+      TError = unknown
+    >(
+      pageParamKey: keyof SavedTournamentsQueryVariables,
+      variables: SavedTournamentsQueryVariables,
+      options?: UseInfiniteQueryOptions<SavedTournamentsQuery, TError, TData>
+    ) =>{
+    const query = useFetchData<SavedTournamentsQuery, SavedTournamentsQueryVariables>(SavedTournamentsDocument)
+    return useInfiniteQuery<SavedTournamentsQuery, TError, TData>(
+      ['SavedTournaments.infinite', variables],
+      (metaData) => query({...variables, ...(metaData.pageParam ?? {})}),
+      options
+    )};
+
+
+useInfiniteSavedTournamentsQuery.getKey = (variables: SavedTournamentsQueryVariables) => ['SavedTournaments.infinite', variables];
 ;
 
 export const TournamentListDataDocument = `
