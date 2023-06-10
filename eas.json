@@ -25,12 +25,14 @@
     },
     "preview-final": {
       "extends": "preview",
+      "channel": "staging",
       "android": {
         "buildType": "apk"
       }
     },
     "production": {
       // "autoIncrement": true,
+      "channel": "production",
       "ios": {
         "resourceClass": "m1-medium"
       },
