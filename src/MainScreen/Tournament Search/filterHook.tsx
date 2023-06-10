@@ -22,9 +22,17 @@ export function useFilter() {
     const [regOpen, setRegOpen] = useState<true | null>(null);
 
     useEffect(() => {
-        if (mainGame) {
-            setGames([mainGame])
+
+        console.log(mainGame);
+
+        if (games.length > 0 && mainGame === null) {
+            setGames([]);
+            return
         }
+
+        const gameInFilters = games.some(game => game.value === mainGame?.value);
+        if (mainGame !== null && !gameInFilters) setGames([mainGame]);
+        
     }, [mainGame])
 
     return {
