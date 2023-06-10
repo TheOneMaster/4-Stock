@@ -1,4 +1,4 @@
-# ![app-icon](.github/gen.png) 4 Stock
+# ![app-icon](.github/Images/gen.png) 4 Stock
 
 [![download](https://img.shields.io/github/downloads/TheOneMaster/startggapp/total?color=blue&style=for-the-badge)](https://github.com/TheOneMaster/StartGGApp/releases/latest)
 
@@ -29,6 +29,16 @@ User login is currently unsupported on this app until [start.gg OAuth is availab
 - Draw bracket as a tree
 - OTA update support
 - Welcome screen
+
+</details>
+
+<details><summary>App screenshots</summary>
+
+## Featured Tournaments Page
+![Featured Tournaments page](.github/Images/Featured%20Tournaments.png)
+
+## Tournament Search
+![Tournament Search](.github/Images/Tournament%20Search.png)
 
 </details>
 
