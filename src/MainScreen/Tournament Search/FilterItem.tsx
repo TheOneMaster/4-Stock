@@ -28,7 +28,7 @@ export const StaticFilterItem = (props: StaticFilterItemProps) => {
 
 interface FilterDateProps extends FilterItemProps {
     date: Date | undefined
-    setDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+    setDate: (date: Date|undefined) => void
 }
 
 export const FilterDate = (props: FilterDateProps) => {
@@ -65,13 +65,13 @@ export const FilterDate = (props: FilterDateProps) => {
 interface FilterBoolean extends FilterItemProps {
     value: boolean
     nullValue?: false
-    setValue: React.Dispatch<React.SetStateAction<boolean>>
+    setValue: (value: boolean) => void
 }
 
 interface FilterNullBoolean extends FilterItemProps {
     value: boolean | null
     nullValue: true
-    setValue: React.Dispatch<React.SetStateAction<true | null>>
+    setValue: (value: true|null) => void
 }
 
 type FilterCheckboxProps = FilterBoolean | FilterNullBoolean
