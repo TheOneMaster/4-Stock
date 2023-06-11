@@ -5,11 +5,11 @@ import { StyleSheet } from "react-native";
 import { HomeDrawerParamList, HomeScreenProps } from "../navTypes";
 import CustomDrawerContent from "./CustomDrawerContent";
 
-import FeaturedTournamentsPage from "./Featured Tournaments";
-import TournamentList from "./Tournament Search";
-import SettingsPage, { useSettings } from "./Settings";
 import AboutPage from "./About";
-import { DebugPage } from "./Debug"
+import { DebugPage } from "./Debug";
+import FeaturedTournamentsPage from "./Featured Tournaments";
+import SettingsPage, { useSettings } from "./Settings";
+import TournamentSearchPage from "./Tournament Search";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
@@ -29,7 +29,7 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
         >
 
             <Drawer.Screen name="Featured Tournaments" component={FeaturedTournamentsPage} />
-            <Drawer.Screen name="Tournament Search" component={TournamentList} />
+            <Drawer.Screen name="Tournament Search" component={TournamentSearchPage} />
             <Drawer.Screen name="Settings" component={SettingsPage} />
             <Drawer.Screen name="About" component={AboutPage} />
 

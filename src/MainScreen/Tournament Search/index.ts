@@ -1,3 +1,3 @@
-import { default as TournamentList } from "./TournamentList"
+import { TournamentSearchPage } from "./TournamentList";
 
-export default TournamentList
+export default TournamentSearchPage

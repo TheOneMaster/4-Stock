@@ -1,35 +1,46 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useRef, useState } from "react";
-import { FlatList, Pressable, RefreshControl, StyleSheet, View } from "react-native";
+import { useRef } from "react";
+import { FlatList, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, StyleSheet, View } from "react-native";
 
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
 import { FilterButton } from "./FilterButton";
-import { convertStorageToAPI, useFilter } from "./filterHook";
-import { FilterCheckbox, FilterDate, StaticFilterItem } from "./FilterItem";
+// import { convertStorageToAPI, useFilter } from "./filterHook";
 import TournamentCard from "./TournamentCard";
 import { EmptyTournamentListProps, FilterButtonRefProps } from "./types";
 
 import { checkID, truthyFilter } from "../../helper";
 import { TournamentListViewProps } from "../../navTypes";
-import { SearchBar, SecondaryCard } from "../../Shared";
-import { BottomSheet } from "../../Shared/BottomSheet/BottomSheet";
-import { BottomSheetRefProps } from "../../Shared/BottomSheet/types";
-import { CustomText, TitleText } from "../../Shared/Text";
+import { SearchBar } from "../../Shared";
+import { CustomText } from "../../Shared/Text";
+import { convertFiltersForAPI, FilterProvider, useFilters } from "./filterContext";
+import { FilterList, FilterListRefProps } from "./FilterList";
 
-const MIN_BOTTOMSHEET_SIZE = -440;
+const MIN_BOTTOMSHEET_SIZE = -450;
 const MAX_BOTTOMSHEET_SIZE = -600;
 
-function TournamentList({ navigation, route }: TournamentListViewProps) {
+export function TournamentSearchPage({navigation, route}: TournamentListViewProps) {
 
-    const { filters, setFilters } = useFilter();
+    return (
+        <FilterProvider>
+            <TournamentList navigation={navigation} />
+        </FilterProvider>
+    )
+}
+
+interface TournamentListProps {
+    navigation: TournamentListViewProps["navigation"]
+}
+
+function TournamentList({ navigation }: TournamentListProps) {
+
+    const {filters, updateFilter} = useFilters();
+
     const filterButtonRef = useRef<FilterButtonRefProps>(null);
-    const filterSheetRef = useRef<BottomSheetRefProps>(null);
-
-    const [overlay, setOverlay] = useState(false);
+    const filterSheetRef = useRef<FilterListRefProps>(null);
 
     const queryClient = useQueryClient();
-    const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", convertStorageToAPI(filters), {
+    const { data, status, isRefetching, fetchNextPage } = useInfiniteTournamentListDataQuery("page", convertFiltersForAPI(filters), {
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.tournaments?.pageInfo?.page ? lastPage.tournaments.pageInfo.page + 1 : filters.page + 1
             return { page: nextPage }
@@ -44,77 +55,57 @@ function TournamentList({ navigation, route }: TournamentListViewProps) {
 
     function refresh() {
         queryClient.invalidateQueries({
-            queryKey: useInfiniteTournamentListDataQuery.getKey(convertStorageToAPI(filters)),
+            queryKey: useInfiniteTournamentListDataQuery.getKey(convertFiltersForAPI(filters)),
         })
     }
 
     const onPress = () => {
-        if (filterSheetRef.current?.isActive()) {
-            filterSheetRef.current.scrollTo(0);
-            setOverlay(false);
-        } else {
-            filterSheetRef.current?.scrollTo(MIN_BOTTOMSHEET_SIZE);
-            setOverlay(true);
-        }
+        filterSheetRef.current?.open();
     };
 
-    const overlayPress = useCallback(() => {
-        filterSheetRef.current?.scrollTo(0);
-        setOverlay(false);
-    }, [filterSheetRef.current])
+    const scrollEvent = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const {y: offsetY} = event.nativeEvent.contentOffset;
+
+        if (offsetY > 100) {
+            filterButtonRef.current?.toggleFilter(false)
+        } else {
+            filterButtonRef.current?.toggleFilter(true)
+        }
+    }
+
 
     return (
-        <View style={styles.container}>
-            <FlatList
-                // Main data rendering
-                data={listData}
-                renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
-                contentContainerStyle={{ flexGrow: 1 }}
-                keyExtractor={(tournament) => tournament.id}
+            <View style={styles.container}>
+                <FlatList
+                    // Main data rendering
+                    data={listData}
+                    renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyExtractor={(tournament) => tournament.id}
 
-                // Header
-                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={setFilters.setName} placeholder="Tournament" />}
-                ListHeaderComponentStyle={{ padding: 10 }}
+                    // Header
+                    ListHeaderComponent={<SearchBar filter={filters.name} filterAction={(name) => updateFilter("name", name)} placeholder="Tournament" />}
+                    ListHeaderComponentStyle={{ padding: 10 }}
 
-                // Empty component
-                ListEmptyComponent={<EmptyTournamentList status={status} />}
+                    // Empty component
+                    ListEmptyComponent={<EmptyTournamentList status={status} />}
 
-                // Update/Refresh data
-                refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
-                onEndReached={() => fetchNextPage()}
-                onEndReachedThreshold={0.1}
-                onScroll={(event) => {
-                    const { y: offsetY } = event.nativeEvent.contentOffset;
-                    if (offsetY > 100) {
-                        filterButtonRef.current?.toggleFilter(false);
-                    } else {
-                        filterButtonRef.current?.toggleFilter(true);
-                    }
-                }}
+                    // Update/Refresh data
+                    refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
+                    onEndReached={() => fetchNextPage()}
+                    onEndReachedThreshold={0.1}
+                    onScroll={scrollEvent}
 
-                // Misc. properties
-                showsVerticalScrollIndicator={false}
-                keyboardShouldPersistTaps="handled"
-            />
+                    // Misc. properties
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                />
 
-            <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
+                <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
 
-            {overlay ? <Pressable style={styles.overlay} onPress={overlayPress} /> : null}
+                <FilterList ref={filterSheetRef} maxSize={MAX_BOTTOMSHEET_SIZE} minSize={MIN_BOTTOMSHEET_SIZE}  />
 
-
-            <BottomSheet ref={filterSheetRef} style={styles.bottomSheet} setOverlay={setOverlay} minSize={MIN_BOTTOMSHEET_SIZE} maxSize={MAX_BOTTOMSHEET_SIZE}>
-                <SecondaryCard style={styles.filterSheetInner}>
-                    <TitleText style={styles.titleText}>Filters</TitleText>
-                    <FilterDate title="From" date={filters.afterDate} setDate={setFilters.setAfterDate} />
-                    <FilterDate title="Till" date={filters.beforeDate} setDate={setFilters.setBeforeDate} />
-                    <FilterCheckbox title="Past events" value={filters.past} setValue={setFilters.setPast} />
-                    <FilterCheckbox title="Has online events" value={filters.online} setValue={setFilters.setOnline} />
-                    <FilterCheckbox title="Open for registration" value={filters.regOpen} setValue={setFilters.setRegOpen} nullValue />
-                    <StaticFilterItem title="Game filter" value={filters.games.map(game => game.label).join(", ")} />
-                </SecondaryCard>
-            </BottomSheet>
-
-        </View>
+            </View>
     )
 }
 
@@ -145,36 +136,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center"
     },
-    bottomSheet: {
-        zIndex: 3
-    },
     filterButton: {
         position: "absolute",
         bottom: 30,
         right: 30
-    },
-    filterSheetInner: {
-        flex: 1,
-        flexGrow: 1,
-        borderRadius: 10,
-        overflow: "hidden"
-        // borderWidth: 1
-    },
-    titleText: {
-        // fontSize: 18,
-        // fontFamily: ,
-        // padding: 10,
-        fontWeight: "400",
-        // padding: 0
-    },
-    overlay: {
-        position: "absolute",
-        height: "100%",
-        width: "100%",
-        backgroundColor: "#000000",
-        opacity: 0.6,
-        zIndex: 2
     }
 });
-
-export default TournamentList
