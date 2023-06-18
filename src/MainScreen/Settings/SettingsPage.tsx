@@ -1,15 +1,14 @@
 import { ScrollView, StyleSheet } from "react-native";
 
+import { SettingsDropdown, SettingsSwitch, SettingsTextInput } from "./SettingsComponents";
 import SettingsGroup from "./SettingsGroup";
-import { SettingsSwitch, SettingsTextInput, SettingsDropdown } from "./SettingsComponents";
 import GAME_LIST from "./games.json";
 
 import { useSettings } from "../../Context";
-import { CustomText } from "../../Shared/Text";
 import { SettingsViewProps } from "../../navTypes";
 
 
-const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
+function SettingsPage({ navigation, route }: SettingsViewProps) {
 
     const { settings, updateSetting } = useSettings();
 
@@ -22,12 +21,8 @@ const SettingsPage = ({ navigation, route }: SettingsViewProps) => {
                 <SettingsSwitch title="Debug" icon="bug-outline" value={settings.debug} updateValue={(value) => updateSetting("debug", value)} />
             </SettingsGroup>
 
-            <CustomText>{settings.debug.toString()}</CustomText>
-            <CustomText>{JSON.stringify(settings.mainGame)}</CustomText>
-            <CustomText>{settings.apiKey}</CustomText>
-
         </ScrollView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
