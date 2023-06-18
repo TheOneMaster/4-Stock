@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from "react"
 import { useMMKV } from "react-native-mmkv"
 import { DropdownOption } from "../Shared/types"
 
-interface Settings {
+export interface Settings {
     apiKey: string
     debug: boolean
-    mainGame: DropdownOption[]
+    mainGame: DropdownOption | null
 }
 
 interface SettingsContextProps {
@@ -17,17 +17,25 @@ interface SettingsProviderProps {
     children?: React.ReactNode
 }
 
+const DEFAULT_SETTINGS: Settings = {
+    apiKey: "",
+    debug: false,
+    mainGame: null,
+}
+
+
 const SettingsContext = createContext<SettingsContextProps | null>(null);
 
 export function SettingsProvider(props: SettingsProviderProps) {
 
-    const [settings, setSettings] = useState<Settings>({
-        apiKey: "",
-        debug: false,
-        mainGame: []
-    });
-
     const storage = useMMKV();
+    const mainGameString = storage.getString("settings.mainGame");
+
+    const [settings, setSettings] = useState<Settings>({
+        apiKey: storage.getString("settings.apiKey") ?? DEFAULT_SETTINGS.apiKey,
+        debug: storage.getBoolean("settings.debug") ?? DEFAULT_SETTINGS.debug,
+        mainGame: mainGameString ? JSON.parse(mainGameString) : DEFAULT_SETTINGS.mainGame,
+    });
 
     function updateSetting<K extends keyof Settings>(setting: K, value: Settings[K]) {
         setSettings(prev => {
