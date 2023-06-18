@@ -19,25 +19,22 @@
     },
     "preview": {
       "distribution": "internal",
-      "ios": {
-        "resourceClass": "m1-medium"
-      }
-    },
-    "preview-final": {
-      "extends": "preview",
-      "channel": "staging",
+      "channel": "preview",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "APP_VARIANT": "preview"
       }
     },
     "production": {
-      // "autoIncrement": true,
+      "autoIncrement": true,
       "channel": "production",
       "ios": {
         "resourceClass": "m1-medium"
       },
-      "android": {
-        "buildType": "apk"
+      "env": {
+        "APP_VARIANT": "production"
       }
     }
   },

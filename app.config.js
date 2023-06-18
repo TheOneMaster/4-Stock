@@ -14,8 +14,8 @@ export default {
     backgroundColor: "#2C8F60"
   },
   updates: {
-    "fallbackToCacheTimeout": 0,
-    url: `https://u.expo.dev/6d316582-6f1f-4542-8040-5be355f164db`
+    fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/6d316582-6f1f-4542-8040-5be355f164db"
   },
   assetBundlePatterns: [
     "**/*",
