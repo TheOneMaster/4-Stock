@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { NativeSyntheticEvent, Pressable, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
+import { NativeSyntheticEvent, Pressable, StyleProp, StyleSheet, TextInputSubmitEditingEventData, ViewStyle } from "react-native"
 
 import { PrimaryCard } from "../Containers/Containers"
 import { IoniconsThemed } from "../IconTheme"
@@ -9,6 +9,7 @@ interface EyeTextInputProps {
     defaultValue?: string
     onChangeText?: (text: string) => void
     onSubmit?: (text: string) => void
+    style?: StyleProp<ViewStyle>
 }
 
 function EyeTextInput(props: EyeTextInputProps) {
@@ -39,7 +40,7 @@ function EyeTextInput(props: EyeTextInputProps) {
 
 
     return (
-        <PrimaryCard style={styles.container}>
+        <PrimaryCard style={[styles.container, props.style]}>
             <ThemedTextInput
                 secureTextEntry={!visible}
                 editable={visible}
