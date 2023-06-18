@@ -1,7 +1,6 @@
-import { MMKV } from "react-native-mmkv";
+import { useCallback, useEffect } from "react";
 import { useSettings } from "./Context";
-
-export const localStorage = new MMKV();
+import { useMMKV } from "react-native-mmkv";
 
 export const useFetchData = <TData, TVariables>(
     query: string,
@@ -9,18 +8,18 @@ export const useFetchData = <TData, TVariables>(
 ): ((variables?: TVariables) => Promise<TData>) => {
     // it is safe to call React Hooks here.
 
-    const { settings } = useSettings();
+    const storage = useMMKV();
 
-    const fetcher = async (variables?: TVariables) => {
+    return async (variables?: TVariables) => {
 
-        const apiKey = settings.apiKey;
+        const authKey = storage.getString("settings.apiKey") ?? "";
 
         const res = await fetch("https://api.start.gg/gql/alpha", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-Exclude-Invalid": "true",
-                "Authorization": `Bearer ${apiKey}`,
+                "Authorization": `Bearer ${authKey}`,
                 ...options
             },
             body: JSON.stringify({ query, variables })
@@ -40,6 +39,4 @@ export const useFetchData = <TData, TVariables>(
 
         return json.data;
     }
-
-    return fetcher
 }
