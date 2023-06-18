@@ -1,7 +1,7 @@
 import React, { createContext, useState } from "react";
 import { ColorValue } from "react-native";
 
-interface UIThemeOptions {
+export interface UIThemeOptions {
     baseColor: ColorValue
     secondaryColor: ColorValue
     backgroundColor: ColorValue
