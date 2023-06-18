@@ -8,7 +8,10 @@ interface GlobalProviderProps {
 
 const queryClient = new QueryClient();
 
-
+/**
+ * Provides the global contexts to the application. Any global context or state to be passed to the entire application
+ * should be added here instead of the App.tsx file.
+ */
 export function GlobalProvider(props: GlobalProviderProps) {
     return (
         <SettingsProvider>
