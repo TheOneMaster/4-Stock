@@ -1,2 +1,1 @@
-export * from "./IoniconsThemed"
-export * from "./FontAwesome"
+export * from "./ThemedIcons"
