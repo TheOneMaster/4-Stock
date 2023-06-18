@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { DropdownOption } from "../../Shared/types";
-import { useSettings } from "../Settings";
-import { TournamentListDataQueryVariables } from "../../gql/gql";
-import { convertDateToUnixSeconds } from "../../helper";
 import { addMonths } from "date-fns";
+
+import { TournamentListDataQueryVariables } from "../../gql/gql";
+
+import { DropdownOption } from "../../Shared/types";
+import { convertDateToUnixSeconds } from "../../helper";
+import { useSettings } from "../../Context";
 
 interface SearchFilterType {
     name: string
@@ -12,9 +14,9 @@ interface SearchFilterType {
     games: DropdownOption[]
     past: boolean
     online: boolean
-    regOpen: true|null
+    regOpen: true | null
     page: number
-} 
+}
 
 interface FilterContextType {
     filters: SearchFilterType,
@@ -25,17 +27,14 @@ interface FilterProviderProps {
     children: React.ReactNode
 }
 
-export const FilterContext = createContext<FilterContextType|null>(null);
+export const FilterContext = createContext<FilterContextType | null>(null);
 
 export function FilterProvider(props: FilterProviderProps) {
 
-    const {general} = useSettings()
-    const {mainGame} = general
-
-
+    const { settings } = useSettings();
     const [filters, setFilters] = useState<SearchFilterType>({
         name: "",
-        games: mainGame ? [mainGame] : [],
+        games: settings.mainGame ? [settings.mainGame] : [],
         beforeDate: addMonths(new Date(), 1),
         past: false,
         online: false,
@@ -47,15 +46,15 @@ export function FilterProvider(props: FilterProviderProps) {
         setFilters((prevFilter) => {
             const newFilters = Object.assign({}, prevFilter);
 
-            if (mainGame) {
-                newFilters.games = [mainGame]
+            if (settings.mainGame) {
+                newFilters.games = [settings.mainGame]
             } else {
                 newFilters.games = []
             }
 
             return newFilters
         })
-    }, [mainGame])
+    }, [settings.mainGame])
 
 
     function updateFilter<Key extends keyof SearchFilterType>(key: Key, value: SearchFilterType[Key]) {
@@ -67,11 +66,11 @@ export function FilterProvider(props: FilterProviderProps) {
     }
 
     return (
-        <FilterContext.Provider value={{filters: filters, updateFilter}}>
+        <FilterContext.Provider value={{ filters: filters, updateFilter }}>
             {props.children}
         </FilterContext.Provider>
     )
-} 
+}
 
 export function useFilters() {
 

@@ -1,4 +1,5 @@
 import { MMKV } from "react-native-mmkv";
+import { useSettings } from "./Context";
 
 export const localStorage = new MMKV();
 
@@ -8,10 +9,11 @@ export const useFetchData = <TData, TVariables>(
 ): ((variables?: TVariables) => Promise<TData>) => {
     // it is safe to call React Hooks here.
 
+    const { settings } = useSettings();
+
     const fetcher = async (variables?: TVariables) => {
 
-        const storage = localStorage;
-        const apiKey = storage.getString("general.apiKey") ?? "";
+        const apiKey = settings.apiKey;
 
         const res = await fetch("https://api.start.gg/gql/alpha", {
             method: "POST",

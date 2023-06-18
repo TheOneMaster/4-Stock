@@ -4,7 +4,7 @@ const IS_DEV = process.env.APP_VARIANT === "development";
 export default {
   name: IS_DEV ? "4 Stock (Dev)" : "4 Stock",
   slug: "4-stock",
-  version: "0.6.6",
+  version: "0.6.7",
   orientation: "portrait",
   icon: "./assets/final/icon.png",
   userInterfaceStyle: "automatic",
@@ -14,8 +14,8 @@ export default {
     backgroundColor: "#2C8F60"
   },
   updates: {
-    "fallbackToCacheTimeout": 0,
-    url: `https://u.expo.dev/6d316582-6f1f-4542-8040-5be355f164db`
+    fallbackToCacheTimeout: 0,
+    url: "https://u.expo.dev/6d316582-6f1f-4542-8040-5be355f164db"
   },
   assetBundlePatterns: [
     "**/*",

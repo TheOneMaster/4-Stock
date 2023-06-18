@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { StyleSheet, View } from "react-native";
 
 import { SubtitleProps, TournamentCardProps } from "./types";
@@ -14,9 +13,9 @@ export const TournamentCard = ({ id, name, city, startAt, images, navigation, st
     const usableImages = images?.filter(truthyFilter) ?? [];
     const profile_image = getImageByType(usableImages, "profile")
 
-    const navigateToTournament = useCallback(() => {
+    const navigateToTournament = () => {
         navigation.push("Tournament", { id: id })
-    }, [id, navigation]);
+    }
 
     return (
         <PrimaryCard touchable onPress={navigateToTournament} style={[styles.container, style]}>

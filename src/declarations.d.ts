@@ -13,9 +13,6 @@ declare module "*.png" {
   const value: Source;
   export default value;
 }
-declare module '@env' {
-  export const API_TOKEN: string;
-}
 
 declare module "*.ttf" {
   import { FontSource } from 'expo-font';

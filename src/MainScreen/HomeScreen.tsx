@@ -8,15 +8,16 @@ import CustomDrawerContent from "./CustomDrawerContent";
 import AboutPage from "./About";
 import { DebugPage } from "./Debug";
 import FeaturedTournamentsPage from "./Featured Tournaments";
-import SettingsPage, { useSettings } from "./Settings";
+import SettingsPage from "./Settings";
 import TournamentSearchPage from "./Tournament Search";
+import { useSettings } from "../Context";
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const MainScreen = ({ navigation, route }: HomeScreenProps) => {
 
     const { colors } = useTheme();
-    const { general } = useSettings();
+    const { settings } = useSettings();
 
     return (
         <Drawer.Navigator
@@ -33,7 +34,7 @@ const MainScreen = ({ navigation, route }: HomeScreenProps) => {
             <Drawer.Screen name="Settings" component={SettingsPage} />
             <Drawer.Screen name="About" component={AboutPage} />
 
-            {general.debug
+            {settings.debug
                 ? <Drawer.Group>
                     <Drawer.Screen name="Debug Testing" component={DebugPage} />
                 </Drawer.Group>
