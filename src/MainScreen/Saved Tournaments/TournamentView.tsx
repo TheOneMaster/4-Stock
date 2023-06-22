@@ -1,13 +1,11 @@
-import { useNavigation, useTheme } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { runOnJS, useAnimatedStyle } from "react-native-reanimated";
-import { AntDesign } from "@expo/vector-icons";
+import { runOnJS } from "react-native-reanimated";
 
-import { useState } from "react";
 import { PlaceholderImage } from "../../Shared";
 import { TitleText } from "../../Shared/Text";
-import { SavedTournamentsCardNavigationProp } from "../../navTypes";
 import { TournamentData } from "./types";
 
 
@@ -15,64 +13,47 @@ import { TournamentData } from "./types";
 interface TournamentViewProps {
     data: TournamentData
     height: number
-    onPress?: () => void
-    longPress?: () => void
+    selected: boolean
+    onPress?: (tournament: string) => void
+    longPress?: (tournament: string) => void
 }
 
 export function TournamentView(props: TournamentViewProps) {
 
-    const [selected, setSelected] = useState(false);
+    if (!props.data.id) return null
 
-    const {colors} = useTheme();
-    const navigation = useNavigation<SavedTournamentsCardNavigationProp>();
-
+    const { colors } = useTheme();
     const image = props.data.images?.find(image => image?.url)?.url;
-    const tournamentID = props.data.id;
-
-
-    const toggleSelected = () => {
-        setSelected((prevState) => !prevState)
-    }
-
-    const clickGesture = Gesture.Tap().onStart(_ => {
-        if (!tournamentID) return
-        runOnJS(navigation.navigate)({name: "Tournament", params: {id: tournamentID}});
+    const clickGesture = Gesture.Tap().onFinalize(() => {
+        console.log("click")
+        if (props.onPress) runOnJS(props.onPress)(props.data.id!);
+    });
+    const longPressGesture = Gesture.LongPress().onStart(() => {
+        console.log("longPress")
+        if (props.longPress) runOnJS(props.longPress)(props.data.id!)
     });
 
-    const longPressGesture = Gesture.LongPress().onStart(() => {
-        console.log("Long Press Tournament: ", props.data.name);
-
-        runOnJS(toggleSelected)()
-    })
-
-    const allGestures = Gesture.Race(clickGesture, longPressGesture);
-
-    const animStyle = useAnimatedStyle(() => {
-        return {
-            borderColor: selected ? colors.primary : colors.border,
-            borderWidth: selected ? 3 : 1
-        }
-    })
-
-
+    const allGestures = Gesture.Exclusive(clickGesture, longPressGesture)
 
     return (
+
         <GestureDetector gesture={allGestures}>
-            <Animated.View style={[styles.container, animStyle]}>
-                <View style={{height: props.height}}>
+
+            <View style={[styles.container]}>
+                <View style={{ height: props.height }}>
                     <PlaceholderImage imageSrc={image} placeholder="tournament" style={styles.image} resize="cover" />
                 </View>
                 <View>
                     <TitleText style={styles.title} numberOfLines={2}>{props.data.name}</TitleText>
                 </View>
 
-                {selected
-                ? <View style={styles.selectionCircle}>
-                 <AntDesign name="check" color="black" />
-                </View>
-                : null}
+                {props.selected
+                    ? <View style={styles.selectionCircle}>
+                        <AntDesign name="check" color="black" />
+                    </View>
+                    : null}
 
-            </Animated.View>
+            </View>
         </GestureDetector>
     )
 
