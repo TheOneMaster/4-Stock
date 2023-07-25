@@ -21,7 +21,7 @@ export const TopBar = (props: TopBarProps) => {
 
                 <TransparentCard style={styles.banner_container}>
                     <PlaceholderImage imageSrc={bannerImage.url} style={styles.banner_image} resize="stretch" />
-                    <FavIcon favourite={props.fav} onPress={props.favFunc} size={20} style={styles.favIcon} />
+                    <FavIcon favourite={props.fav} onPress={props.favFunc} size={25} style={styles.favIcon} />
                 </TransparentCard>
 
                 <View style={[styles.profile_container, { marginTop: -20 }]}>
