@@ -16,15 +16,13 @@ type SavedTournamentsProviderProps = {
 const SavedTournamentsContext = createContext<SavedTournamentsContextProps | null>(null);
 
 export function SavedTournamentsProvider(props: SavedTournamentsProviderProps) {
-
     const storageString = "saved.tournaments";
 
     const storage = useMMKV();
-    const [saved, _saved] = useState<SavedTournaments>([]);
-    // const [saved, updateSaved] = useMMKVObject<SavedTournaments>("saved.tournaments");
+    const initSaved: SavedTournaments = storage.contains(storageString) ? JSON.parse(storage.getString(storageString)!) : [];
+    const [saved, _saved] = useState<SavedTournaments>(initSaved);
 
     function updateSaved(newSaved: SavedTournaments) {
-
         _saved(newSaved);
 
         if (storage.contains(storageString)) {
@@ -33,7 +31,6 @@ export function SavedTournamentsProvider(props: SavedTournamentsProviderProps) {
 
         storage.set(storageString, JSON.stringify(newSaved));
     }
-
 
     return (
         <SavedTournamentsContext.Provider value={{ saved, updateSaved }}>
