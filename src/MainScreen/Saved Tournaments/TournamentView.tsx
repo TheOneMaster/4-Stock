@@ -33,7 +33,7 @@ export function TournamentView(props: TournamentViewProps) {
         if (props.longPress) runOnJS(props.longPress)(props.data.id!)
     });
 
-    const allGestures = Gesture.Exclusive(clickGesture, longPressGesture)
+    const allGestures = Gesture.Race(longPressGesture, clickGesture)
 
     return (
 
