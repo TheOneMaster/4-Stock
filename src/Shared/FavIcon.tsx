@@ -10,7 +10,7 @@ type FavIconProps = {
 
 export function FavIcon(props: FavIconProps) {
     const iconName = props.favourite ? "heart-sharp" : "heart-outline";
-    const iconColor = props.favourite ? "red" : "white";
+    const iconColor = props.favourite ? "red" : "lightgrey";
     const iconSize = props.size ?? 16;
 
     return <Ionicons name={iconName} color={iconColor} size={iconSize} onPress={props.onPress} style={props.style} />
