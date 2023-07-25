@@ -35,7 +35,7 @@ export default {
     softwareKeyboardLayoutMode: "pan"
   },
   web: {
-    "favicon": "./assets/favicon.png"
+    favicon: "./assets/favicon.png"
   },
   jsEngine: "hermes",
   extra: {
