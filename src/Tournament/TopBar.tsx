@@ -1,10 +1,12 @@
 import { StyleSheet, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons"
 
 import { TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
 import { CustomText, TitleText } from "../Shared/Text";
 import { TopBarProps } from "./types";
+import { FavIcon } from "../Shared/FavIcon";
 
 export const TopBar = (props: TopBarProps) => {
 
@@ -19,6 +21,7 @@ export const TopBar = (props: TopBarProps) => {
 
                 <TransparentCard style={styles.banner_container}>
                     <PlaceholderImage imageSrc={bannerImage.url} style={styles.banner_image} resize="stretch" />
+                    <FavIcon favourite={props.fav} onPress={props.favFunc} size={20} style={styles.favIcon} />
                 </TransparentCard>
 
                 <View style={[styles.profile_container, { marginTop: -20 }]}>
@@ -63,7 +66,8 @@ const styles = StyleSheet.create({
         borderStyle: 'solid',
     },
     banner_image: {
-        height: "100%"
+        height: "100%",
+        zIndex: 1
     },
     profile_container: {
         height: 80,
@@ -91,5 +95,11 @@ const styles = StyleSheet.create({
     profile_title: {
         flexWrap: 'wrap',
         flexShrink: 1,
+    },
+    favIcon: {
+        position: "absolute",
+        right: 10,
+        top: 10,
+        zIndex: 2
     }
 })
