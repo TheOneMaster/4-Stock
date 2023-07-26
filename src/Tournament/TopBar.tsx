@@ -1,12 +1,8 @@
 import { StyleSheet, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons"
 
-import { TransparentCard } from "../Shared";
-import { getImageByType } from "../Shared/APIConverters";
-import PlaceholderImage from "../Shared/PlaceholderImage";
-import { CustomText, TitleText } from "../Shared/Text";
 import { TopBarProps } from "./types";
-import { FavIcon } from "../Shared/FavIcon";
+import { FavIcon, TransparentCard, PlaceholderImage, getImageByType } from "../Shared";
+import { TitleText } from "../Shared/Text";
 
 export const TopBar = (props: TopBarProps) => {
 
