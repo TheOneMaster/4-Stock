@@ -13,23 +13,23 @@ type SavedTournamentsProviderProps = {
     children?: React.ReactNode
 }
 
+
+const STORAGE_STRING = "saved.tournaments";
 const SavedTournamentsContext = createContext<SavedTournamentsContextProps | null>(null);
 
 export function SavedTournamentsProvider(props: SavedTournamentsProviderProps) {
-    const storageString = "saved.tournaments";
-
     const storage = useMMKV();
-    const initSaved: SavedTournaments = storage.contains(storageString) ? JSON.parse(storage.getString(storageString)!) : [];
+    const initSaved: SavedTournaments = storage.contains(STORAGE_STRING) ? JSON.parse(storage.getString(STORAGE_STRING)!) : [];
     const [saved, _saved] = useState<SavedTournaments>(initSaved);
 
     function updateSaved(newSaved: SavedTournaments) {
         _saved(newSaved);
 
-        if (storage.contains(storageString)) {
-            storage.delete(storageString);
+        if (storage.contains(STORAGE_STRING)) {
+            storage.delete(STORAGE_STRING);
         }
 
-        storage.set(storageString, JSON.stringify(newSaved));
+        storage.set(STORAGE_STRING, JSON.stringify(newSaved));
     }
 
     return (
