@@ -13,8 +13,8 @@ export function SavedTournamentsPage({ navigation, route }: SavedTournamentsScre
     const { saved } = useSavedTournaments();
     const { data, status } = useSavedTournamentsQuery({ ids: saved });
 
-    if (status === "loading") return <CenterMessage message="Loading..." />
-    if (status === "error") return <CenterMessage message="Error loading tournaments" icon={<IoniconsThemed name="alert" />} />
+    if (status === "loading") return <CenterMessage fill message="Loading..." />
+    if (status === "error") return <CenterMessage fill message="Error loading tournaments" icon={<IoniconsThemed name="alert" />} />
 
     const tournaments = data.tournaments?.nodes?.filter(truthyFilter) ?? [];
 
