@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import { truthyFilter } from "../../helper";
 import { FeaturedTournamentCardNavigationProp } from "../../navTypes";
 import { getImageByType, PlaceholderImage, TransparentCard } from "../../Shared";
-import { CustomText, TitleText } from "../../Shared/Text";
+import { TitleText } from "../../Shared/Text";
 import { LargeTournamentCardProps } from "./types";
 
 function LargeTournamentCard(props: LargeTournamentCardProps) {

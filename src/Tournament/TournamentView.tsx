@@ -11,6 +11,7 @@ import { TournamentViewProps } from "../navTypes";
 import ContactButton from "../Shared/ContactButton";
 import { CustomText } from "../Shared/Text";
 import { truthyFilter } from "../helper";
+import { useSavedTournaments } from "../Context/SavedTournaments";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
     if (!show) {
@@ -39,10 +40,23 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
 
     const tournamentID = route.params.id;
     const queryClient = useQueryClient();
-    const { data, isLoading, isError, isFetching } = useTournamentDetailsQuery({ ID: tournamentID })
+    const { data, isLoading, isError, isFetching } = useTournamentDetailsQuery({ ID: tournamentID });
+    const { saved, updateSaved } = useSavedTournaments();
+
+    const favourite = saved.includes(tournamentID);
 
     function refresh() {
         queryClient.invalidateQueries(useTournamentDetailsQuery.getKey({ ID: tournamentID }));
+    }
+
+    function toggleSaved() {
+        if (favourite) {
+            const newSaved = saved.filter(id => id !== tournamentID);
+            updateSaved(newSaved)
+        } else {
+            const newSaved = [...saved, tournamentID];
+            updateSaved(newSaved);
+        }
     }
 
     if (isLoading) {
@@ -67,7 +81,11 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
         <View style={{ flex: 1 }}>
 
             <ScrollView refreshControl={<RefreshControl refreshing={isFetching} onRefresh={refresh} />}>
-                <TopBar images={data.tournament.images} name={data.tournament.name}></TopBar>
+                <TopBar
+                    images={data.tournament.images}
+                    name={data.tournament.name}
+                    fav={favourite}
+                    favFunc={toggleSaved} />
 
                 <View style={styles.section}>
                     <CustomText style={styles.sectionTitle}>Details</CustomText>

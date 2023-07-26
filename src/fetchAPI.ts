@@ -1,5 +1,3 @@
-import { useCallback, useEffect } from "react";
-import { useSettings } from "./Context";
 import { useMMKV } from "react-native-mmkv";
 
 export const useFetchData = <TData, TVariables>(

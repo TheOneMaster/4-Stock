@@ -1,0 +1,13 @@
+query SavedTournaments($ids: [ID]!) {
+  tournaments(query: {filter: {ids: $ids}}) {
+    nodes {
+      id
+      name
+      images(type: "profile") {
+        id
+        type
+        url
+      }
+    }
+  }
+}

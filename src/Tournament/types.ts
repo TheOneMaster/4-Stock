@@ -7,6 +7,8 @@ type TournamentDetails = Exclude<TournamentDetailsQuery['tournament'], null>
 export interface TopBarProps {
     images: TournamentDetails['images']
     name: TournamentDetails['name']
+    fav?: boolean
+    favFunc?: () => void
 }
 
 export interface RegisterButtonProps {
