@@ -8,7 +8,7 @@ import { EventCardNavigationProp } from "../navTypes";
 import { PrimaryCard, TransparentCard } from "../Shared";
 import { getImageByType } from "../Shared/APIConverters";
 import PlaceholderImage from "../Shared/PlaceholderImage";
-import { CustomText, TitleText } from "../Shared/Text";
+import { TitleText } from "../Shared/Text";
 
 const EventCard = ({ event, style }: EventCardProps) => {
     const navigation = useNavigation<EventCardNavigationProp>();

@@ -1,5 +1,4 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useTheme } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";

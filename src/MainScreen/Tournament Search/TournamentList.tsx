@@ -5,7 +5,6 @@ import { FlatList, NativeScrollEvent, NativeSyntheticEvent, RefreshControl, Styl
 import { useInfiniteTournamentListDataQuery } from "../../gql/gql";
 
 import { FilterButton } from "./FilterButton";
-// import { convertStorageToAPI, useFilter } from "./filterHook";
 import TournamentCard from "./TournamentCard";
 import { EmptyTournamentListProps, FilterButtonRefProps } from "./types";
 
@@ -19,7 +18,7 @@ import { FilterList, FilterListRefProps } from "./FilterList";
 const MIN_BOTTOMSHEET_SIZE = -450;
 const MAX_BOTTOMSHEET_SIZE = -600;
 
-export function TournamentSearchPage({navigation, route}: TournamentListViewProps) {
+export function TournamentSearchPage({ navigation, route }: TournamentListViewProps) {
 
     return (
         <FilterProvider>
@@ -34,7 +33,7 @@ interface TournamentListProps {
 
 function TournamentList({ navigation }: TournamentListProps) {
 
-    const {filters, updateFilter} = useFilters();
+    const { filters, updateFilter } = useFilters();
 
     const filterButtonRef = useRef<FilterButtonRefProps>(null);
     const filterSheetRef = useRef<FilterListRefProps>(null);
@@ -64,7 +63,7 @@ function TournamentList({ navigation }: TournamentListProps) {
     };
 
     const scrollEvent = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const {y: offsetY} = event.nativeEvent.contentOffset;
+        const { y: offsetY } = event.nativeEvent.contentOffset;
 
         if (offsetY > 100) {
             filterButtonRef.current?.toggleFilter(false)
@@ -75,37 +74,37 @@ function TournamentList({ navigation }: TournamentListProps) {
 
 
     return (
-            <View style={styles.container}>
-                <FlatList
-                    // Main data rendering
-                    data={listData}
-                    renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
-                    contentContainerStyle={{ flexGrow: 1 }}
-                    keyExtractor={(tournament) => tournament.id}
+        <View style={styles.container}>
+            <FlatList
+                // Main data rendering
+                data={listData}
+                renderItem={({ item }) => <TournamentCard {...item} navigation={navigation} />}
+                contentContainerStyle={{ flexGrow: 1 }}
+                keyExtractor={(tournament) => tournament.id}
 
-                    // Header
-                    ListHeaderComponent={<SearchBar filter={filters.name} filterAction={(name) => updateFilter("name", name)} placeholder="Tournament" />}
-                    ListHeaderComponentStyle={{ padding: 10 }}
+                // Header
+                ListHeaderComponent={<SearchBar filter={filters.name} filterAction={(name) => updateFilter("name", name)} placeholder="Tournament" />}
+                ListHeaderComponentStyle={{ padding: 10 }}
 
-                    // Empty component
-                    ListEmptyComponent={<EmptyTournamentList status={status} />}
+                // Empty component
+                ListEmptyComponent={<EmptyTournamentList status={status} />}
 
-                    // Update/Refresh data
-                    refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
-                    onEndReached={() => fetchNextPage()}
-                    onEndReachedThreshold={0.1}
-                    onScroll={scrollEvent}
+                // Update/Refresh data
+                refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refresh} />}
+                onEndReached={() => fetchNextPage()}
+                onEndReachedThreshold={0.1}
+                onScroll={scrollEvent}
 
-                    // Misc. properties
-                    showsVerticalScrollIndicator={false}
-                    keyboardShouldPersistTaps="handled"
-                />
+                // Misc. properties
+                showsVerticalScrollIndicator={false}
+                keyboardShouldPersistTaps="handled"
+            />
 
-                <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
+            <FilterButton ref={filterButtonRef} onPress={onPress} style={styles.filterButton} />
 
-                <FilterList ref={filterSheetRef} maxSize={MAX_BOTTOMSHEET_SIZE} minSize={MIN_BOTTOMSHEET_SIZE}  />
+            <FilterList ref={filterSheetRef} maxSize={MAX_BOTTOMSHEET_SIZE} minSize={MIN_BOTTOMSHEET_SIZE} />
 
-            </View>
+        </View>
     )
 }
 

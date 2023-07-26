@@ -1,8 +1,8 @@
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import React, { useCallback } from "react"
 import { StyleProp, StyleSheet, Text, ViewStyle } from "react-native"
-
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker"
 import Checkbox from "expo-checkbox"
+
 import { TransparentCard } from "../../Shared"
 import { CustomText, SubtitleText } from "../../Shared/Text"
 
@@ -28,7 +28,7 @@ export const StaticFilterItem = (props: StaticFilterItemProps) => {
 
 interface FilterDateProps extends FilterItemProps {
     date: Date | undefined
-    setDate: (date: Date|undefined) => void
+    setDate: (date: Date | undefined) => void
 }
 
 export const FilterDate = (props: FilterDateProps) => {
@@ -71,7 +71,7 @@ interface FilterBoolean extends FilterItemProps {
 interface FilterNullBoolean extends FilterItemProps {
     value: boolean | null
     nullValue: true
-    setValue: (value: true|null) => void
+    setValue: (value: true | null) => void
 }
 
 type FilterCheckboxProps = FilterBoolean | FilterNullBoolean

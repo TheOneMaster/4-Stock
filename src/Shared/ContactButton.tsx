@@ -1,6 +1,5 @@
-import * as React from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Linking, StyleSheet, TouchableHighlight } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { LinkText } from "./Text";
 

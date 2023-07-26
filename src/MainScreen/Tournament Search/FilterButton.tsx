@@ -1,6 +1,6 @@
-import { useTheme } from "@react-navigation/native"
 import React, { useCallback, useImperativeHandle } from "react"
 import { StyleSheet } from "react-native"
+import { useTheme } from "@react-navigation/native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 
 import { TransparentCard } from "../../Shared"
