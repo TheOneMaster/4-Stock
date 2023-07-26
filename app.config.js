@@ -1,10 +1,12 @@
+import PackageJson from "./package.json"
 
 const IS_DEV = process.env.APP_VARIANT === "development";
+const VERSION = PackageJson.version;
 
 export default {
   name: IS_DEV ? "4 Stock (Dev)" : "4 Stock",
   slug: "4-stock",
-  version: "0.6.7",
+  version: VERSION,
   orientation: "portrait",
   icon: "./assets/final/icon.png",
   userInterfaceStyle: "automatic",
