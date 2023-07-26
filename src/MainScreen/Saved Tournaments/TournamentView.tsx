@@ -13,7 +13,7 @@ import { TournamentData } from "./types";
 interface TournamentViewProps {
     data: TournamentData
     height: number
-    selected: boolean
+    selected?: boolean
     onPress?: (tournament: string) => void
     longPress?: (tournament: string) => void
 }
@@ -22,22 +22,15 @@ export function TournamentView(props: TournamentViewProps) {
 
     if (!props.data.id) return null
 
-    const { colors } = useTheme();
     const image = props.data.images?.find(image => image?.url)?.url;
     const clickGesture = Gesture.Tap().onFinalize(() => {
         console.log("click")
         if (props.onPress) runOnJS(props.onPress)(props.data.id!);
     });
-    const longPressGesture = Gesture.LongPress().onStart(() => {
-        console.log("longPress")
-        if (props.longPress) runOnJS(props.longPress)(props.data.id!)
-    });
-
-    const allGestures = Gesture.Race(longPressGesture, clickGesture)
 
     return (
 
-        <GestureDetector gesture={allGestures}>
+        <GestureDetector gesture={clickGesture}>
 
             <View style={[styles.container]}>
                 <View style={{ height: props.height }}>
