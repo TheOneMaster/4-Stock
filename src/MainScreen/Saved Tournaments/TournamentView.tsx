@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS } from "react-native-reanimated";
 
@@ -22,31 +22,31 @@ export function TournamentView(props: TournamentViewProps) {
     if (!props.data.id) return null
 
     const image = props.data.images?.find(image => image?.url)?.url;
-    const clickGesture = Gesture.Tap().onFinalize(() => {
-        console.log("click")
-        if (props.onPress) runOnJS(props.onPress)(props.data.id!);
-    });
+    // const clickGesture = Gesture.Tap().onFinalize(() => {
+    //     console.log("click")
+    //     if (props.onPress) runOnJS(props.onPress)(props.data.id!);
+    // });
+
+    const onPress = () => {
+        if (props.onPress) props.onPress(props.data.id!);
+    }
 
     return (
-
-        <GestureDetector gesture={clickGesture}>
-
-            <View style={[styles.container]}>
-                <View style={{ height: props.height }}>
-                    <PlaceholderImage imageSrc={image} placeholder="tournament" style={styles.image} resize="cover" />
-                </View>
-                <View>
-                    <TitleText style={styles.title} numberOfLines={2}>{props.data.name}</TitleText>
-                </View>
-
-                {props.selected
-                    ? <View style={styles.selectionCircle}>
-                        <AntDesign name="check" color="black" />
-                    </View>
-                    : null}
-
+        <Pressable style={[styles.container]} onPress={onPress}>
+            <View style={{ height: props.height }}>
+                <PlaceholderImage imageSrc={image} placeholder="tournament" style={styles.image} resize="cover" />
             </View>
-        </GestureDetector>
+            <View>
+                <TitleText style={styles.title} numberOfLines={2}>{props.data.name}</TitleText>
+            </View>
+
+            {props.selected
+                ? <View style={styles.selectionCircle}>
+                    <AntDesign name="check" color="black" />
+                </View>
+                : null}
+
+        </Pressable>
     )
 
 }
