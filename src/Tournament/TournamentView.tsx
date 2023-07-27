@@ -12,21 +12,18 @@ import ContactButton from "../Shared/ContactButton";
 import { CustomText } from "../Shared/Text";
 import { truthyFilter } from "../helper";
 import { useSavedTournaments } from "../Context/SavedTournaments";
+import { CenterMessage } from "../Shared";
 
 const RegisterButton = ({ show, disabled = false }: RegisterButtonProps) => {
-    if (!show) {
-        return null;
-    }
 
-    const register = () => {
-        console.log("Register")
-    }
+    if (!show) return null
+
+    const register = () => console.log("Register");
 
     return (
         <View style={styles.registerButton}>
-            <Button title="Register" onPress={register} disabled={disabled}></Button>
+            <Button title="Register" onPress={register} disabled={disabled} />
         </View>
-
     )
 }
 
@@ -60,19 +57,11 @@ const TournamentView = ({ navigation, route }: TournamentViewProps) => {
     }
 
     if (isLoading) {
-        return (
-            <View style={styles.centerView}>
-                <CustomText>Loading...</CustomText>
-            </View>
-        )
+        return <CenterMessage fill message="Loading..." />
     }
 
     if (isError || data.tournament === null) {
-        return (
-            <View>
-                <CustomText>Unable to load Tournament details from API</CustomText>
-            </View>
-        )
+        return <CenterMessage fill message="Unable to load tournament details from API" />
     }
 
     const events = data.tournament.events?.filter(truthyFilter) ?? [];
