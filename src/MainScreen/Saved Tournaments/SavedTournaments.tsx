@@ -19,7 +19,7 @@ export function SavedTournamentsPage({ navigation, route }: SavedTournamentsScre
     const tournaments = data.tournaments?.nodes?.filter(truthyFilter) ?? [];
 
     const navigateToTournament = (tournament: string) => {
-        navigation.navigate("Tournament", { id: tournament });
+        navigation.push("Tournament", { id: tournament });
     }
 
     return (
