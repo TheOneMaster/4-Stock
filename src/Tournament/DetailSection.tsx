@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 
 import { DetailsSectionProps } from "./types";
 import { convertDateToString, truthyFilter } from "../helper";
-import { CustomText } from "../Shared/Text";
+import { CustomText, SubtitleText } from "../Shared/Text";
 import { FontAwesomeThemed, IoniconsThemed, MaterialIconsThemed } from "../Shared/IconTheme";
 
 function DetailSection(props: DetailsSectionProps) {
@@ -42,10 +42,10 @@ function DetailRow(props: DetailRowProps) {
             <View style={styles.rowIcon}>
                 {props.icon ?? null}
             </View>
-            <Text style={{ flexWrap: "wrap" }}>
-                <CustomText style={styles.rowType}>{props.title}: </CustomText>
-                <CustomText>{props.value}</CustomText>
-            </Text>
+            <View style={{ flexWrap: "wrap", flexDirection: "row" }}>
+                <CustomText>{props.title}: </CustomText>
+                <SubtitleText selectable>{props.value}</SubtitleText>
+            </View>
         </View>
     )
 }
@@ -58,17 +58,10 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: "row",
         alignItems: "center",
-        // backgroundColor: "green",
-        // marginBottom: 5,
         paddingVertical: 5
-    },
-    rowType: {
-        fontWeight: "bold"
     },
     rowIcon: {
         marginRight: 5,
-        // width: 15,
-        // alignItems: "center"
     }
 })
 
