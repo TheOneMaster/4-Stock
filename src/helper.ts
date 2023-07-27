@@ -4,7 +4,10 @@ export function convertAPITimeToDate(date: number): Date {
     return new Date(date * 1000);
 }
 
-export function convertDateToString(date: number): string {
+export function convertDateToString(date?: number | null): string {
+
+    if (date == null) return "";
+
     const given_date = convertAPITimeToDate(date);
 
     // Unnecessary for now. Might need this later if localeDateString stops working. Previously stopped working because
