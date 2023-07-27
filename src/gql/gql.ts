@@ -2336,7 +2336,7 @@ export type TournamentDetailsQueryVariables = Exact<{
 }>;
 
 
-export type TournamentDetailsQuery = { __typename?: 'Query', tournament: { __typename?: 'Tournament', id: string | null, name: string | null, city: string | null, countryCode: string | null, currency: string | null, eventRegistrationClosesAt: any | null, isRegistrationOpen: boolean | null, mapsPlaceId: string | null, numAttendees: number | null, primaryContact: string | null, primaryContactType: string | null, startAt: any | null, venueName: string | null, venueAddress: string | null, events: Array<{ __typename?: 'Event', id: string | null, type: number | null, name: string | null, phases: Array<{ __typename?: 'Phase', id: string | null } | null> | null, videogame: { __typename?: 'Videogame', id: string | null, displayName: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null } | null> | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null };
+export type TournamentDetailsQuery = { __typename?: 'Query', tournament: { __typename?: 'Tournament', id: string | null, name: string | null, city: string | null, countryCode: string | null, addrState: string | null, currency: string | null, eventRegistrationClosesAt: any | null, isRegistrationOpen: boolean | null, mapsPlaceId: string | null, numAttendees: number | null, primaryContact: string | null, primaryContactType: string | null, startAt: any | null, venueName: string | null, venueAddress: string | null, events: Array<{ __typename?: 'Event', id: string | null, type: number | null, name: string | null, videogame: { __typename?: 'Videogame', id: string | null, displayName: string | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null } | null> | null, images: Array<{ __typename?: 'Image', id: string | null, type: string | null, url: string | null } | null> | null } | null };
 
 
 export const EventDataDocument = `
@@ -2735,15 +2735,13 @@ export const TournamentDetailsDocument = `
     name
     city
     countryCode
+    addrState
     currency
     eventRegistrationClosesAt
     events {
       id
       type
       name
-      phases {
-        id
-      }
       videogame {
         id
         displayName

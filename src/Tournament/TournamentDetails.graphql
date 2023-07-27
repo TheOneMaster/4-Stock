@@ -4,15 +4,13 @@ query TournamentDetails($ID: ID!) {
     name
     city
     countryCode
+    addrState
     currency
     eventRegistrationClosesAt
     events {
       id
       type
       name
-      phases {
-        id
-      }
       videogame {
         id
         displayName
