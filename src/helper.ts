@@ -45,8 +45,8 @@ export function getNumberOrdinal(num: number | null): string {
 
     if (num === null) return ""
 
-    let tens = num % 10;
-    let hundreds = num % 100;
+    const tens = num % 10;
+    const hundreds = num % 100;
 
     if (tens == 1 && hundreds != 11) {
         return num + "st";
