@@ -6,6 +6,7 @@ const VERSION = PackageJson.version;
 export default {
   name: IS_DEV ? "4 Stock (Dev)" : "4 Stock",
   slug: "4-stock",
+  scheme: "fourstock",
   version: VERSION,
   orientation: "portrait",
   icon: "./assets/final/icon.png",
